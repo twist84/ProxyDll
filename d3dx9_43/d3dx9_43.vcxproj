@@ -76,8 +76,8 @@
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>bin\$(Configuration)\</IntDir>
-    <ExecutablePath>C:\Games\proxy_dlls\d3dx9_43\directx\lib.X86;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>C:\Games\proxy_dlls\d3dx9_43\directx\include;$(IncludePath)</IncludePath>
+    <ExecutablePath>$(SolutionDir)d3dx9_43\directx\lib.X86;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)d3dx9_43\directx\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -87,8 +87,8 @@
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
     <OutDir>bin\$(Configuration)\</OutDir>
     <IntDir>bin\$(Configuration)\</IntDir>
-    <ExecutablePath>C:\Games\proxy_dlls\d3dx9_43\directx\lib.X86;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>C:\Games\proxy_dlls\d3dx9_43\directx\include;$(IncludePath)</IncludePath>
+    <ExecutablePath>$(SolutionDir)d3dx9_43\directx\lib.X86;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)d3dx9_43\directx\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
