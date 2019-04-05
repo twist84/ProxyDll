@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="d3dx9_43.cpp">
+      <Filter>d3dx9_43</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3dx9_43.hpp">
+      <Filter>d3dx9_43</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="d3dx9_43">
+      <UniqueIdentifier>{946b6c46-bdc0-4a9b-9eac-85fac0407dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{e37cbe9d-c49f-43e2-a406-c22ee6d23235}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="d3dx9_43.def">
+      <Filter>d3dx9_43</Filter>
+    </None>
+  </ItemGroup>
+</Project>

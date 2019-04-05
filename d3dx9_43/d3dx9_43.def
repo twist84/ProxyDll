@@ -1,0 +1,3 @@
+EXPORTS
+; we don't actually need this atm
+;D3DXCheckVersion=Proxy_D3DXCheckVersion @1

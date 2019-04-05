@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Patch.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Pointer.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utils\Console.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\Utils.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\local_types.hpp">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\tag_definitions.hpp">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\tag_groups.hpp">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\backend.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\camera.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\cinematic.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\filo.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\game_engine.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\game_globals.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\game_state.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\game_update.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\level.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\map.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\misc.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\networking.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\physics.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\player_profile.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\preferences.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\print.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\renderer.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\simulation.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\tags.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\ui.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\unit.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Patch.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Pointer.hpp">
+      <Filter>utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="utils">
+      <UniqueIdentifier>{3347c2ad-72f8-45bd-a2a3-0afbfaf5f7f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{4d777ef6-8f8a-470a-ad95-9213fab25c7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="classes">
+      <UniqueIdentifier>{ff42f962-50d1-4a34-b8ba-9c65818ebfff}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
