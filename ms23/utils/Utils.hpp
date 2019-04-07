@@ -26,6 +26,16 @@ namespace Utils
 		{
 			return (T)((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
 		}
+
+		template<typename T>
+		T Between(double val_to_check, double min_val, double max_val)
+		{
+			if (val_to_check < min_val)
+				return (T)min_val;
+			if (val_to_check > max_val)
+				return (T)max_val;
+			return (T)val_to_check;
+		}
 	}
 
 	namespace Uuid
@@ -162,6 +172,20 @@ namespace Utils
 			Uuid::uuidFromString((RPC_CSTR)guidStr, &guid);
 
 			return guid;
+		}
+
+		bool InArray(const char *str, std::vector<const char*> arr, int *outVal)
+		{
+			bool result = false;
+			for (size_t i = 0; i <= arr.size(); i++)
+			{
+				if (Utils::String::ToLower(str) == arr[i])
+				{
+					*outVal = (int)i;
+					result = true;
+				}
+			}
+			return result;
 		}
 	}
 
@@ -326,7 +350,7 @@ struct ConMan
 	}
 	LANGID GetLanguage(const char *lpAppName, const char *lpKeyName)
 	{
-		const char *languages[] {
+		std::vector<const char *> languages = {
 			"english",
 			"japanese",
 			"german",
@@ -355,13 +379,10 @@ struct ConMan
 			LANG_RUSSIAN
 		};
 
-		for (int i = 0; i < 12; i++)
-			if (Utils::String::ToLower(GetString(lpAppName, lpKeyName)) == languages[i])
-				return ids[i];
-
-		auto iniVal = GetInt(lpAppName, lpKeyName);
-		if (iniVal >= 0 || iniVal < 12)
-			return ids[iniVal];
+		int outVal;
+		if (Utils::String::InArray(GetString(lpAppName, lpKeyName), languages, &outVal))
+			return ids[outVal];
+		return ids[Utils::Math::Between<int>(GetInt(lpAppName, lpKeyName), 0, 12)];
 
 		return LANG_NEUTRAL;
 	}
