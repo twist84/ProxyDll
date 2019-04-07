@@ -28,13 +28,12 @@ namespace Utils
 		}
 
 		template<typename T>
-		T Between(double val_to_check, double min_val, double max_val)
+		bool Between(double val_to_check, double min_val, double max_val, T *outVal)
 		{
-			if (val_to_check < min_val)
-				return (T)min_val;
-			if (val_to_check > max_val)
-				return (T)max_val;
-			return (T)val_to_check;
+			if (val_to_check < min_val || val_to_check > max_val)
+				return false;
+			*outVal = (T)val_to_check;
+			return true;
 		}
 	}
 
@@ -382,7 +381,8 @@ struct ConMan
 		int outVal;
 		if (Utils::String::InArray(GetString(lpAppName, lpKeyName), languages, &outVal))
 			return ids[outVal];
-		return ids[Utils::Math::Between<int>(GetInt(lpAppName, lpKeyName), 0, 12)];
+		if (Utils::Math::Between(GetInt(lpAppName, lpKeyName), 0, 12, &outVal))
+			return ids[outVal];
 
 		return LANG_NEUTRAL;
 	}
