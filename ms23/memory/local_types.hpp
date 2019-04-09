@@ -215,7 +215,7 @@ struct e_display_option
 
 	const char *GetName()
 	{
-		const char *names[]{
+		const char *names[] {
 			"windowed",
 			"borderless (windowed)",
 			"fullscreen"

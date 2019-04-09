@@ -337,8 +337,8 @@ inline void AddMiscHooks(const char *name)
 
 		//AddHook({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
 
-		//AddHook({ 0x7F0454 }, &vector_ctor_iterator_hook, "`eh vector constructor iterator'");
-		//AddHook({ 0x7F04BC }, &vector_dtor_iterator_hook, "`eh vector destructor iterator'");
+		//AddHook({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
+		//AddHook({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
 	}
 }
 

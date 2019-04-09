@@ -206,26 +206,38 @@ struct PlugMan
 	//WritePrivateProfileStringA("Plugins", "Libs", ".\\mtndew.dll", iniFilename);
 	const char *iniFilename;
 	std::vector<HMODULE> LoadedPlugins = {};
-
+	
 	const char *GetString(const char *lpAppName, const char *lpKeyName)
 	{
 		const size_t ArraySize = 256;
-		char* iniVal = new char[ArraySize];
+		char *iniVal = new char[ArraySize];
 		GetPrivateProfileStringA(lpAppName, lpKeyName, "", iniVal, ArraySize, iniFilename);
 
 		return iniVal;
+	}
+	void SetString(const char *lpAppName, const char *lpKeyName, const char *lpValue = "")
+	{
+		WritePrivateProfileStringA(lpAppName, lpKeyName, lpValue, iniFilename);
 	}
 	std::vector<std::string>GetSplitString(const char *lpAppName, const char *lpKeyName, char lpDelim)
 	{
 		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
 	}
-	bool GetInt(const char *lpAppName, const char *lpKeyName)
+	int GetInt(const char *lpAppName, const char *lpKeyName)
 	{
 		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
+	}
+	void SetInt(const char *lpAppName, const char *lpKeyName, int lpValue = 0)
+	{
+		SetString(lpAppName, lpKeyName, std::to_string(lpValue).c_str());
 	}
 	bool GetBool(const char *lpAppName, const char *lpKeyName)
 	{
 		return GetInt(lpAppName, lpKeyName) == 1;
+	}
+	void SetBool(const char *lpAppName, const char *lpKeyName, bool lpValue = true)
+	{
+		SetInt(lpAppName, lpKeyName, lpValue);
 	}
 	HMODULE LoadPlugin(const char *path)
 	{

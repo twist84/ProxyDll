@@ -539,7 +539,7 @@ inline void AddPreferencesPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&DisableSaberReflections, "Disable Saber Reflections");
+		AddPatch(&DisableSaberReflections, "DisableSaberReflections");
 	}
 }
 

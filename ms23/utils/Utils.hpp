@@ -226,6 +226,83 @@ void AssignHotkey(int vKey, void *function)
 		((void(*)())function)();
 }
 
+struct ConMan
+{
+	const char *iniFilename;
+
+	const char *GetString(const char *lpAppName, const char *lpKeyName)
+	{
+		const size_t ArraySize = 256;
+		char *iniVal = new char[ArraySize];
+		GetPrivateProfileStringA(lpAppName, lpKeyName, "", iniVal, ArraySize, iniFilename);
+
+		return iniVal;
+	}
+	void SetString(const char *lpAppName, const char *lpKeyName, const char *lpValue = "")
+	{
+		WritePrivateProfileStringA(lpAppName, lpKeyName, lpValue, iniFilename);
+	}
+	std::vector<std::string>GetSplitString(const char *lpAppName, const char *lpKeyName, char lpDelim)
+	{
+		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
+	}
+	int GetInt(const char *lpAppName, const char *lpKeyName)
+	{
+		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
+	}
+	void SetInt(const char *lpAppName, const char *lpKeyName, int lpValue = 0)
+	{
+		SetString(lpAppName, lpKeyName, std::to_string(lpValue).c_str());
+	}
+	bool GetBool(const char *lpAppName, const char *lpKeyName)
+	{
+		return GetInt(lpAppName, lpKeyName) == 1;
+	}
+	void SetBool(const char *lpAppName, const char *lpKeyName, bool lpValue = true)
+	{
+		SetInt(lpAppName, lpKeyName, lpValue);
+	}
+	LANGID GetLanguage(const char* lpAppName, const char* lpKeyName)
+	{
+		std::vector<const char *> languages = {
+			"english",
+			"japanese",
+			"german",
+			"french",
+			"spanish",
+			"mexican",
+			"italian",
+			"korean",
+			"chinese-traditional",
+			"chinese-simplified",
+			"portuguese",
+			"russian"
+		};
+		LANGID ids[] {
+			LANG_ENGLISH,
+			LANG_JAPANESE,
+			LANG_GERMAN,
+			LANG_FRENCH,
+			LANG_SPANISH,
+			LANG_SPANISH,
+			LANG_ITALIAN,
+			LANG_KOREAN,
+			LANG_CHINESE_TRADITIONAL,
+			LANG_CHINESE_SIMPLIFIED,
+			LANG_PORTUGUESE,
+			LANG_RUSSIAN
+		};
+
+		int outVal;
+		if (Utils::String::InArray(GetString(lpAppName, lpKeyName), languages, &outVal))
+			return ids[outVal];
+		if (Utils::Math::Between(GetInt(lpAppName, lpKeyName), 0, 12, &outVal))
+			return ids[outVal];
+
+		return LANG_NEUTRAL;
+	}
+} ConfigManager;
+
 void HookVftable(DWORD dwVtable, DWORD member, void *function)
 {
 	DWORD oldProt, newProt;
@@ -280,13 +357,16 @@ struct VftHookInfo
 std::vector<HookInfo> hooks;
 std::vector<PatchInfo> patches;
 std::vector<VftHookInfo> vfthooks;
+
 inline void AddHook(std::vector<size_t> offsets, void *dest_func, const char *name = "untitled", HookFlags flags = HookFlags::None)
 {
-	hooks.push_back(HookInfo(offsets, dest_func, name, flags));
+	//if (ConfigManager.GetBool("Hooks::Individual", name))
+		hooks.push_back(HookInfo(offsets, dest_func, name, flags));
 }
 inline void AddPatch(void* dest_func, const char *name = "untitled")
 {
-	patches.push_back(PatchInfo(dest_func, name));
+	//if (ConfigManager.GetBool("Patches::Individual", name))
+		patches.push_back(PatchInfo(dest_func, name));
 }
 inline void AddVftHook(size_t offset, void *dest_func, int member, const char *name = "untitled", HookFlags flags = HookFlags::None)
 {
@@ -322,68 +402,3 @@ T VftableGetMember(DWORD dwVtable, int member)
 	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, dwVtable, member);
 	return (T)memAdr;
 }
-
-struct ConMan
-{
-	const char *iniFilename;
-
-	const char *GetString(const char *lpAppName, const char *lpKeyName)
-	{
-		const size_t ArraySize = 256;
-		char* iniVal = new char[ArraySize];
-		GetPrivateProfileStringA(lpAppName, lpKeyName, "", iniVal, ArraySize, iniFilename);
-
-		return iniVal;
-	}
-	std::vector<std::string>GetSplitString(const char *lpAppName, const char *lpKeyName, char lpDelim)
-	{
-		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
-	}
-	int GetInt(const char *lpAppName, const char *lpKeyName)
-	{
-		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
-	}
-	bool GetBool(const char *lpAppName, const char *lpKeyName)
-	{
-		return GetInt(lpAppName, lpKeyName) == 1;
-	}
-	LANGID GetLanguage(const char *lpAppName, const char *lpKeyName)
-	{
-		std::vector<const char *> languages = {
-			"english",
-			"japanese",
-			"german",
-			"french",
-			"spanish",
-			"mexican",
-			"italian",
-			"korean",
-			"chinese-traditional",
-			"chinese-simplified",
-			"portuguese",
-			"russian"
-		};
-		LANGID ids[] {
-			LANG_ENGLISH,
-			LANG_JAPANESE,
-			LANG_GERMAN,
-			LANG_FRENCH,
-			LANG_SPANISH,
-			LANG_SPANISH,
-			LANG_ITALIAN,
-			LANG_KOREAN,
-			LANG_CHINESE_TRADITIONAL,
-			LANG_CHINESE_SIMPLIFIED,
-			LANG_PORTUGUESE,
-			LANG_RUSSIAN
-		};
-
-		int outVal;
-		if (Utils::String::InArray(GetString(lpAppName, lpKeyName), languages, &outVal))
-			return ids[outVal];
-		if (Utils::Math::Between(GetInt(lpAppName, lpKeyName), 0, 12, &outVal))
-			return ids[outVal];
-
-		return LANG_NEUTRAL;
-	}
-} ConfigManager;
