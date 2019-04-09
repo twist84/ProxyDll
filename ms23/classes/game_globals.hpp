@@ -6,7 +6,7 @@
 auto game_globals_get_campaign_difficulty_get_hook()
 {
 	auto game_globals = game_globals_get();
-	if (game_globals->game_options.MapType.value == e_map_type::_campaign)
+	if (game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign)
 		return game_globals->game_options.DifficultyLevel.value;
 	return e_difficulty_level::_normal;
 }
@@ -46,7 +46,7 @@ e_game_playback __cdecl game_globals_set_playback_hook(e_game_playback a1)
 int game_insertion_point_get_hook()
 {
 	auto game_globals = game_globals_get();
-	if (game_globals->game_options.MapType.value == e_map_type::_campaign)
+	if (game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign)
 		return game_globals->game_options.InsertionPoint.value;
 	return 0;
 }

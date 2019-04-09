@@ -15,7 +15,7 @@ double get_time_from_frame_count_hook(signed int frame_count)
 
 bool game_is_campaign_hook()
 {
-	return game_options_get()->MapType.value == e_map_type::_campaign;
+	return game_options_get()->ScenarioType.value == e_scenario_type::_campaign;
 }
 
 bool game_in_progress_hook()
@@ -30,7 +30,7 @@ bool game_in_progress_hook()
 
 bool game_is_multiplayer_hook()
 {
-	return game_options_get()->MapType.value == e_map_type::_multiplayer;
+	return game_options_get()->ScenarioType.value == e_scenario_type::_multiplayer;
 }
 
 bool game_is_survival_hook()
@@ -39,7 +39,7 @@ bool game_is_survival_hook()
 	if (game_globals && (game_globals->unknown0 || game_globals->unknown1))
 	{
 		auto game_options = &game_globals->game_options;
-		if (game_options && (game_options->MapType.value == e_map_type::_campaign && game_options->SurvivalModeEnabled))
+		if (game_options && (game_options->ScenarioType.value == e_scenario_type::_campaign && game_options->SurvivalModeEnabled))
 			return true;
 	}
 	return false;
@@ -58,7 +58,7 @@ bool game_is_playtest_hook()
 
 bool game_is_mainmenu_hook()
 {
-	return game_options_get()->MapType.value == e_map_type::_mainmenu;
+	return game_options_get()->ScenarioType.value == e_scenario_type::_mainmenu;
 }
 
 
@@ -82,7 +82,7 @@ char prepare_game_level_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.MapType.value == e_map_type::_campaign && game_globals->unknown24B58 != a1))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign && game_globals->unknown24B58 != a1))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = false;
@@ -96,7 +96,7 @@ char game_level_prepare_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.MapType.value == e_map_type::_campaign))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = true;

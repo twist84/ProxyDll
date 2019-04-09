@@ -303,7 +303,7 @@ struct e_game_language
 bool g_use_default_system_ui_language = true;
 auto g_new_system_ui_language = -1;
 
-struct e_map_type
+struct e_scenario_type
 {
 	enum : int
 	{
@@ -314,18 +314,17 @@ struct e_map_type
 		_mainmenu,
 		_shared, // not sure
 
-		k_number_of_map_types
+		k_number_of_scenario_types
 	} value;
 
 	const char *GetName()
 	{
 		const char *names[] {
+			"none",
 			"campaign",
-			"matchmaking",
 			"multiplayer",
-			"mapeditor",
-			"theater",
-			"survival"
+			"mainmenu",
+			"shared"
 		};
 		return names[value];
 	}
@@ -1882,7 +1881,7 @@ struct XnkAddr
 
 struct s_game_options
 {
-	e_map_type MapType;
+	e_scenario_type ScenarioType;
 	e_game_simulation GameSimulation;
 	int16_t FrameLimit;
 	int32_t GameInstance;
@@ -2485,7 +2484,7 @@ uint8_t *Transport()
 
 auto game_globals_get = []() { return (game_globals *)GetMainTls(0x3C)[0]; };
 auto game_options_get = []() { return &game_globals_get()->game_options; };
-auto map_type_get = []() { return game_options_get()->MapType.value; };
+auto scenario_type_get = []() { return game_options_get()->ScenarioType.value; };
 auto game_progression_get = []() { return game_globals_get()->progression; };
 
 struct s_levels

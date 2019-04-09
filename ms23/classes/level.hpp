@@ -19,7 +19,7 @@ void SetFpsTarget(int16_t *FrameLimit, int fps)
 
 void *NewGameOptions(s_game_options *data)
 {
-	if (data->MapType.value == e_map_type::_campaign)
+	if (data->ScenarioType.value == e_scenario_type::_campaign)
 	{
 		SetFpsTarget(&data->FrameLimit, 30);
 		data->DifficultyLevel.value = e_difficulty_level::_easy;
