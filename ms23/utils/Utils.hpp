@@ -325,6 +325,15 @@ struct HookInfo
 		dest_func = _dest_func;
 		flags = _flags;
 	}
+
+	void Apply()
+	{
+		for (auto offset : offsets)
+		{
+			Hook(offset, dest_func, flags).Apply();
+			printf_s("%s\n", name);
+		}
+	}
 };
 struct PatchInfo
 {
@@ -335,6 +344,12 @@ struct PatchInfo
 	{
 		name = _name;
 		dest_func = _dest_func;
+	}
+
+	void Apply()
+	{
+		((void(*)())dest_func)();
+		printf_s("%s\n", name);
 	}
 };
 struct VftHookInfo
@@ -352,6 +367,12 @@ struct VftHookInfo
 		table_member = _member;
 		dest_func = _dest_func;
 		flags = _flags;
+	}
+
+	void Apply()
+	{
+		HookVftable(table_addr, table_member, dest_func);
+		printf_s("%s\n", name);
 	}
 };
 std::vector<HookInfo> hooks;
@@ -375,30 +396,20 @@ inline void AddVftHook(size_t offset, void *dest_func, int member, const char *n
 inline void ApplyHooks()
 {
 	for (auto hook : hooks)
-	{
-		for (auto offset : hook.offsets)
-			Hook(offset, hook.dest_func, hook.flags).Apply();
-		printf_s("%s\n", hook.name);
-	}
+		hook.Apply();
 	for (auto hook : vfthooks)
-	{
-		HookVftable(hook.table_addr, hook.table_member, hook.dest_func);
-		printf_s("%s\n", hook.name);
-	}
+		hook.Apply();
 }
 inline void ApplyPatches()
 {
 	for (auto patch : patches)
-	{
-		((void(*)())patch.dest_func)();
-		printf_s("%s\n", patch.name);
-	}
+		patch.Apply();
 }
 
 template<typename T>
 T VftableGetMember(DWORD dwVtable, int member)
 {
-	auto memAdr = *(DWORD *)(dwVtable + (4 * member));
+	auto memAdr = *(DWORD *)(dwVtable + (sizeof(void *) * member));
 	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, dwVtable, member);
 	return (T)memAdr;
 }
