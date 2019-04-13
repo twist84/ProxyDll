@@ -1,7 +1,9 @@
 #pragma once
-#include <vector>
+#include <Windows.h>
 #include <algorithm>
+#include <psapi.h>
 #include <rpcdce.h>
+#include <vector>
 
 #include "../Patch.hpp"
 
@@ -217,6 +219,88 @@ namespace Utils
 		std::stringstream ss;
 		ss << line << std::endl;
 		Utils::Log(ss.str(), (".\\ms23.txt"));
+	}
+
+	namespace Memory
+	{
+		// Initialize our base address and code size
+		uint32_t m_BaseAddress = 0;
+		uint32_t m_CodeSize = 0;
+
+		bool GetExecutableInfo(uint32_t& p_ModuleBase, uint32_t& p_ModuleSize)
+		{
+			if (m_BaseAddress && m_CodeSize)
+			{
+				p_ModuleBase = m_BaseAddress;
+				p_ModuleSize = m_CodeSize;
+				return true;
+			}
+
+			MODULEINFO s_ModuleInfo = { 0 };
+
+			auto s_Ret = GetModuleInformation(GetCurrentProcess(), GetModuleHandle(nullptr), &s_ModuleInfo, sizeof(s_ModuleInfo));
+			if (!s_Ret)
+				return false;
+
+			p_ModuleBase = reinterpret_cast<uint32_t>(s_ModuleInfo.lpBaseOfDll);
+			p_ModuleSize = s_ModuleInfo.SizeOfImage;
+
+			m_BaseAddress = p_ModuleBase;
+			m_CodeSize = p_ModuleSize;
+
+			return true;
+		}
+
+		uint32_t GetBaseAddress()
+		{
+			if (!m_BaseAddress)
+			{
+				auto s_Result = GetExecutableInfo(m_BaseAddress, m_CodeSize);
+				if (!s_Result)
+					return 0;
+			}
+
+			return m_BaseAddress;
+		}
+
+		int32_t Match(void* p_SrcArray, void* p_DstArray, const char* p_Mask, uint32_t p_Length)
+		{
+			auto s_NextStart = 0;
+			auto s_Start = static_cast<uint8_t*>(p_DstArray)[0];
+			for (uint32_t i = 0; i < p_Length; ++i)
+			{
+				if (p_Mask[i] == '?')
+					continue;
+
+				if (static_cast<uint8_t*>(p_SrcArray)[i] == s_Start)
+					s_NextStart = i;
+
+				if (static_cast<uint8_t*>(p_SrcArray)[i] != static_cast<uint8_t*>(p_DstArray)[i])
+					return s_NextStart;
+			}
+			return -1;
+		}
+
+		uint32_t FindPattern(void* p_Address, uint32_t p_Length, const char* p_ByteMask, const char* p_Mask)
+		{
+			uint8_t* s_Address = nullptr;
+			auto s_Buffer = p_Address;
+
+			auto s_MaskLength = strnlen_s(p_Mask, 64);
+			for (uint32_t i = 0; i < (p_Length - s_MaskLength); ++i)
+			{
+				auto l_Result = Match((static_cast<uint8_t*>(s_Buffer) + i), (void*)p_ByteMask, p_Mask, s_MaskLength);
+				if (l_Result < 0)
+				{
+					s_Address = static_cast<uint8_t*>(p_Address) + i;
+					break;
+				}
+
+				i += l_Result;
+			}
+
+			return reinterpret_cast<uint32_t>(s_Address);
+		}
 	}
 }
 
