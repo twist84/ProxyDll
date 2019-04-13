@@ -9,12 +9,15 @@
 #include "utils/Console.hpp"
 #include "utils/Utils.hpp"
 #include "Patch.hpp"
+
 int MainThread()
 {
 	ConfigManager = { ".\\bin\\ms29.ini" };
 
-	ApplyHooks();
-	ApplyPatches();
+	printf_s("And...\nwe're in.\n");
+
+	//ApplyHooks();
+	//ApplyPatches();
 
 	return 1;
 }
