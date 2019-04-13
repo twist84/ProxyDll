@@ -47,6 +47,16 @@ int MainThread()
 	ApplyHooks();
 	ApplyPatches();
 
+	Sleep(1000);
+	// BACKEND_SESSION enum patch
+	while ((*(char*)0x3254113 == '0') /*|| *(char*)0x3254151 == '1' || *(char*)0x325418F == '2'*/ || (*(char*)0x32541CD == '3'))
+	{
+		*(char*)0x3254113 = '3'; // var BACKEND_SESSION_OFFLINE                  : int    = 0
+		//*(char*)0x3254151 = '1'; // var BACKEND_SESSION_AUTHENTICATING           : int    = 1
+		//*(char*)0x325418F = '2'; // var BACKEND_SESSION_ESTABLISHING             : int    = 2
+		*(char*)0x32541CD = '0'; // var BACKEND_SESSION_ONLINE                   : int    = 3
+	}
+
 	return AssignHotkeys(1.5);
 }
 
@@ -54,7 +64,6 @@ BOOL InitInstance(HINSTANCE hModule)
 {
 	SetProcessDPIAware();
 	DisableThreadLibraryCalls(hModule);
-
 
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 
