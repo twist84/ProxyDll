@@ -31,26 +31,30 @@ int MainThread()
 {
 	ConfigManager = { ".\\bin\\ms29.ini" };
 
+	UnprotectModuleMemory();
+	Sleep(1000);
+
 	g_use_default_system_ui_language = ConfigManager.GetBool("Language", "UseSystemDefault");
 	g_new_system_ui_language = ConfigManager.GetLanguage("Language", "Selected");
-	language_patch();
 
-	//AddCameraHooks("Camera");
-	//AddCameraPatches("Camera");
-	//AddTagsHooks("Tags");
-	//AddTagsPatches("Tags");
-	//AddUiHooks("Ui");
-	//AddUiPatches("Ui");
+	AddCameraHooks("Camera");
+	AddCameraPatches("Camera");
+	AddTagsHooks("Tags");
+	AddTagsPatches("Tags");
+	AddUiHooks("Ui");
+	AddUiPatches("Ui");
 
-	//ApplyHooks();
-	//ApplyPatches();
+	ApplyHooks();
+	ApplyPatches();
 
 	return AssignHotkeys(1.5);
 }
 
 BOOL InitInstance(HINSTANCE hModule)
 {
-	//DisableThreadLibraryCalls(hModule);
+	SetProcessDPIAware();
+	DisableThreadLibraryCalls(hModule);
+
 
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 

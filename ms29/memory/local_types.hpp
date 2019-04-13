@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <Windows.h>
+#include <psapi.h>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
@@ -41,7 +43,7 @@ std::string GetDirectory()
 	Dir = Dir.substr(0, std::string(Dir).find_last_of('\\') + 1);
 	return Dir;
 }
-std::string GetModule()
+std::string GetModuleName()
 {
 	char Path[MAX_PATH];
 	HMODULE hMod;
@@ -54,6 +56,41 @@ std::string GetModule()
 	std::string Module(Path);
 	Module = Module.substr(std::string(Module).find_last_of('\\') + 1);
 	return Module;
+}
+
+void* GetModuleAddress(const DWORD offset)
+{
+	static void* base_address = nullptr;
+
+	if (base_address == nullptr)
+	{
+		MODULEINFO module_info = { 0 };
+
+		auto result = GetModuleInformation(GetCurrentProcess(), GetModuleHandle(nullptr), &module_info, sizeof(module_info));
+
+		if (!result)
+			return nullptr;
+
+		base_address = module_info.lpBaseOfDll;
+	}
+
+	return (char*)base_address + offset;
+}
+
+void UnprotectModuleMemory()
+{
+	MEMORY_BASIC_INFORMATION MemInfo;
+
+	printf_s("unprotecting module memory...\n");
+	for (auto offset = 0; VirtualQuery(GetModuleAddress(offset), &MemInfo, sizeof(MEMORY_BASIC_INFORMATION));)
+	{
+		printf_s("module region 0x%X\n", offset);
+		offset += MemInfo.RegionSize;
+
+		if (MemInfo.Protect == PAGE_EXECUTE_READ)
+			VirtualProtect(MemInfo.BaseAddress, MemInfo.RegionSize, PAGE_EXECUTE_READWRITE, &MemInfo.Protect);
+	}
+	printf_s("module memory unprotected...\n");
 }
 
 std::string GetExecutable()
