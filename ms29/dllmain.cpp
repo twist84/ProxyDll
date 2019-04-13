@@ -10,21 +10,47 @@
 #include "utils/Utils.hpp"
 #include "Patch.hpp"
 
+#include "classes/camera.hpp"
+#include "classes/tags.hpp"
+#include "classes/ui.hpp"
+
+#include "memory/local_types.hpp"
+
+int AssignHotkeys(float sleep_time = 0.5)
+{
+	while (true)
+	{
+		//AssignHotkey(VK_F2, &SetAllQualitySettingsLow);
+
+		Sleep((int)(sleep_time * 1000));
+	}
+	return 0;
+}
+
 int MainThread()
 {
 	ConfigManager = { ".\\bin\\ms29.ini" };
 
-	printf_s("And...\nwe're in.\n");
+	g_use_default_system_ui_language = ConfigManager.GetBool("Language", "UseSystemDefault");
+	g_new_system_ui_language = ConfigManager.GetLanguage("Language", "Selected");
+	language_patch();
+
+	//AddCameraHooks("Camera");
+	//AddCameraPatches("Camera");
+	//AddTagsHooks("Tags");
+	//AddTagsPatches("Tags");
+	//AddUiHooks("Ui");
+	//AddUiPatches("Ui");
 
 	//ApplyHooks();
 	//ApplyPatches();
 
-	return 1;
+	return AssignHotkeys(1.5);
 }
 
 BOOL InitInstance(HINSTANCE hModule)
 {
-	DisableThreadLibraryCalls(hModule);
+	//DisableThreadLibraryCalls(hModule);
 
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 

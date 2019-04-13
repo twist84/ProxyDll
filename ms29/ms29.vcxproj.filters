@@ -13,6 +13,12 @@
     <Filter Include="utils">
       <UniqueIdentifier>{09b00d7a-6225-488a-8146-ccdbe788060a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="classes">
+      <UniqueIdentifier>{60cd2b02-00f9-4d5d-b2f8-df47f449fbdd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="memory">
+      <UniqueIdentifier>{15eec4fc-40a1-4c18-98e7-528d076a892b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Patch.hpp">
@@ -26,6 +32,18 @@
     </ClInclude>
     <ClInclude Include="utils\Console.hpp">
       <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\camera.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\ui.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\local_types.hpp">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="classes\tags.hpp">
+      <Filter>classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

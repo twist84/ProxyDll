@@ -244,7 +244,9 @@ struct PlugMan
 		printf_s("loading plugin... [%s]\n", path);
 		auto lib = ::LoadLibraryA(path);
 		if (!lib)
-			printf_s("...failed\n");
+			printf_s("...failed to load plugin [%s]\n", path);
+		else
+			printf_s("...loaded plugin [%s]\n", path);
 		return lib;
 	}
 	bool LoadPlugins(const char *lpAppName, const char *lpKeyName)

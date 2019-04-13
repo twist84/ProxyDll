@@ -172,6 +172,10 @@
     <ClCompile Include="Pointer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="classes\camera.hpp" />
+    <ClInclude Include="classes\tags.hpp" />
+    <ClInclude Include="classes\ui.hpp" />
+    <ClInclude Include="memory\local_types.hpp" />
     <ClInclude Include="Patch.hpp" />
     <ClInclude Include="Pointer.hpp" />
     <ClInclude Include="utils\Console.hpp" />
