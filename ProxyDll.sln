@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3DX9_43", "D3DX9_43\d3dx9_43.vcxproj", "{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_proxy", "d3dx9_43\d3dx9_43.vcxproj", "{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ms23", "ms23\ms23.vcxproj", "{C1CED326-D764-4B6D-86C0-35D7879488BB}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ms29", "ms29\ms29.vcxproj", "{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,14 @@ Global
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x64.Build.0 = Release|x64
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x86.ActiveCfg = Release|Win32
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x86.Build.0 = Release|Win32
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x64.ActiveCfg = Debug|x64
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x64.Build.0 = Debug|x64
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x86.ActiveCfg = Debug|Win32
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x86.Build.0 = Debug|Win32
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x64.ActiveCfg = Release|x64
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x64.Build.0 = Release|x64
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x86.ActiveCfg = Release|Win32
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
