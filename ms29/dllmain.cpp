@@ -27,12 +27,24 @@ int AssignHotkeys(float sleep_time = 0.5)
 	return 0;
 }
 
+bool CanHook(bool shouldPrint, double secondsToWait = 0.5, size_t incrementalStep = 50)
+{
+	int currentStep = 0;
+	while (currentStep < secondsToWait * 1000)
+	{
+		currentStep += incrementalStep;
+		Sleep(incrementalStep);
+		if (shouldPrint)
+			printf_s("can hook: %s\n", currentStep < (int)(secondsToWait * 1000) ? "false" : "true");
+	}
+	return true;
+}
+
 int MainThread()
 {
 	ConfigManager = { ".\\bin\\ms29.ini" };
 
 	UnprotectModuleMemory();
-	Sleep(1000);
 
 	g_use_default_system_ui_language = ConfigManager.GetBool("Language", "UseSystemDefault");
 	g_new_system_ui_language = ConfigManager.GetLanguage("Language", "Selected");
@@ -44,27 +56,38 @@ int MainThread()
 	AddUiHooks("Ui");
 	AddUiPatches("Ui");
 
-	ApplyHooks();
-	ApplyPatches();
-
-	Sleep(1000);
-	// BACKEND_SESSION enum patch
-	while ((*(char*)0x3254113 == '0') /*|| *(char*)0x3254151 == '1' || *(char*)0x325418F == '2'*/ || (*(char*)0x32541CD == '3'))
+	if (CanHook(ConfigManager.GetFloat("Delays", "PrintHookDelay"), ConfigManager.GetFloat("Delays", "HookDelay"), ConfigManager.GetInt("Delays", "HookDelayIncrement")))
 	{
-		*(char*)0x3254113 = '3'; // var BACKEND_SESSION_OFFLINE                  : int    = 0
-		//*(char*)0x3254151 = '1'; // var BACKEND_SESSION_AUTHENTICATING           : int    = 1
-		//*(char*)0x325418F = '2'; // var BACKEND_SESSION_ESTABLISHING             : int    = 2
-		*(char*)0x32541CD = '0'; // var BACKEND_SESSION_ONLINE                   : int    = 3
+		ApplyHooks();
+		ApplyPatches();
 	}
 
 	return AssignHotkeys(1.5);
 }
+
+//This is taken from http://www.cplusplus.com/forum/beginner/127593/
+//Finding the user's screen resolution
+int Width = GetSystemMetrics(SM_CXSCREEN);
+int Height = GetSystemMetrics(SM_CYSCREEN);
+
+//Assigning variables for MoveWindows parameters
+int WindowWidth = 995;		//--- Used as a parameter to specify the width of the console window (MoveWindows int nWidth)
+int WindowHeight = 520;		//--- Used as a parameter to specify the height of the console window (MoveWindows int nHeight)
+int NewWidth = ((Width - WindowWidth)) / 2 - 250;		//--- Used as a parameter to center the console window horizontally (MoveWindows int x)
+int NewHeight = ((Height - WindowHeight) / 2) + 250;		//--- Used as a parameter to center the console window vertically (MoveWindows int y)
+
+//Getting the console window handle
+HWND hWnd = GetConsoleWindow();
+
+//Declaring the function
+BOOL WINAPI MoveWindow(_In_ HWND hWnd, _In_ int NewWidth, _In_ int NewHeight, _In_ int WindowWidth, _In_ int WindowHeight, _In_ BOOL bRepaint);
 
 BOOL InitInstance(HINSTANCE hModule)
 {
 	SetProcessDPIAware();
 	DisableThreadLibraryCalls(hModule);
 
+	MoveWindow(hWnd, NewWidth, NewHeight, WindowWidth, WindowHeight, TRUE);
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 
 	return true;

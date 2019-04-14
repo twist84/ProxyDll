@@ -346,6 +346,14 @@ struct ConMan
 	{
 		SetInt(lpAppName, lpKeyName, lpValue);
 	}
+	float GetDouble(const char* lpAppName, const char* lpKeyName)
+	{
+		return (float)std::atof(GetString(lpAppName, lpKeyName));
+	}
+	float GetFloat(const char* lpAppName, const char* lpKeyName)
+	{
+		return (float)GetDouble(lpAppName, lpKeyName);
+	}
 	LANGID GetLanguage(const char* lpAppName, const char* lpKeyName)
 	{
 		std::vector<const char *> languages = {
