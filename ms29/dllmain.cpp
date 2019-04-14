@@ -56,7 +56,7 @@ int MainThread()
 	AddUiHooks("Ui");
 	AddUiPatches("Ui");
 
-	if (CanHook(ConfigManager.GetFloat("Delays", "PrintHookDelay"), ConfigManager.GetFloat("Delays", "HookDelay"), ConfigManager.GetInt("Delays", "HookDelayIncrement")))
+	if (CanHook(ConfigManager.GetBool("Delays", "PrintHookDelay"), ConfigManager.GetFloat("Delays", "HookDelay"), ConfigManager.GetInt("Delays", "HookDelayIncrement")))
 	{
 		ApplyHooks();
 		ApplyPatches();
