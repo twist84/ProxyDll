@@ -345,9 +345,6 @@ inline void AddPrintHooks(const char *name)
 		AddHook({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
 
 		//AddHook({ 0x9858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
-
-		//if (!ms23)
-			//AddHook({ 0x58C2E0 }, &network_debug_print_hook, "network_debug_print");
 	}
 }
 

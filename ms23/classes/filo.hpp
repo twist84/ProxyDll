@@ -58,7 +58,7 @@ void *__cdecl filo_create_hook(s_file_reference *filo, const char *file_path, bo
 		sub_5288B0(filo, Src);
 	}
 
-	//printf_s("filo_create: %s\n", filo->file_path);
+	//printf_s("filo_create: %s\n", filo->path);
 	return filo;
 }
 
@@ -81,13 +81,13 @@ char __cdecl file_read_hook(s_file_reference *filo, DWORD nNumberOfBytesToRead, 
 	if (!result)
 		sub_5294F0("file_read", filo, 0, a3);
 
-	//printf_s("file_read: %s\n", filo->file_path);
+	//printf_s("file_read: %s\n", filo->path);
 	return result;
 }
 
 char __cdecl file_close_hook(s_file_reference *filo)
 {
-	//printf_s("file_close: %s\n", filo->file_path);
+	//printf_s("file_close: %s\n", filo->path);
 	bool result;
 	if (CloseHandle(filo->file_handle))
 	{
@@ -115,7 +115,7 @@ bool __cdecl file_set_position_hook(s_file_reference *filo, LONG lDistanceToMove
 	if (file_pointer == -1)
 		sub_5294F0("file_set_position", filo, 0, a3);
 
-	//printf_s("file_set_position: %s\n", filo->file_path);
+	//printf_s("file_set_position: %s\n", filo->path);
 	return file_pointer_is_valid;
 }
 

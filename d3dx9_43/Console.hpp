@@ -7,6 +7,8 @@
 
 #include "Utils.hpp"
 
+BOOL WINAPI MoveWindow(_In_ HWND hWnd, _In_ int NewWidth, _In_ int NewHeight, _In_ int WindowWidth, _In_ int WindowHeight, _In_ BOOL bRepaint);
+
 namespace Console
 {
 	// Base class for objects which handle console output.
@@ -80,5 +82,10 @@ namespace Console
 		ss << line << std::endl;
 		Utils::Con(ss.str());
 		//Utils::Log(ss.str(), (".\\" + dllname + ".txt"));
+	}
+
+	bool Resize(int nWidth, int nHeight, int cOffX = 0, int cOffY = 0)
+	{
+		return MoveWindow(GetConsoleWindow(), ((GetSystemMetrics(SM_CXSCREEN) - nWidth)) / 2 - cOffX, ((GetSystemMetrics(SM_CYSCREEN) - nHeight) / 2) + cOffY, nWidth, nHeight, TRUE);
 	}
 }

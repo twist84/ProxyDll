@@ -20,14 +20,6 @@ Pointer GetMainTls(size_t tlsOffset)
 			mov     eax, dword ptr ds : [eax]
 			mov		_mainTLS, eax
 		}
-	//	if (!ms23)
-	//	{
-	//		_asm
-	//		{
-	//			mov     eax, dword ptr fs : [2Ch]
-	//			mov		_mainTLS, eax
-	//		}
-	//	}
 	}
 
 	return Pointer(_mainTLS)(tlsOffset);
@@ -5054,7 +5046,7 @@ struct e_achievement
 
 	signed int grant_level(int local_user_index, int map_id, int campaign_difficulty)
 	{
-		signed int result;
+		signed int result = -1;
 		if (campaign_difficulty > e_difficulty_level::k_number_of_difficulty_levels)
 			for (size_t achievement_index = 0; achievement_index <= _beat_l300; achievement_index++)
 				result = grant(local_user_index, achievement_index);
@@ -5070,26 +5062,75 @@ struct e_achievement
 	}
 };
 
+auto g_default_maps_path = "maps\\";
+std::string g_maps_path = g_default_maps_path;
+
+struct s_cache_file_path
+{
+	std::string filename;
+	size_t offset;
+	std::string file_path;
+
+	s_cache_file_path(size_t offset_, std::string filename_)
+	{
+		filename = filename_;
+		file_path = g_maps_path + filename;
+		offset = offset_;
+	}
+	s_cache_file_path *Update(std::string mapname)
+	{
+		file_path = g_maps_path + mapname + "\\" + filename;
+		return this;
+	}
+	std::string Read()
+	{
+		return Pointer::Base(offset).Read<char*>();
+	}
+	void Write(bool shouldWrite)
+	{
+		if (shouldWrite)
+			Pointer::Base(offset).Write(file_path.c_str());
+	}
+	void Print()
+	{
+		printf_s("%s\n", file_path.c_str());
+	}
+};
+
+s_cache_file_path g_string_ids = s_cache_file_path(0x149CFEC, "string_ids.dat");
+s_cache_file_path g_tags = s_cache_file_path(0x149CFF0, "tags.dat");
+s_cache_file_path g_tag_list = s_cache_file_path(0x149CFF4, "tag_list.csv");
+s_cache_file_path g_resources = s_cache_file_path(0x149CFF8, "resources.dat");
+s_cache_file_path g_textures = s_cache_file_path(0x149CFFC, "textures.dat");
+s_cache_file_path g_textures_b = s_cache_file_path(0x149D000, "textures_b.dat");
+s_cache_file_path g_audio = s_cache_file_path(0x149D004, "audio.dat");
+s_cache_file_path g_video = s_cache_file_path(0x149D008, "video.dat");
+
 struct s_cache_path
 {
-	const char *string_ids;
-	const char *tags;
-	const char *tag_list;
-	const char *resources;
-	const char *textures;
-	const char *textures_b;
-	const char *audio;
-	const char *video; // resources_b
-	const char *extension;
-};
-auto cache_path = GetStructure<s_cache_path>(0x189CFEC);
-
-struct {
-	char data[256];
-} current_cache_path;
-
-auto g_default_maps_path = "maps\\";
-auto g_maps_path = g_default_maps_path;
+	void Update(bool new_cache_style = false)
+	{
+		g_string_ids.Update(map_data->map_name)->Write(new_cache_style);
+		g_tags.Update(map_data->map_name)->Write(new_cache_style);
+		g_tag_list.Update(map_data->map_name)->Write(new_cache_style);
+		g_resources.Update(map_data->map_name)->Write(new_cache_style);
+		g_textures.Update(map_data->map_name)->Write(new_cache_style);
+		g_textures_b.Update(map_data->map_name)->Write(new_cache_style);
+		g_audio.Update(map_data->map_name)->Write(new_cache_style);
+		g_video.Update(map_data->map_name)->Write(new_cache_style);
+	}
+	void Print()
+	{
+		g_string_ids.Print();
+		g_tag_list.Print();
+		g_resources.Print();
+		g_textures.Print();
+		g_textures_b.Print();
+		g_audio.Print();
+		g_video.Print();
+		g_tags.Print();
+	}
+} cache_path;
 
 template<typename T>
 struct point2d

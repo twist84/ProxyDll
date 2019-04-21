@@ -25,9 +25,6 @@
     <ClInclude Include="memory\tag_groups.hpp">
       <Filter>memory</Filter>
     </ClInclude>
-    <ClInclude Include="classes\backend.hpp">
-      <Filter>classes</Filter>
-    </ClInclude>
     <ClInclude Include="classes\camera.hpp">
       <Filter>classes</Filter>
     </ClInclude>

@@ -9,8 +9,6 @@
 
 FILE *fStdIn, *fStdOut, *fStdErr;
 
-FILE* stream;
-
 namespace std {
 	template <typename _CharT, typename _Traits>
 	inline basic_ostream<_CharT, _Traits> &
@@ -178,7 +176,7 @@ namespace Utils
 		bool InArray(const char *str, std::vector<const char*> arr, int *outVal)
 		{
 			bool result = false;
-			for (size_t i = 0; i <= arr.size(); i++)
+			for (size_t i = 0; i < arr.size(); i++)
 			{
 				if (Utils::String::ToLower(str) == arr[i])
 				{

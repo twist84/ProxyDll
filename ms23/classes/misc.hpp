@@ -400,8 +400,5 @@ void AddMiscPatches(const char *name)
 		//AddPatch(&unknown_float30_to_float60_patch, "unknown_float30_to_float60"); // this float is what's actually used in get_time_from_frame_count, but we hook it just incase
 
 		AddPatch(&gamestart_status_error_check_patch, "gamestart_status_error_check");
-
-		//if (!ms23)
-			//AddPatch(&gameshield_initialize_patch, "gameshield_initialize");
 	}
 }

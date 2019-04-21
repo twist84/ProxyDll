@@ -237,14 +237,6 @@ inline void AddUiHooks(const char *name)
 		AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
 		AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
 		AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
-
-		//if (!ms23)
-		//{
-		//	AddHook({ 0xC4BF0 }, &get_loading_text_hook, "get_loading_text");
-		//	AddHook({ 0xB2840 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		//	AddHook({ 0xB2960 }, &game_get_region_hook, "game_get_region");
-		//	AddHook({ 0x169EDD, 0x27E999 }, &draw_watermark_hook, "draw_watermark", HookFlags::IsCall);
-		//}
 	}
 }
 

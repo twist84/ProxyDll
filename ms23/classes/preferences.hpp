@@ -132,9 +132,6 @@ void __cdecl sub_A228D0(int adapter, int BackBufferWidth, int BackBufferHeight, 
 
 		preferences.fullscreen.set(Fullscreen);
 		*(uint8_t *)0x50DD9D1 = 1;
-
-		//if (!ms23)
-			//*(uint8_t *)0x278AFB9 = 1;
 	}
 }
 

@@ -65,29 +65,13 @@ int MainThread()
 	return AssignHotkeys(1.5);
 }
 
-//This is taken from http://www.cplusplus.com/forum/beginner/127593/
-//Finding the user's screen resolution
-int Width = GetSystemMetrics(SM_CXSCREEN);
-int Height = GetSystemMetrics(SM_CYSCREEN);
-
-//Assigning variables for MoveWindows parameters
-int WindowWidth = 995;		//--- Used as a parameter to specify the width of the console window (MoveWindows int nWidth)
-int WindowHeight = 520;		//--- Used as a parameter to specify the height of the console window (MoveWindows int nHeight)
-int NewWidth = ((Width - WindowWidth)) / 2 - 250;		//--- Used as a parameter to center the console window horizontally (MoveWindows int x)
-int NewHeight = ((Height - WindowHeight) / 2) + 250;		//--- Used as a parameter to center the console window vertically (MoveWindows int y)
-
-//Getting the console window handle
-HWND hWnd = GetConsoleWindow();
-
-//Declaring the function
-BOOL WINAPI MoveWindow(_In_ HWND hWnd, _In_ int NewWidth, _In_ int NewHeight, _In_ int WindowWidth, _In_ int WindowHeight, _In_ BOOL bRepaint);
-
 BOOL InitInstance(HINSTANCE hModule)
 {
 	SetProcessDPIAware();
 	DisableThreadLibraryCalls(hModule);
 
-	MoveWindow(hWnd, NewWidth, NewHeight, WindowWidth, WindowHeight, TRUE);
+	Console::Resize(995, 520, 250, 250);
+
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 
 	return true;

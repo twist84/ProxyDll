@@ -24,7 +24,6 @@
     <ClCompile Include="Pointer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="classes\backend.hpp" />
     <ClInclude Include="classes\camera.hpp" />
     <ClInclude Include="classes\cinematic.hpp" />
     <ClInclude Include="classes\filo.hpp" />

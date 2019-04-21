@@ -20,7 +20,7 @@ uint8_t *tag_header_get(uint16_t index)
 }
 
 template<typename T>
-T * tag_get_definition(uint32_t group, uint16_t index)
+T *tag_get_definition(uint32_t group, uint16_t index)
 {
 	last_tag = index;
 	return (T *)(tag_header_get(index) + *(uint32_t *)(tag_header_get(index) + 0x10));
@@ -70,41 +70,15 @@ char *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size
 
 const char *maps_path_hook()
 {
-	std::string maps_path(g_maps_path);
-	maps_path += "\\";
-	return maps_path.c_str();
-}
-const char *cache_path_get(const char *cache_file)
-{
-	sprintf_s<256>(current_cache_path.data, "%s%s\\%s", g_maps_path, ConfigManager.GetBool("Maps", "UseNewCacheStyle") ? map_data->map_name : "", cache_file);
-
-	std::string cache_path(current_cache_path.data);
-	if (strstr(cache_path.c_str(), "\\\\"))
-		Utils::String::ReplaceString(cache_path, "\\\\", "\\");
-
-	return cache_path.c_str();
-}
-
-void set_cache_path()
-{
-	cache_path->string_ids = cache_path_get("string_ids.dat");
-	cache_path->tag_list = cache_path_get("tag_list.csv");
-	cache_path->resources = cache_path_get("resources.dat");
-	cache_path->textures = cache_path_get("textures.dat");
-	cache_path->textures_b = cache_path_get("textures_b.dat");
-	cache_path->audio = cache_path_get("audio.dat");
-	cache_path->video = cache_path_get("video.dat");
-	cache_path->extension = ".map";
-
-	cache_path->tags = cache_path_get("tags.dat"); // apparently this has to be last, no idea why
+	return g_maps_path.c_str();
 }
 
 char __fastcall filo_create_and_open_tags_hook(void *thisptr)
 {
-	set_cache_path();
+	cache_path.Update(ConfigManager.GetBool("Maps", "UseNewCacheStyle"));
 	auto result = ((char(__thiscall *)(void *))0x5028C0)(thisptr);
+	g_tags.Print();
 
-	printf_s("%s\n", cache_path->tags);
 	return result;
 }
 
@@ -121,10 +95,22 @@ inline void AddTagsHooks(const char *name)
 	}
 }
 
+void cache_read_patch()
+{
+	if (ConfigManager.GetBool("Maps", "UseNewCacheStyle"))
+	{
+		Patch(0x1027C7, { 0xEB }).Apply();
+		Patch(0x102C9A, { 0xEB }).Apply();
+		//Patch::NopFill(0x102B54, 6);
+		//Patch::NopFill(0x102907, 2);
+		//Patch::NopFill(0x102F27, 2);
+	}
+}
+
 inline void AddTagsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-
+		AddPatch(&cache_read_patch, "cache_read_patch");
 	}
 }
