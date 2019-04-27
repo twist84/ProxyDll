@@ -226,6 +226,37 @@ namespace Utils
 		ss << line << std::endl;
 		Log(ss.str(), (".\\bin\\log.txt"));
 	}
+
+	std::vector<std::string> ReadFile(std::string Path, char Dilem = '\n')
+	{
+		std::stringstream ss;
+		ss << std::ifstream(Path).rdbuf();
+		return Utils::String::SplitString(ss.str(), Dilem);
+	}
+
+	std::vector<std::string> ReadLogs(bool RecursiveFolders, std::string LogExtension)
+	{
+		std::vector<std::experimental::filesystem::directory_entry> directory_entries;
+		if (RecursiveFolders)
+			for (auto& p : std::experimental::filesystem::recursive_directory_iterator("."))
+				directory_entries.push_back(p);
+		else
+			for (auto& p : std::experimental::filesystem::directory_iterator("."))
+				directory_entries.push_back(p);
+
+		std::vector<std::string> result;
+		for (auto& p : directory_entries)
+		{
+			if (p.path().extension() == LogExtension)
+			{
+				result.push_back(p.path().generic_string());
+				for (std::string line : ReadFile(p.path().generic_string()))
+					result.push_back(line);
+				//DeleteFileA(entry.path().generic_string().c_str());
+			}
+		}
+		return result;
+	}
 }
 
 void AssignHotkey(int vKey, void *function)

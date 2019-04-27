@@ -20,6 +20,7 @@ namespace Console
 
 		// Writes a line to the output.
 		virtual void WriteLine(const std::string &line) = 0;
+		virtual void WriteLines(std::vector<std::string> lines) = 0;
 	};
 
 	// Get the consoles allocation.
@@ -31,6 +32,9 @@ namespace Console
 	// Writes one or more lines to the console.
 	void WriteLine(const std::string &line);
 
+	// Writes lines in a vector to the console.
+	void WriteLines(const std::vector<std::string> lines);
+
 	// Registers an output handler.
 	void RegisterHandler(std::shared_ptr<ConsoleOutputHandler> handler);
 
@@ -41,6 +45,7 @@ namespace Console
 	{
 	public:
 		void WriteLine(const std::string &line) override;
+		void WriteLines(const std::vector<std::string> lines) override;
 	};
 
 	bool is_allocated = false;
@@ -50,7 +55,7 @@ namespace Console
 		return is_allocated;
 	}
 
-	inline void Init(const std::string& initLine)
+	inline void Init(const std::string &initLine)
 	{
 		is_allocated = AllocConsole();
 
@@ -71,6 +76,14 @@ namespace Console
 				handler->WriteLine(lineToPrint);
 		}
 	}
+	inline void WriteLines(const std::vector<std::string> lines)
+	{
+		for (auto&& lineToPrint : lines)
+		{
+			for (auto&& handler : Handlers)
+				handler->WriteLine(lineToPrint);
+		}
+	}
 
 	inline void RegisterHandler(std::shared_ptr<ConsoleOutputHandler> handler)
 	{
@@ -83,6 +96,17 @@ namespace Console
 		ss << line << std::endl;
 		Utils::Con(ss.str());
 		//Utils::Log(ss.str(), (".\\bin\\" + ProxyManager.Name + ".txt"));
+	}
+
+	inline void LogConsoleOutputHandler::WriteLines(const std::vector<std::string> lines)
+	{
+		for (auto&& lineToLog : lines)
+		{
+			std::stringstream ss;
+			ss << lineToLog << std::endl;
+			Utils::Con(ss.str());
+			//Utils::Log(ss.str(), (".\\bin\\" + ProxyManager.Name + ".txt"));
+		}
 	}
 
 	bool Resize(int nWidth, int nHeight, int cOffX = 0, int cOffY = 0)
