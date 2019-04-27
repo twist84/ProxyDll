@@ -82,7 +82,7 @@ namespace Console
 		std::stringstream ss;
 		ss << line << std::endl;
 		Utils::Con(ss.str());
-		//Utils::Log(ss.str(), (".\\" + dllname + ".txt"));
+		//Utils::Log(ss.str(), (".\\bin\\" + ProxyManager.Name + ".txt"));
 	}
 
 	bool Resize(int nWidth, int nHeight, int cOffX = 0, int cOffY = 0)

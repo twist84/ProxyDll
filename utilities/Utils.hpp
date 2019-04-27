@@ -224,7 +224,7 @@ namespace Utils
 	{
 		std::stringstream ss;
 		ss << line << std::endl;
-		Utils::Log(ss.str(), (".\\ms23.txt"));
+		Log(ss.str(), (".\\bin\\log.txt"));
 	}
 }
 
