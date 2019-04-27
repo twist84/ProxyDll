@@ -523,3 +523,41 @@ struct PlugMan
 			FreeLibrary(Plugin);
 	}
 } PluginManager;
+
+
+struct ProxMan
+{
+	HMODULE Dll;
+	std::string Name;
+	bool DllLoaded = false;
+
+	void LoadDll()
+	{
+		if (!DllLoaded)
+		{
+			Dll = LoadLibraryA((Name + "_org.dll").c_str());
+			if (!Dll)
+				DllLoaded = false;
+			else
+				DllLoaded = true;
+		}
+	}
+	std::string GetInitString()
+	{
+		return "Proxied " + Name + "_org.dll";
+	}
+	bool Setup(std::string name)
+	{
+		Name = name;
+		LoadDll();
+		if (!DllLoaded)
+			return false;
+
+		DisableThreadLibraryCalls(Dll);
+		return true;
+	}
+	bool Free()
+	{
+		return FreeLibrary(Dll);
+	}
+} ProxyManager;

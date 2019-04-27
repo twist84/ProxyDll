@@ -2,23 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="d3dx9_43.cpp">
-      <Filter>d3dx9_43</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="d3dx9_43.hpp">
-      <Filter>d3dx9_43</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="d3dx9_43">
-      <UniqueIdentifier>{946b6c46-bdc0-4a9b-9eac-85fac0407dfb}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="d3dx9_43.def">
-      <Filter>d3dx9_43</Filter>
-    </None>
+    <ClInclude Include="d3dx9_43.hpp" />
   </ItemGroup>
 </Project>
