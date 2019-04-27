@@ -1,4 +1,7 @@
 #pragma once
+
+auto DLL_NAME = "D3DX9_43";
+
 #pragma comment(linker, "/export:D3DXCheckVersion=D3DX9_43_org.D3DXCheckVersion")
 #pragma comment(linker, "/export:D3DXGetDriverLevel=D3DX9_43_org.D3DXGetDriverLevel")
 #pragma comment(linker, "/export:D3DXCreateSprite=D3DX9_43_org.D3DXCreateSprite")
