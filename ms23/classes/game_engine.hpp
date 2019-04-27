@@ -1,5 +1,5 @@
 #pragma once
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 
 struct c_game_engine
 {

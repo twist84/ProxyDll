@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
 std::vector<size_t> c_simulation_event_handler_send_event_offsets = { 0xE5723, 0xE5A15, 0xE5B1B };

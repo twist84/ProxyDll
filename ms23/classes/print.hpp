@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <iostream>
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 
 void hook_print(const char *hook, const char *DstBuf)
 {

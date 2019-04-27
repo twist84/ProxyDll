@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "../Pointer.hpp"
+#include <Pointer.hpp>
 
 void* _mainTLS;
 Pointer GetMainTls(size_t tlsOffset)

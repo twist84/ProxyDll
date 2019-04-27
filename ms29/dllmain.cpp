@@ -6,9 +6,8 @@
 #include <string>
 #include <codecvt>
 
-#include "utils/Console.hpp"
-#include "utils/Utils.hpp"
-#include "Patch.hpp"
+#include <Console.hpp>
+#include <Utils.hpp>
 
 #include "classes/camera.hpp"
 #include "classes/tags.hpp"

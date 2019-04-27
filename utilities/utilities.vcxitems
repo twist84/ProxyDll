@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{f9d88cf6-9812-475b-91d6-8bf637490f92}</ItemsProjectGuid>
+    <ItemsProjectName>utilities</ItemsProjectName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Console.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Patch.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Pointer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Utils.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Patch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Pointer.cpp" />
+  </ItemGroup>
+</Project>

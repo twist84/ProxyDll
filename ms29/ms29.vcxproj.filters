@@ -2,17 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Pointer.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Patch.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="utils">
-      <UniqueIdentifier>{09b00d7a-6225-488a-8146-ccdbe788060a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="classes">
       <UniqueIdentifier>{60cd2b02-00f9-4d5d-b2f8-df47f449fbdd}</UniqueIdentifier>
     </Filter>
@@ -21,18 +12,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Patch.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Pointer.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Utils.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Console.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="classes\camera.hpp">
       <Filter>classes</Filter>
     </ClInclude>

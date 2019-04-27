@@ -2,20 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Patch.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Pointer.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="utils\Console.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="utils\Utils.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
     <ClInclude Include="memory\local_types.hpp">
       <Filter>memory</Filter>
     </ClInclude>
@@ -85,17 +73,8 @@
     <ClInclude Include="classes\unit.hpp">
       <Filter>classes</Filter>
     </ClInclude>
-    <ClInclude Include="Patch.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Pointer.hpp">
-      <Filter>utils</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="utils">
-      <UniqueIdentifier>{3347c2ad-72f8-45bd-a2a3-0afbfaf5f7f1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="memory">
       <UniqueIdentifier>{4d777ef6-8f8a-470a-ad95-9213fab25c7e}</UniqueIdentifier>
     </Filter>

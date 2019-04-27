@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <iostream>
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
 #include "preferences.hpp"

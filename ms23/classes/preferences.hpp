@@ -1,13 +1,13 @@
 #pragma once
 #include <iostream>
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
 #include "filo.hpp"
 #include "renderer.hpp"
 
-#include "../../directx/include/d3d9.h"
+#include <d3d9.h>
 
 struct
 {

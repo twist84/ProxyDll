@@ -9,7 +9,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ms23", "ms23\ms23.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ms29", "ms29\ms29.vcxproj", "{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utilities", "utilities\utilities.vcxitems", "{F9D88CF6-9812-475B-91D6-8BF637490F92}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		utilities\utilities.vcxitems*{821dcce1-d911-4dbd-b4c8-477df71edaef}*SharedItemsImports = 4
+		utilities\utilities.vcxitems*{9fafd0f0-63ad-45fd-bf3d-0e0c89812299}*SharedItemsImports = 4
+		utilities\utilities.vcxitems*{c1ced326-d764-4b6d-86c0-35d7879488bb}*SharedItemsImports = 4
+		utilities\utilities.vcxitems*{f9d88cf6-9812-475b-91d6-8bf637490f92}*SharedItemsImports = 9
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86

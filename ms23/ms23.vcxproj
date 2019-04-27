@@ -20,8 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Patch.cpp" />
-    <ClCompile Include="Pointer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="classes\camera.hpp" />
@@ -47,10 +45,6 @@
     <ClInclude Include="memory\local_types.hpp" />
     <ClInclude Include="memory\tag_definitions.hpp" />
     <ClInclude Include="memory\tag_groups.hpp" />
-    <ClInclude Include="Patch.hpp" />
-    <ClInclude Include="Pointer.hpp" />
-    <ClInclude Include="utils\Console.hpp" />
-    <ClInclude Include="utils\Utils.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -90,6 +84,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
+    <Import Project="..\utilities\utilities.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />

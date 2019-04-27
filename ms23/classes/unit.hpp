@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
 inline char __cdecl unit_action_submit_hook(void *object_handle, e_unit_action unit_action_index)

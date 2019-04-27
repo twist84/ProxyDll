@@ -7,6 +7,7 @@
 
 #include "Utils.hpp"
 
+#pragma warning(disable:4273)
 BOOL WINAPI MoveWindow(_In_ HWND hWnd, _In_ int NewWidth, _In_ int NewHeight, _In_ int WindowWidth, _In_ int WindowHeight, _In_ BOOL bRepaint);
 
 namespace Console
@@ -25,7 +26,7 @@ namespace Console
 	bool IsAllocated();
 
 	// Initializes the console.
-	void Init();
+	void Init(const std::string& initLine);
 
 	// Writes one or more lines to the console.
 	void WriteLine(const std::string &line);
@@ -49,12 +50,14 @@ namespace Console
 		return is_allocated;
 	}
 
-	inline void Init()
+	inline void Init(const std::string& initLine)
 	{
 		is_allocated = AllocConsole();
 
 		// Register a log output by default
 		RegisterHandler(std::make_shared<LogConsoleOutputHandler>());
+
+		WriteLine(initLine);
 	}
 
 	inline void WriteLine(const std::string &line)

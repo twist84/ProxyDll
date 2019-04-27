@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "../utils/Utils.hpp"
+#include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
-#include "../../directx/include/d3d9.h"
+#include <d3d9.h>
 
 
 // TODO: get the rest of ms30s offsets
