@@ -227,6 +227,18 @@ namespace Utils
 		Log(ss.str(), (".\\bin\\log.txt"));
 	}
 
+	std::vector<std::experimental::filesystem::directory_entry> GetDirectoryEntries(std::string path, bool recursive)
+	{
+		std::vector<std::experimental::filesystem::directory_entry> directory_entries;
+		if (recursive)
+			for (auto& p : std::experimental::filesystem::recursive_directory_iterator(path))
+				directory_entries.push_back(p);
+		else
+			for (auto& p : std::experimental::filesystem::directory_iterator(path))
+				directory_entries.push_back(p);
+		return directory_entries;
+	}
+
 	std::vector<std::string> ReadFile(std::string Path, char Dilem = '\n')
 	{
 		std::stringstream ss;
@@ -236,16 +248,8 @@ namespace Utils
 
 	std::vector<std::string> ReadLogs(bool RecursiveFolders, std::string LogExtension)
 	{
-		std::vector<std::experimental::filesystem::directory_entry> directory_entries;
-		if (RecursiveFolders)
-			for (auto& p : std::experimental::filesystem::recursive_directory_iterator("."))
-				directory_entries.push_back(p);
-		else
-			for (auto& p : std::experimental::filesystem::directory_iterator("."))
-				directory_entries.push_back(p);
-
 		std::vector<std::string> result;
-		for (auto& p : directory_entries)
+		for (auto& p : Utils::GetDirectoryEntries(".", RecursiveFolders))
 		{
 			if (p.path().extension() == LogExtension)
 			{
@@ -526,15 +530,7 @@ struct PlugMan
 	}
 	bool LoadFolder(const char *lpAppName, const char *lpFolderKeyName, const char *lpExtensionKeyName)
 	{
-		std::vector<std::experimental::filesystem::directory_entry> directory_entries;
-		if (GetBool("Config", "RecursiveFolders"))
-			for (auto& p : std::experimental::filesystem::recursive_directory_iterator(GetString(lpAppName, lpFolderKeyName)))
-				directory_entries.push_back(p);
-		else
-			for (auto& p : std::experimental::filesystem::directory_iterator(GetString(lpAppName, lpFolderKeyName)))
-				directory_entries.push_back(p);
-
-		for (auto& p : directory_entries)
+		for (auto& p : Utils::GetDirectoryEntries(GetString(lpAppName, lpFolderKeyName), GetBool("Config", "RecursiveFolders")))
 			if (p.path().extension() == GetString(lpAppName, lpExtensionKeyName))
 				LoadedPlugins.push_back(LoadPlugin(p.path().generic_string().c_str()));
 		return true;
