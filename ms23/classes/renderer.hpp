@@ -6,7 +6,6 @@
 #include <d3d9.h>
 
 
-// TODO: get the rest of ms30s offsets
 auto			 g_clip_plane_near = *(int*)0x0191068C;
 auto			  g_clip_plane_far = *(int*)0x01910690;
 auto					  g_d3d9ex = *(int*)0x01910700;

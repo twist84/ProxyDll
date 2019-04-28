@@ -533,112 +533,112 @@ struct e_metagame_scoring_option
 	}
 };
 
-//struct s_unit_action_info
-//{
-//	const char *Name;
-//	unsigned short Unknown4;
-//	unsigned short Unknown6;
-//};
-//struct e_unit_action
-//{
-//	enum : int
-//	{
-//		_death_ping = 0,
-//		_custom_animation,
-//		_stop_custom_animation,
-//		_sync_container,
-//		_assassinate,
-//		_get_infected,
-//		_hostile_morph,
-//		_resurrect,
-//		_hard_ping,
-//		_ping,
-//		_morph,
-//		_morph_arrival,
-//		_infect,
-//		_posture,
-//		_posture_exit,
-//		_vehicle_exit,
-//		_vehicle_exit_and_detach,
-//		_vehicle_ejection,
-//		_vehicle_board,
-//		_vehicle_enter,
-//		_open,
-//		_close,
-//		_vehicle_exit_immediate,
-//		_vehicle_flip,
-//		_climb_attach,
-//		_climb_detach,
-//		_wall_lean,
-//		_wall_leanopen,
-//		_token,
-//		_take_off,
-//		_perch,
-//		_perch_jump,
-//		_land,
-//		_jump,
-//		_leap_anticipation,
-//		_leap,
-//		_leap_recovery,
-//		_emit_ai,
-//		_berserk,
-//		_flurry,
-//		_deploy_turret,
-//		_smash,
-//		_vault,
-//		_hoist,
-//		_ai_impulse,
-//		_melee_ai,
-//		_weapon_pickup,
-//		_weapon_trade,
-//		_primary_weapon_drop,
-//		_secondary_weapon_drop,
-//		_surge,
-//		_phase,
-//		_stow,
-//		_draw,
-//		_infection_spew,
-//		_kamikaze,
-//		_primary_weapon_switch,
-//		_secondary_weapon_switch,
-//		_grenade,
-//		_equipment,
-//		_equipment_animation,
-//		_equipment_pickup,
-//		_equipment_drop,
-//		_melee_player,
-//		_primary_weapon_primary_reload,
-//		_primary_weapon_secondary_reload,
-//		_secondary_weapon_primary_reload,
-//		_secondary_weapon_secondary_reload,
-//		_soft_ping,
-//		_primary_weapon_primary_recoil,
-//		_primary_weapon_secondary_recoil,
-//		_primary_weapon_primary_chamber,
-//		_primary_weapon_secondary_chamber,
-//		_primary_weapon_primary_charged,
-//		_primary_weapon_secondary_charged,
-//		_secondary_weapon_primary_recoil,
-//		_secondary_weapon_secondary_recoil,
-//		_secondary_weapon_primary_chamber,
-//		_secondary_weapon_secondary_chamber,
-//		_secondary_weapon_primary_charged,
-//		_secondary_weapon_secondary_charged,
-//		_primary_weapon_overheat_enter,
-//		_primary_weapon_overheat_loop,
-//		_primary_weapon_overheat_exit,
-//		_secondary_weapon_overheat_enter,
-//		_secondary_weapon_overheat_loop,
-//		_secondary_weapon_overheat_exit,
-//
-//		k_number_of_unit_actions
-//	} value;
-//
-//	const char *GetName()
-//	{
-//		return GetStructure<s_unit_action_info>(0x1947A58, value)->Name; // 0x12FCA90 in ms30
-//	}
-//};
+struct s_unit_action_info
+{
+	const char *Name;
+	unsigned short Unknown4;
+	unsigned short Unknown6;
+};
+struct e_unit_action
+{
+	enum : int
+	{
+		_death_ping = 0,
+		_custom_animation,
+		_stop_custom_animation,
+		_sync_container,
+		_assassinate,
+		_get_infected,
+		_hostile_morph,
+		_resurrect,
+		_hard_ping,
+		_ping,
+		_morph,
+		_morph_arrival,
+		_infect,
+		_posture,
+		_posture_exit,
+		_vehicle_exit,
+		_vehicle_exit_and_detach,
+		_vehicle_ejection,
+		_vehicle_board,
+		_vehicle_enter,
+		_open,
+		_close,
+		_vehicle_exit_immediate,
+		_vehicle_flip,
+		_climb_attach,
+		_climb_detach,
+		_wall_lean,
+		_wall_leanopen,
+		_token,
+		_take_off,
+		_perch,
+		_perch_jump,
+		_land,
+		_jump,
+		_leap_anticipation,
+		_leap,
+		_leap_recovery,
+		_emit_ai,
+		_berserk,
+		_flurry,
+		_deploy_turret,
+		_smash,
+		_vault,
+		_hoist,
+		_ai_impulse,
+		_melee_ai,
+		_weapon_pickup,
+		_weapon_trade,
+		_primary_weapon_drop,
+		_secondary_weapon_drop,
+		_surge,
+		_phase,
+		_stow,
+		_draw,
+		_infection_spew,
+		_kamikaze,
+		_primary_weapon_switch,
+		_secondary_weapon_switch,
+		_grenade,
+		_equipment,
+		_equipment_animation,
+		_equipment_pickup,
+		_equipment_drop,
+		_melee_player,
+		_primary_weapon_primary_reload,
+		_primary_weapon_secondary_reload,
+		_secondary_weapon_primary_reload,
+		_secondary_weapon_secondary_reload,
+		_soft_ping,
+		_primary_weapon_primary_recoil,
+		_primary_weapon_secondary_recoil,
+		_primary_weapon_primary_chamber,
+		_primary_weapon_secondary_chamber,
+		_primary_weapon_primary_charged,
+		_primary_weapon_secondary_charged,
+		_secondary_weapon_primary_recoil,
+		_secondary_weapon_secondary_recoil,
+		_secondary_weapon_primary_chamber,
+		_secondary_weapon_secondary_chamber,
+		_secondary_weapon_primary_charged,
+		_secondary_weapon_secondary_charged,
+		_primary_weapon_overheat_enter,
+		_primary_weapon_overheat_loop,
+		_primary_weapon_overheat_exit,
+		_secondary_weapon_overheat_enter,
+		_secondary_weapon_overheat_loop,
+		_secondary_weapon_overheat_exit,
+
+		k_number_of_unit_actions
+	} value;
+
+	const char *GetName()
+	{
+		return GetStructure<s_unit_action_info>(0x1947A58, value)->Name;
+	}
+};
 
 struct e_simulation_event
 {

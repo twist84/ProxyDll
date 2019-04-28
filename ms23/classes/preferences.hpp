@@ -40,7 +40,7 @@ struct
 	uint32 mouse_sensitivity_vehicle_vertical = { 25, "Mouse Sensitivity: Vehicle Vertical" };
 	uint32 mouse_sensitivity_vehicle_horizontal = { 25, "Mouse Sensitivity: Vehicle Horizontal" };
 
-	uint32 mouse_acceleration = { 0, "mouse_acceleration" };
+	uint32 mouse_acceleration = { 0, "Mouse Acceleration" };
 	toggle mouse_filter = { e_toggle_option::_off, "Mouse Filter" };
 	toggle invert_mouse = { e_toggle_option::_off, "Invert Mouse" };
 	toggle toggle_crouch = { e_toggle_option::_on, "Toggle Crouch" };
@@ -50,11 +50,11 @@ struct
 	screen_resolution screen_resolution = { 1920, 1080, "Screen Resolution" };
 
 	quality texture_resolution = { e_quality_option::_high, "Texture Resolution (Requires Restart)" };
-	quality texture_filtering_quality = { e_quality_option::_high, "texture_filtering Quality" };
+	quality texture_filtering_quality = { e_quality_option::_high, "Texture Filtering Quality" };
 	quality lighting_quality = { e_quality_option::_high, "Lighting Quality" };
 	quality effects_quality = { e_quality_option::_high, "Effects Quality" };
 	quality shadow_quality = { e_quality_option::_high, "Shadow Quality" };
-	quality details_quality = { e_quality_option::_high, "details Quality" };
+	quality details_quality = { e_quality_option::_high, "Details Quality" };
 	quality postprocessing_quality = { e_quality_option::_high, "Post-Processing Quality" };
 	toggle motion_blur = { e_toggle_option::_off, "Motion Blur", true };
 
@@ -110,15 +110,17 @@ void preferences_get_screen_resolution(int *a1, int *a2)
 
 void preferences_set_screen_resolution(int a1, int a2)
 {
-	//preferences.screen_resolution.set(a1, a2);
+	preferences.screen_resolution.set(a1, a2);
+	preferences.screen_resolution.width = a1;
+	preferences.screen_resolution.height = a2;
 }
 
-// TODO: fix for ms30, the equivalent ms30 function is __stdcall and only has 2 params (width and height)
-void __cdecl sub_A228D0(int adapter, int BackBufferWidth, int BackBufferHeight, e_toggle_option Fullscreen)
+void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBufferWidth, int BackBufferHeight, e_toggle_option Fullscreen)
 {
 	if (preferences.screen_resolution.locked)
 		return;
 
+	preferences.screen_resolution.set(BackBufferWidth, BackBufferHeight);
 	preferences.screen_resolution.width = BackBufferWidth;
 	preferences.screen_resolution.height = BackBufferHeight;
 	if (adapter == g_adapter)
@@ -432,7 +434,6 @@ void preferences_set_contrast(uint32_t a1)
 	preferences.contrast.set(a1);
 }
 
-// TODO: add more ms30 offsets
 inline void AddPreferencesHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -447,7 +448,7 @@ inline void AddPreferencesHooks(const char *name)
 		//AddHook({ 0x10D850 }, &preferences_set_screen_resolution_list, "preferences_set_screen_resolution_list");
 		AddHook({ 0x10C030 }, &preferences_get_screen_resolution, "preferences_get_screen_resolution");
 		AddHook({ 0x10E1C0 }, &preferences_set_screen_resolution, "preferences_set_screen_resolution");
-		AddHook({ 0x6228D0 }, &sub_A228D0, "sub_A228D0");
+		AddHook({ 0x6228D0 }, &display_preferences_update_back_buffer_hook, "display_preferences_update_back_buffer");
 		AddHook({ 0x10B560 }, &preferences_get_gamemode_data, "preferences_get_gamemode_data");
 		AddHook({ 0x10D8E0 }, &preferences_set_gamemode_data, "preferences_set_gamemode_data");
 		AddHook({ 0x10EBA0 }, &preferences_set_lobby_data, "preferences_set_lobby_data");

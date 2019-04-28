@@ -88,6 +88,9 @@ size_t GetAddress(void *addr, bool base = false)
 	return base ? (size_t)addr - 0x400000 : (size_t)addr;
 }
 
+ConMan PreferenceManager;
+const char *PreferenceManagerAppname;
+
 struct e_lobby_type
 {
 	enum : int
@@ -557,7 +560,7 @@ struct e_unit_action
 
 	const char *GetName()
 	{
-		return GetStructure<s_unit_action_info>(0x1947A58, value)->Name; // 0x12FCA90 in ms30
+		return GetStructure<s_unit_action_info>(0x1947A58, value)->Name;
 	}
 };
 
@@ -1168,11 +1171,11 @@ struct vftable
 	{
 		switch (address)
 		{
-		case 0x165FC44: // 0x11BD838 in ms30
+		case 0x165FC44:
 			return "c_draw_string::`vftable'";
 		case 0x165FCB0:
 			return "c_font_cache_base::`vftable'";
-		case 0x165FCCC: // 0x11BD81C in ms30
+		case 0x165FCCC:
 			return "c_font_cache_mt_safe::`vftable'";
 		case 0x165FCE8:
 			return "c_null_font_cache::`vftable'";
@@ -1182,81 +1185,81 @@ struct vftable
 			return "c_gui_saved_screenshot_selected_item::`vftable'";
 		case 0x166DBC4:
 			return "c_screenshots_loader_optional_cache_callback::`vftable'";
-		case 0x1697104: // 0x11C6008 in ms30
+		case 0x1697104:
 			return "c_simple_font_draw_string::`vftable'";
-		case 0x1699240: // 0x11C6028 in ms30
+		case 0x1699240:
 			return "c_simple_font_cache::`vftable'";
-		case 0x1699FD4: // 0x11DC428 in ms30
+		case 0x1699FD4:
 			return "c_message::`vftable'";
-		case 0x1699FE4: // 0x11DC3CC in ms30
+		case 0x1699FE4:
 			return "c_controller_input_message::`vftable'";
 		case 0x1699FF4:
 			return "c_xenon_message::`vftable'";
-		case 0x169A004: // 0x11DC414 in ms30
+		case 0x169A004:
 			return "c_load_screen_message::`vftable'";
 		case 0x169A018:
 			return "c_screen_custom_message::`vftable'";
-		case 0x169A028: // 0x11DC3EC in ms30
+		case 0x169A028:
 			return "c_load_alert_screen_message::`vftable'";
-		case 0x169A03C: // 0x11DC44C in ms30
+		case 0x169A03C:
 			return "c_load_dialog_screen_message::`vftable'";
-		case 0x169A050: // 0x11DC400 in ms30
+		case 0x169A050:
 			return "c_load_in_progress_screen_message::`vftable'";
-		case 0x169A064: // 0x11DC438 in ms30
+		case 0x169A064:
 			return "c_load_in_progress_mini_screen_message::`vftable'";
-		case 0x169A078: // 0x11DC3DC in ms30
+		case 0x169A078:
 			return "c_dialog_result_message::`vftable'";
 		case 0x169A088:
 			return "c_load_spartan_milestone_screen_message::`vftable'";
 		case 0x169A09C:
 			return "c_load_spartan_rank_screen_message::`vftable'";
-		case 0x169A144: // 0x11DC4D8 in ms30
+		case 0x169A144:
 			return "c_chud_draw_string::`vftable'";
 		case 0x169A8C4:
 			return "c_game_tag_parser::`vftable'";
 		case 0x169A8D4:
 			return "c_simple_game_tag_parser::`vftable'";
-		case 0x169A8E4: // 0x11DC7AC in ms30
+		case 0x169A8E4:
 			return "c_magic_string_game_tag_parser::`vftable'";
-		case 0x169A9AC: // 0x11DC7EC in ms30
+		case 0x169A9AC:
 			return "c_gui_screen_terminal::`vftable'";
-		case 0x169AD9C: // 0x11DCD44 in ms30
+		case 0x169AD9C:
 			return "c_gui_screen_widget::`vftable'";
-		case 0x169AE7C: // 0x11DCE24 in ms30
+		case 0x169AE7C:
 			return "c_gui_screen_codeless_widget::`vftable'";
-		case 0x169AF9C: // 0x11DCF24 in ms30
+		case 0x169AF9C:
 			return "c_gui_screen_scoreboard::`vftable'";
 		case 0x169B07C:
 			return "c_scoreboard_load_screen_message::`vftable'";
-		case 0x169B094: // 0x11DD004 in ms30
+		case 0x169B094:
 			return "c_gui_scoreboard_data::`vftable'";
 		case 0x169B148:
 			return "c_user_interface_allocation::`vftable'";
-		case 0x169B1E4: // 0x11DC8CC in ms30
+		case 0x169B1E4:
 			return "c_load_boot_betrayer_screen_message::`vftable'";
 		case 0x169B1FC:
 			return "c_gui_screen_boot_betrayer::`vftable'";
-		case 0x169B344: // 0x11DCBFC in ms30
+		case 0x169B344:
 			return "c_gui_widget::`vftable'";
-		case 0x169B3DC: // 0x11DCB38 in ms30
+		case 0x169B3DC:
 			return "c_sized_user_interface_text<1024>::`vftable'";
-		case 0x169B3F4: // 0x11DCA74 in ms30
+		case 0x169B3F4:
 			return "c_gui_sized_text_widget<1024>::`vftable'";
-		case 0x169B4A4: // 0x11DCA5C in ms30
+		case 0x169B4A4:
 			return "c_sized_user_interface_text<256>::`vftable'";
-		case 0x169B4BC: // 0x11DCC94 in ms30
+		case 0x169B4BC:
 			return "c_gui_sized_text_widget<256>::`vftable'";
-		case 0x169B56C: // 0x11DCB24 in ms30
+		case 0x169B56C:
 			return "c_sized_user_interface_text<48>::`vftable'";
-		case 0x169B584: // 0x11DCB4C in ms30
+		case 0x169B584:
 			return "c_gui_sized_text_widget<48>::`vftable'";
 		case 0x169B6A0:
 			return "c_load_game_camera_list_screen_message::`vftable'";
-		case 0x169B6B4: // 0x11DC8FC in ms30
+		case 0x169B6B4:
 			return "c_observer_camera_list_screen::`vftable'";
-		case 0x169B794: // 0x11DC9DC in ms30
+		case 0x169B794:
 			return "c_camera_list_datasource::`vftable'";
-		case 0x169CAC8: // 0x11DE9B4 in ms30
+		case 0x169CAC8:
 			return "c_user_interface_text::`vftable'";
 		case 0x169CCAC:
 			return "c_gui_carnage_report_loading_screen::`vftable'";
@@ -1270,25 +1273,25 @@ struct vftable
 			return "c_load_pregame_selection_screen_message::`vftable'";
 		case 0x169D2DC:
 			return "c_load_pregame_players_selection_screen_message::`vftable'";
-		case 0x169D334: // 0x11DE9CC in ms30
+		case 0x169D334:
 			return "c_gui_custom_bitmap_widget::`vftable'";
 		case 0x169D65C:
 			return "c_http_stored_buffer_downloader<4096>::`vftable'";
-		case 0x169DA04: // 0x11DEE8C in ms30
+		case 0x169DA04:
 			return "c_gui_data::`vftable'";
-		case 0x169DA74: // 0x11DEEFC in ms30
+		case 0x169DA74:
 			return "c_gui_data_array::`vftable'";
-		case 0x169DAE4: // 0x11DEDA4 in ms30
+		case 0x169DAE4:
 			return "c_gui_data_array_test::`vftable'";
 		case 0x169DB54:
 			return "c_gui_ordered_data::`vftable'";
-		case 0x169DBCC: // 0x11DEE14 in ms30
+		case 0x169DBCC:
 			return "c_gui_tag_datasource::`vftable'";
-		case 0x169DDD4: // 0x11DEC8C in ms30
+		case 0x169DDD4:
 			return "c_gui_alert_screen_widget::`vftable'";
-		case 0x169DEF4: // 0x11DEBAC in ms30
+		case 0x169DEF4:
 			return "c_gui_dialog_screen_widget::`vftable'";
-		case 0x169DFD4: // 0x11DEB34 in ms30
+		case 0x169DFD4:
 			return "c_dialog_screen_widget_dialog_items_datasource::`vftable'";
 		case 0x169E23C:
 			return "c_gui_map_selected_item::`vftable'";
@@ -1352,11 +1355,11 @@ struct vftable
 			return "c_gui_property_value_datasource::`vftable'";
 		case 0x169F36C:
 			return "c_sandbox_object_properties_items_datasource::`vftable'";
-		case 0x169F424: // 0x11DF3EC in ms30
+		case 0x169F424:
 			return "c_saved_film_control_pad::`vftable'";
-		case 0x169F59C: // 0x11DF14C in ms30
+		case 0x169F59C:
 			return "c_saved_film_take_screenshot::`vftable'";
-		case 0x169F7A4: // 0x11DF30C in ms30
+		case 0x169F7A4:
 			return "c_saved_film_snippet_screen::`vftable'";
 		case 0x169F8C4:
 			return "c_error_dialog_screen_widget::`vftable'";
@@ -1480,7 +1483,7 @@ struct vftable
 			return "c_start_menu_settings_film_autosave::`vftable'";
 		case 0x16A2C4C:
 			return "c_settings_film_autosave_sidebar_items_datasource::`vftable'";
-		case 0x16A2D4C: // 0x11DF22C in ms30
+		case 0x16A2D4C:
 			return "c_gui_screen_in_progress::`vftable'";
 		case 0x16A2E6C:
 			return "c_gui_spartan_milestone::`vftable'";
@@ -1564,19 +1567,19 @@ struct vftable
 			return "c_gui_screen_matchmaking_match_found::`vftable'";
 		case 0x16A5E34:
 			return "c_motd_popup_screen_widget::`vftable'";
-		case 0x16A5F6C: // 0x11DF70C in ms30
+		case 0x16A5F6C:
 			return "c_gui_group_widget::`vftable'";
-		case 0x16A600C: // 0x11DF66C in ms30
+		case 0x16A600C:
 			return "c_gui_button_key_widget::`vftable'";
-		case 0x16A60EC: // 0x11DF5CC in ms30
+		case 0x16A60EC:
 			return "c_gui_list_widget::`vftable'";
-		case 0x16A61CC: // 0x11DF7AC in ms30
+		case 0x16A61CC:
 			return "c_gui_bitmap_widget::`vftable'";
-		case 0x16A62F4: // 0x11DF854 in ms30
+		case 0x16A62F4:
 			return "c_gui_list_item_widget::`vftable'";
 		case 0x16A63D4:
 			return "c_gui_text_widget::`vftable'";
-		case 0x16A6564: // 0x11DF8F4 in ms30
+		case 0x16A6564:
 			return "c_gui_model_widget::`vftable'";
 		case 0x16A6684:
 			return "c_gui_game_results_data::`vftable'";
@@ -1915,8 +1918,6 @@ struct s_game_options
 	char GameVariant[0x264]; // Blam::GameVariant
 	char MapVariant[0xE090]; // Blam::MapVariant
 	uint8_t MachineArray[0x128];
-
-	// TODO: figure what changed and where
 	struct
 	{
 		uint8_t IsValid;
@@ -1926,11 +1927,8 @@ struct s_game_options
 		uint8_t unknown8[0x18];
 		char PlayerProperties[0x1620]; // Blam::Players::PlayerProperties
 	} InitialParticipantsArray[16];
-
-	//uint8_t InitialParticipantsArray[16][0xBB0]; // ms30
 } game_options;
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
-//static_assert(sizeof(s_game_options) == 0x1A248u, "game_options wrong size");
 
 struct s_progression
 {
@@ -2167,21 +2165,11 @@ struct screen_resolution
 		value.width = a1;
 		value.height = a2;
 		printf_s("Set %s: %s->%s\n", name, prev.ToString(), value.ToString());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, value.ToString());
 	}
 	void set(s_screen_resolution *a1)
 	{
-		if (a1->width == width && a1->height == height)
-			return;
-		if (locked)
-		{
-			printf_s("Unable to set %s: locked\n", name);
-			return;
-		}
-		s_screen_resolution value = { width, height };
-		auto prev = value;
-		value.width = a1->width;
-		value.height = a1->height;
-		printf_s("Set %s: %s->%s\n", name, prev.ToString(), value.ToString());
+		set(a1->width, a1->height);
 	}
 	void toggle_lock()
 	{
@@ -2212,6 +2200,7 @@ struct game_language
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %s->%s\n", name, prev.GetName(), value.GetName());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, value.GetName());
 	}
 	void toggle_lock()
 	{
@@ -2242,6 +2231,7 @@ struct player_marker
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %s->%s\n", name, prev.GetName(), value.GetName());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, value.GetName());
 	}
 	void toggle_lock()
 	{
@@ -2272,6 +2262,7 @@ struct control_method
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %s->%s\n", name, prev.GetName(), value.GetName());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, value.GetName());
 	}
 	void toggle_lock()
 	{
@@ -2302,6 +2293,7 @@ struct toggle
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %s->%s\n", name, prev.GetName(), value.GetName());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, value.GetName());
 	}
 	void toggle_lock()
 	{
@@ -2332,6 +2324,7 @@ struct quality
 		auto prev = quality;
 		quality.value = a1.value;
 		printf_s("Set %s: %s->%s\n", name, prev.GetName(), quality.GetName());
+		PreferenceManager.SetString(PreferenceManagerAppname, name, quality.GetName());
 	}
 	void toggle_lock()
 	{
@@ -2362,6 +2355,7 @@ struct stringid
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %s->%s\n", name, Blam::StringIDCache::Instance.GetString(prev), Blam::StringIDCache::Instance.GetString(a1));
+		PreferenceManager.SetString(PreferenceManagerAppname, name, Blam::StringIDCache::Instance.GetString(a1));
 	}
 	void toggle_lock()
 	{
@@ -2392,6 +2386,7 @@ struct uint32
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %d->%d\n", name, prev, value);
+		PreferenceManager.SetInt(PreferenceManagerAppname, name, value);
 	}
 	void toggle_lock()
 	{
@@ -2422,6 +2417,7 @@ struct uint16
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %d->%d\n", name, prev, value);
+		PreferenceManager.SetInt(PreferenceManagerAppname, name, value);
 	}
 	void toggle_lock()
 	{
@@ -2452,6 +2448,7 @@ struct uint8
 		auto prev = value;
 		value = a1;
 		printf_s("Set %s: %d->%d\n", name, prev, value);
+		PreferenceManager.SetInt(PreferenceManagerAppname, name, value);
 	}
 	void toggle_lock()
 	{
@@ -4269,6 +4266,23 @@ struct s_initial_network_values
 	int unknown16B8;
 	int determinism_version;
 	int unknown16C0;
+
+	void SetMaxOfflinePlayerCount(int player_count)
+	{
+		offline_max_player_count = player_count;
+	}
+	void SetMaxCoopPlayerCount(int player_count)
+	{
+		lobby_coop_max_player_count = player_count;
+	}
+	void SetMaxForgePlayerCount(int player_count)
+	{
+		lobby_mapeditor_max_player_count = player_count;
+	}
+	void SetMaxTheaterPlayerCount(int player_count)
+	{
+		lobby_film_max_player_count = player_count;
+	}
 };
 auto initial_network_values = GetStructure<s_initial_network_values>(0x19A62C0);
 
@@ -5203,6 +5217,22 @@ struct s_camera_definition
 	uint8_t unknownD4[4];
 	uint32_t dword_flagsD8;
 	uint8_t unknownDC[16];
+
+	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
+	{
+		if (direction.i != 0.0f || direction.j != 0.0f || direction.k != 0.0f)
+		{
+			if (position_and_shift)
+				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", position.i, position.j, position.k, position_shift.i, position_shift.j, position_shift.k);
+			if (look_and_depth_and_fov)
+				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", look, look_shift, depth, field_of_view.Get());
+			if (forward_and_up_and_direction)
+				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", forward.i, forward.j, forward.k, up.i, up.j, up.k, direction.i, direction.j, direction.k);
+			if (center_and_zoom_transition_time)
+				printf_s("center: %f %f %f, zoom_transition_time: %f\n", center.i, center.j, center.k, zoom_transition_time);
+		}
+		return this;
+	}
 };
 _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 

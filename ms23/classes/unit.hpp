@@ -16,7 +16,7 @@ inline char __cdecl unit_action_submit_hook(void *object_handle, e_unit_action u
 	if (result)
 	{
 		//if (scenario_type_get() != e_scenario_type::_mainmenu)
-		//	print_f("%s\n", GetStructure<UnitActionInfo>(0x1947A58, unit_action.Index)->Name);
+		//	printf_s("%s\n", GetStructure<UnitActionInfo>(0x1947A58, unit_action.Index)->Name);
 	}
 
 	return result;
