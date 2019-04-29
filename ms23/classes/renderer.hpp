@@ -244,25 +244,25 @@ inline void AddRendererHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({ 0x6233A0 }, &IDirect3DDevice9RenderStateFillModeSetValue, "IDirect3DDevice9RenderStateFillModeSetValue");
-		//AddHook({ 0x6233C0 }, &IDirect3DIndexBuffer9SetIndexData, "IDirect3DIndexBuffer9SetIndexData");
-		//AddHook({ 0x623500 }, &IDirect3DDevice9PixelShaderSet, "IDirect3DDevice9PixelShaderSet");
-		//AddHook({ 0x623700 }, &sub_A23700, "sub_A23700");
-		//AddHook({ 0x624650 }, &IDirect3DDevice9SetVertexDeclaration, "IDirect3DDevice9SetVertexDeclaration");
-		//AddHook({ 0x6247B0 }, &IDirect3DDevice9VertexShaderSet, "IDirect3DDevice9VertexShaderSet");
-		//AddHook({ 0x648C70 }, &IDirect3DDevice9DepthStencilSurfaceSetZ, "IDirect3DDevice9DepthStencilSurfaceSetZ");
-		//AddHook({ 0x666370 }, &IDirect3DDevice9SetPixelShaderConstantB, "IDirect3DDevice9SetPixelShaderConstantB");
-		//AddHook({ 0x6663A0 }, &IDirect3DDevice9SetPixelShaderConstantI, "IDirect3DDevice9SetPixelShaderConstantI");
-		//AddHook({ 0x666620 }, &IDirect3DDevice9SetVertexShaderConstantB, "IDirect3DDevice9SetVertexShaderConstantB");
-		//AddHook({ 0x675810 }, &IDirect3DDevice9IsNull, "IDirect3DDevice9IsNull");
-		//AddHook({ 0x6758F0 }, &IDirect3DDevice9CreateCubeTexture, "IDirect3DDevice9CreateCubeTexture");
-		//AddHook({ 0x675960 }, &IDirect3DDevice9CreateIndexBuffer, "IDirect3DDevice9CreateIndexBuffer");
-		//AddHook({ 0x6759B0 }, &IDirect3DDevice9CreateVertexBuffer, "IDirect3DDevice9CreateVertexBuffer");
-		//AddHook({ 0x675A00 }, &IDirect3DDevice9CreateDepthStencilSurface, "IDirect3DDevice9CreateDepthStencilSurface");
-		//AddHook({ 0x675B20 }, &IDirect3DDevice9CreateTexture, "IDirect3DDevice9CreateTexture");
-		//AddHook({ 0x675BD0 }, &IDirect3DDevice9CreateVertexDeclaration, "IDirect3DDevice9CreateVertexDeclaration");
-		//AddHook({ 0x675C70 }, &IDirect3DDevice9CreateVolumeTexture, "IDirect3DDevice9CreateVolumeTexture");
-		//AddHook({ 0x675E30 }, &IDirect3DDevice9UpdateTexture, "IDirect3DDevice9UpdateTexture");
+		//HookManager.AddHook({ 0x6233A0 }, &IDirect3DDevice9RenderStateFillModeSetValue, "IDirect3DDevice9RenderStateFillModeSetValue");
+		//HookManager.AddHook({ 0x6233C0 }, &IDirect3DIndexBuffer9SetIndexData, "IDirect3DIndexBuffer9SetIndexData");
+		//HookManager.AddHook({ 0x623500 }, &IDirect3DDevice9PixelShaderSet, "IDirect3DDevice9PixelShaderSet");
+		//HookManager.AddHook({ 0x623700 }, &sub_A23700, "sub_A23700");
+		//HookManager.AddHook({ 0x624650 }, &IDirect3DDevice9SetVertexDeclaration, "IDirect3DDevice9SetVertexDeclaration");
+		//HookManager.AddHook({ 0x6247B0 }, &IDirect3DDevice9VertexShaderSet, "IDirect3DDevice9VertexShaderSet");
+		//HookManager.AddHook({ 0x648C70 }, &IDirect3DDevice9DepthStencilSurfaceSetZ, "IDirect3DDevice9DepthStencilSurfaceSetZ");
+		//HookManager.AddHook({ 0x666370 }, &IDirect3DDevice9SetPixelShaderConstantB, "IDirect3DDevice9SetPixelShaderConstantB");
+		//HookManager.AddHook({ 0x6663A0 }, &IDirect3DDevice9SetPixelShaderConstantI, "IDirect3DDevice9SetPixelShaderConstantI");
+		//HookManager.AddHook({ 0x666620 }, &IDirect3DDevice9SetVertexShaderConstantB, "IDirect3DDevice9SetVertexShaderConstantB");
+		//HookManager.AddHook({ 0x675810 }, &IDirect3DDevice9IsNull, "IDirect3DDevice9IsNull");
+		//HookManager.AddHook({ 0x6758F0 }, &IDirect3DDevice9CreateCubeTexture, "IDirect3DDevice9CreateCubeTexture");
+		//HookManager.AddHook({ 0x675960 }, &IDirect3DDevice9CreateIndexBuffer, "IDirect3DDevice9CreateIndexBuffer");
+		//HookManager.AddHook({ 0x6759B0 }, &IDirect3DDevice9CreateVertexBuffer, "IDirect3DDevice9CreateVertexBuffer");
+		//HookManager.AddHook({ 0x675A00 }, &IDirect3DDevice9CreateDepthStencilSurface, "IDirect3DDevice9CreateDepthStencilSurface");
+		//HookManager.AddHook({ 0x675B20 }, &IDirect3DDevice9CreateTexture, "IDirect3DDevice9CreateTexture");
+		//HookManager.AddHook({ 0x675BD0 }, &IDirect3DDevice9CreateVertexDeclaration, "IDirect3DDevice9CreateVertexDeclaration");
+		//HookManager.AddHook({ 0x675C70 }, &IDirect3DDevice9CreateVolumeTexture, "IDirect3DDevice9CreateVolumeTexture");
+		//HookManager.AddHook({ 0x675E30 }, &IDirect3DDevice9UpdateTexture, "IDirect3DDevice9UpdateTexture");
 	}
 }
 
@@ -313,6 +313,6 @@ inline void AddRendererPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&SetInitialPresentationParametersPatch, "SetInitialPresentationParameters");
+		PatchManager.AddPatch(&SetInitialPresentationParametersPatch, "SetInitialPresentationParameters");
 	}
 }

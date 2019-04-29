@@ -65,9 +65,9 @@ inline void AddUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0xC2C30 }, &get_loading_text_hook, "get_loading_text");
-		AddHook({ 0xB0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		AddHook({ 0xB0CE0 }, &game_get_region_hook, "game_get_region");
+		HookManager.AddHook({ 0xC2C30 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.AddHook({ 0xB0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
+		HookManager.AddHook({ 0xB0CE0 }, &game_get_region_hook, "game_get_region");
 	}
 }
 
@@ -81,6 +81,6 @@ inline void AddUiPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&language_patch, "language");
+		PatchManager.AddPatch(&language_patch, "language");
 	}
 }

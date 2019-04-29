@@ -5,26 +5,18 @@
 
 #include "../memory/local_types.hpp"
 
-static auto sub_4EC4C0 = (wchar_t(__thiscall*)(wchar_t *Src, const char *file_path))(0x4EC4C0);
+static auto char_string_to_wchar_string = (wchar_t(__thiscall*)(wchar_t *Src, const char *file_path))(0x4EC4C0);
 static auto sub_528410 = (int(__cdecl *)(s_file_reference *filo, const char *file_path))(0x528410);
-static auto sub_5288B0 = (s_file_reference *(__cdecl *)(s_file_reference *filo, wchar_t *Src))(0x5288B0);
+static auto file_path_add_name = (s_file_reference *(__cdecl *)(s_file_reference *filo, wchar_t *Src))(0x5288B0);
 static auto sub_5294F0 = (void(__cdecl *)(const char *ArgList, s_file_reference *a2, s_file_reference *a3, char a4))(0x5294F0);
-
 
 s_file_reference *__cdecl file_reference_initialize_header_hook(s_file_reference *filo, uint16_t a2)
 {
-	memset(filo, 0, 0x110u);
-	filo->header_type = 'filo';
-	filo->unknown6 = a2;
-
-	return filo;
+	return filo->initialize_header(a2);
 }
 s_file_reference *__cdecl file_reference_initialize_hook(s_file_reference *filo, uint16_t a2)
 {
-	file_reference_initialize_header_hook(filo, a2);
-	filo->file_handle = (HANDLE)-1;
-
-	return filo;
+	return filo->initialize(a2);
 }
 
 int __cdecl file_get_folder_path_hook(wchar_t *file_path)
@@ -54,69 +46,50 @@ void *__cdecl filo_create_hook(s_file_reference *filo, const char *file_path, bo
 	}
 	else
 	{
-		sub_4EC4C0(Src, file_path);
-		sub_5288B0(filo, Src);
+		char_string_to_wchar_string(Src, file_path);
+		file_path_add_name(filo, Src);
 	}
 
-	//printf_s("filo_create: %s\n", filo->path);
+	filo->Print("filo_create");
 	return filo;
 }
 
 char __cdecl file_read_hook(s_file_reference *filo, DWORD nNumberOfBytesToRead, char a3, LPVOID lpBuffer)
 {
-	DWORD v4 = nNumberOfBytesToRead;
-	if (!nNumberOfBytesToRead)
-		return true;
-	DWORD v6 = nNumberOfBytesToRead;
-	nNumberOfBytesToRead = 0;
-	char result = false;
-	if (ReadFile(filo->file_handle, lpBuffer, v6, &nNumberOfBytesToRead, 0))
-	{
-		if (nNumberOfBytesToRead == v4)
-			result = true;
-		else
-			SetLastError(0x26u);
-	}
-	filo->file_pointer += nNumberOfBytesToRead;
-	if (!result)
-		sub_5294F0("file_read", filo, 0, a3);
-
-	//printf_s("file_read: %s\n", filo->path);
+	auto result = filo->read(nNumberOfBytesToRead, a3, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
+	filo->Print("file_read");
 	return result;
 }
 
 char __cdecl file_close_hook(s_file_reference *filo)
 {
-	//printf_s("file_close: %s\n", filo->path);
-	bool result;
-	if (CloseHandle(filo->file_handle))
-	{
-		filo->file_handle = (HANDLE)-1;
-		filo->file_pointer = 0;
-		result = true;
-	}
-	else
-	{
-		SetLastError(0);
-		result = false;
-	}
-	return result;
+	filo->Print("file_close");
+	return filo->close();
 }
 
 bool __cdecl file_set_position_hook(s_file_reference *filo, LONG lDistanceToMove, char a3)
 {
-	if (filo->file_pointer == lDistanceToMove)
-		return 1;
-	void *file_handle = filo->file_handle;
-	LONG DistanceToMoveHigh = 0;
-	uint32_t file_pointer = SetFilePointer(file_handle, lDistanceToMove, &DistanceToMoveHigh, 0);
-	bool file_pointer_is_valid = file_pointer != -1;
-	filo->file_pointer = file_pointer;
-	if (file_pointer == -1)
-		sub_5294F0("file_set_position", filo, 0, a3);
+	auto result = filo->set_position(lDistanceToMove, a3, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
+	filo->Print("file_set_position");
+	return result;
+}
 
-	//printf_s("file_set_position: %s\n", filo->path);
-	return file_pointer_is_valid;
+char __cdecl file_write_hook(s_file_reference* filo, DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer)
+{
+	auto result = filo->write(nNumberOfBytesToWrite, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
+	filo->Print("file_write");
+	return result;
+}
+int __cdecl filo_get_file_pointer_hook(s_file_reference* filo)
+{
+	filo->Print("filo_get_file_pointer");
+	return filo->file_pointer;
+}
+
+int __cdecl file_get_eof_hook(s_file_reference* filo)
+{
+	filo->Print("file_get_eof");
+	return filo->get_eof((void(__cdecl*)(const char*, s_file_reference *, s_file_reference *, char))(0x5294F0));
 }
 
 static const auto file_create_parent_directories_if_not_present = (bool(__cdecl *)(s_file_reference *))0x527FF0;
@@ -132,15 +105,18 @@ inline void AddFiloHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x12A5F0 }, &file_get_folder_path_hook, "file_get_folder_path");
+		HookManager.AddHook({ 0x12A5F0 }, &file_get_folder_path_hook, "file_get_folder_path");
 
-		AddHook({ 0x128500 }, &file_reference_initialize_header_hook, "file_reference_initialize_header");
-		AddHook({ 0x12A9A0 }, &file_reference_initialize_hook, "file_reference_initialize");
+		HookManager.AddHook({ 0x128500 }, &file_reference_initialize_header_hook, "file_reference_initialize_header");
+		HookManager.AddHook({ 0x12A9A0 }, &file_reference_initialize_hook, "file_reference_initialize");
 
-		AddHook({ 0x128550 }, &filo_create_hook, "filo_create");
-		AddHook({ 0x12A7E0 }, &file_read_hook, "file_read");
-		AddHook({ 0x128B60 }, &file_close_hook, "file_close");
-		AddHook({ 0x12B060 }, &file_set_position_hook, "file_set_position");
+		HookManager.AddHook({ 0x128550 }, &filo_create_hook, "filo_create");
+		HookManager.AddHook({ 0x12A7E0 }, &file_read_hook, "file_read");
+		HookManager.AddHook({ 0x128B60 }, &file_close_hook, "file_close");
+		HookManager.AddHook({ 0x1298C0 }, &file_get_eof_hook, "file_get_eof");
+		HookManager.AddHook({ 0x129AF0 }, &filo_get_file_pointer_hook, "filo_get_file_pointer");
+		HookManager.AddHook({ 0x12B060 }, &file_set_position_hook, "file_set_position");
+		HookManager.AddHook({ 0x12B250 }, &file_write_hook, "file_write");
 	}
 }
 

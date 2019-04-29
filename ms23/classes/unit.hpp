@@ -26,7 +26,7 @@ inline void AddUnitHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x769CF0 }, &unit_action_submit_hook, "unit_action_submit");
+		HookManager.AddHook({ 0x769CF0 }, &unit_action_submit_hook, "unit_action_submit");
 	}
 }
 

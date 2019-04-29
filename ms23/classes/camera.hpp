@@ -17,7 +17,7 @@ inline void AddCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
+		HookManager.AddHook({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
 	}
 }
 

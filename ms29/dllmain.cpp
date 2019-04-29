@@ -57,8 +57,8 @@ int MainThread()
 
 	if (CanHook(ConfigManager.GetBool("Delays", "PrintHookDelay"), ConfigManager.GetFloat("Delays", "HookDelay"), ConfigManager.GetInt("Delays", "HookDelayIncrement")))
 	{
-		ApplyHooks();
-		ApplyPatches();
+		HookManager.ApplyHooks();
+		PatchManager.ApplyPatches();
 	}
 
 	return AssignHotkeys(1.5);

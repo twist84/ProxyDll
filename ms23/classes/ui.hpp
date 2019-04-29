@@ -209,34 +209,34 @@ inline void AddUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({ 0x6B8AE0 }, &UI_Widget_FindChildText_hook, "UI_Widget_FindChildText");
-		//AddHook({ 0x6B8A40 }, &UI_Widget_FindChildBitmap_hook, "UI_Widget_FindChildBitmap");
-		//AddHook({ 0x6B8AC0 }, &UI_Widget_FindChildField2_hook, "UI_Widget_FindChildField2");
-		//AddHook({ 0x6B8A60 }, &UI_Widget_FindChildField3_hook, "UI_Widget_FindChildField3");
-		//AddHook({ 0x6B8A80 }, &UI_Widget_FindChildField5_hook, "UI_Widget_FindChildField5");
-		//AddHook({ 0x6B8AA0 }, &UI_Widget_FindChildData_hook, "UI_Widget_FindChildData");
+		//HookManager.AddHook({ 0x6B8AE0 }, &UI_Widget_FindChildText_hook, "UI_Widget_FindChildText");
+		//HookManager.AddHook({ 0x6B8A40 }, &UI_Widget_FindChildBitmap_hook, "UI_Widget_FindChildBitmap");
+		//HookManager.AddHook({ 0x6B8AC0 }, &UI_Widget_FindChildField2_hook, "UI_Widget_FindChildField2");
+		//HookManager.AddHook({ 0x6B8A60 }, &UI_Widget_FindChildField3_hook, "UI_Widget_FindChildField3");
+		//HookManager.AddHook({ 0x6B8A80 }, &UI_Widget_FindChildField5_hook, "UI_Widget_FindChildField5");
+		//HookManager.AddHook({ 0x6B8AA0 }, &UI_Widget_FindChildData_hook, "UI_Widget_FindChildData");
 
-		//AddHook({ 0x6B2830 }, &UI_ScreenWidget_Close_hook, "UI_ScreenWidget_Close");
+		//HookManager.AddHook({ 0x6B2830 }, &UI_ScreenWidget_Close_hook, "UI_ScreenWidget_Close");
 
-		//AddHook({ 0x6B872A }, &sub_AB9360_hook, "sub_AB9360", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x6B872A }, &sub_AB9360_hook, "sub_AB9360", HookFlags::IsCall);
 
-		//AddHook({ 0x6BCF40 }, &c_user_interface_text__sub_ABCF40_hook, "c_user_interface_text::sub_ABCF40");
+		//HookManager.AddHook({ 0x6BCF40 }, &c_user_interface_text__sub_ABCF40_hook, "c_user_interface_text::sub_ABCF40");
 
-		//AddHook({ 0x6C3F6F }, &c_gui_widget__vftable24_hook, "c_gui_widget::vftable24", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x6C3F6F }, &c_gui_widget__vftable24_hook, "c_gui_widget::vftable24", HookFlags::IsCall);
 
-		AddHook({ 0x6B4ED0 }, &UI_Alloc_hook, "UI_Alloc");
-		AddHook({ 0x6A8F63 }, &interface__gui_screens__start_menu__panes__game_multiplayer_hook, "interface::gui_screens::start_menu::panes::game_multiplayer", HookFlags::IsCall);
+		HookManager.AddHook({ 0x6B4ED0 }, &UI_Alloc_hook, "UI_Alloc");
+		HookManager.AddHook({ 0x6A8F63 }, &interface__gui_screens__start_menu__panes__game_multiplayer_hook, "interface::gui_screens::start_menu::panes::game_multiplayer", HookFlags::IsCall);
 
-		AddHook({ 0x70CEA0 }, &c_magic_string_game_tag__current_name_hook, "c_magic_string_game_tag::current_name");
-		AddHook({ 0x70CEC0 }, &c_magic_string_game_tag__current_value_hook, "c_magic_string_game_tag::current_value");
+		HookManager.AddHook({ 0x70CEA0 }, &c_magic_string_game_tag__current_name_hook, "c_magic_string_game_tag::current_name");
+		HookManager.AddHook({ 0x70CEC0 }, &c_magic_string_game_tag__current_value_hook, "c_magic_string_game_tag::current_value");
 
-		//AddHook({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
 
 		//AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
 
-		AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
-		AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
+		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
+		HookManager.AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
 	}
 }
 
@@ -249,6 +249,6 @@ inline void AddUiPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&unblock_campaign_lobby_ui_patch, "unblock_campaign_lobby_ui");
+		PatchManager.AddPatch(&unblock_campaign_lobby_ui_patch, "unblock_campaign_lobby_ui");
 	}
 }

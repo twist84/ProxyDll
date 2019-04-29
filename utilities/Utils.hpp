@@ -354,117 +354,119 @@ struct ConMan
 	}
 } ConfigManager;
 
-void HookVftable(DWORD dwVtable, DWORD member, void *function)
-{
-	DWORD oldProt, newProt;
-	VirtualProtect((void*)dwVtable, 0x400, PAGE_EXECUTE_READWRITE, &oldProt);
-	*(DWORD*)(dwVtable + (4 * member)) = (DWORD)&function;
-	VirtualProtect((void*)dwVtable, 0x400, oldProt, &newProt);
-}
-
-struct HookInfo
-{
-	const char *name;
-	std::vector<size_t> offsets;
-	void* dest_func;
-	HookFlags flags;
-
-	HookInfo(std::vector<size_t> _offsets, void *_dest_func, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
-	{
-		name = _name;
-		offsets = _offsets;
-		dest_func = _dest_func;
-		flags = _flags;
-	}
-
-	void Apply()
-	{
-		for (auto offset : offsets)
-		{
-			Hook(offset, dest_func, flags).Apply();
-			printf_s("%s\n", name);
-		}
-	}
-};
-struct PatchInfo
-{
-	const char *name;
-	void* dest_func;
-
-	PatchInfo(void *_dest_func, const char *_name = "untitled")
-	{
-		name = _name;
-		dest_func = _dest_func;
-	}
-
-	void Apply()
-	{
-		((void(*)())dest_func)();
-		printf_s("%s\n", name);
-	}
-};
-struct VftHookInfo
-{
-	const char *name;
-	size_t table_addr;
-	int table_member;
-	void* dest_func;
-	HookFlags flags;
-
-	VftHookInfo(size_t _offset, void *_dest_func, int _member, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
-	{
-		name = _name;
-		table_addr = _offset;
-		table_member = _member;
-		dest_func = _dest_func;
-		flags = _flags;
-	}
-
-	void Apply()
-	{
-		HookVftable(table_addr, table_member, dest_func);
-		printf_s("%s\n", name);
-	}
-};
-std::vector<HookInfo> hooks;
-std::vector<PatchInfo> patches;
-std::vector<VftHookInfo> vfthooks;
-
-inline void AddHook(std::vector<size_t> offsets, void *dest_func, const char *name = "untitled", HookFlags flags = HookFlags::None)
-{
-	//if (ConfigManager.GetBool("Hooks::Individual", name))
-		hooks.push_back(HookInfo(offsets, dest_func, name, flags));
-}
-inline void AddPatch(void* dest_func, const char *name = "untitled")
-{
-	//if (ConfigManager.GetBool("Patches::Individual", name))
-		patches.push_back(PatchInfo(dest_func, name));
-}
-inline void AddVftHook(size_t offset, void *dest_func, int member, const char *name = "untitled", HookFlags flags = HookFlags::None)
-{
-	vfthooks.push_back(VftHookInfo(offset, dest_func, member, name, flags));
-}
-inline void ApplyHooks()
-{
-	for (auto hook : hooks)
-		hook.Apply();
-	for (auto hook : vfthooks)
-		hook.Apply();
-}
-inline void ApplyPatches()
-{
-	for (auto patch : patches)
-		patch.Apply();
-}
-
 template<typename T>
 T VftableGetMember(DWORD dwVtable, int member)
 {
-	auto memAdr = *(DWORD *)(dwVtable + (4 * member));
+	auto memAdr = *(DWORD*)(dwVtable + (4 * member));
 	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, dwVtable, member);
 	return (T)memAdr;
 }
 
+struct HookMan
+{
+	struct HookInfo
+	{
+		const char* name;
+		std::vector<size_t> offsets;
+		void* dest_func;
+		HookFlags flags;
+
+		HookInfo(std::vector<size_t> _offsets, void* _dest_func, const char* _name = "untitled", HookFlags _flags = HookFlags::None)
+		{
+			name = _name;
+			offsets = _offsets;
+			dest_func = _dest_func;
+			flags = _flags;
+		}
+
+		void Apply()
+		{
+			for (auto offset : offsets)
+			{
+				Hook(offset, dest_func, flags).Apply();
+				printf_s("%s\n", name);
+			}
+		}
+	};
+	struct VftHookInfo
+	{
+		const char* name;
+		size_t table_addr;
+		int table_member;
+		void* dest_func;
+		HookFlags flags;
+
+		VftHookInfo(size_t _offset, void* _dest_func, int _member, const char* _name = "untitled", HookFlags _flags = HookFlags::None)
+		{
+			name = _name;
+			table_addr = _offset;
+			table_member = _member;
+			dest_func = _dest_func;
+			flags = _flags;
+		}
+
+		void Apply()
+		{
+			DWORD oldProt, newProt;
+			VirtualProtect((void*)table_addr, 0x400, PAGE_EXECUTE_READWRITE, &oldProt);
+			*(DWORD*)(table_addr + (4 * table_member)) = (DWORD)&dest_func;
+			VirtualProtect((void*)table_addr, 0x400, oldProt, &newProt);
+			printf_s("%s\n", name);
+		}
+	};
+
+	std::vector<HookInfo> hooks;
+	std::vector<VftHookInfo> vfthooks;
+
+	inline void AddHook(std::vector<size_t> offsets, void* dest_func, const char* name = "untitled", HookFlags flags = HookFlags::None)
+	{
+		hooks.push_back(HookInfo(offsets, dest_func, name, flags));
+	}
+	inline void AddVftHook(size_t offset, void* dest_func, int member, const char* name = "untitled", HookFlags flags = HookFlags::None)
+	{
+		vfthooks.push_back(VftHookInfo(offset, dest_func, member, name, flags));
+	}
+	inline void ApplyHooks()
+	{
+		for (auto hook : hooks)
+			hook.Apply();
+		for (auto hook : vfthooks)
+			hook.Apply();
+	}
+} HookManager;
+
+struct PatchMan
+{
+	struct PatchInfo
+	{
+		const char* name;
+		void* dest_func;
+
+		PatchInfo(void* _dest_func, const char* _name = "untitled")
+		{
+			name = _name;
+			dest_func = _dest_func;
+		}
+
+		void Apply()
+		{
+			((void(*)())dest_func)();
+			printf_s("%s\n", name);
+		}
+	};
+
+	std::vector<PatchInfo> patches;
+
+	inline void AddPatch(void* dest_func, const char* name = "untitled")
+	{
+		patches.push_back(PatchInfo(dest_func, name));
+	}
+	inline void ApplyPatches()
+	{
+		for (auto patch : patches)
+			patch.Apply();
+	}
+} PatchManager;
 
 struct PlugMan
 {
@@ -512,7 +514,7 @@ struct PlugMan
 	{
 		return (float)GetDouble(lpAppName, lpKeyName);
 	}
-	HMODULE LoadPlugin(const char *path)
+	HMODULE Load(const char *path)
 	{
 		printf_s("loading plugin... [%s]\n", path);
 		auto lib = ::LoadLibraryA(path);
@@ -525,14 +527,14 @@ struct PlugMan
 	bool LoadPlugins(const char *lpAppName, const char *lpKeyName)
 	{
 		for (auto lib : GetSplitString(lpAppName, lpKeyName, ';'))
-			LoadedPlugins.push_back(LoadPlugin(lib.c_str()));
+			LoadedPlugins.push_back(Load(lib.c_str()));
 		return true;
 	}
 	bool LoadFolder(const char *lpAppName, const char *lpFolderKeyName, const char *lpExtensionKeyName)
 	{
 		for (auto& p : Utils::GetDirectoryEntries(GetString(lpAppName, lpFolderKeyName), GetBool("Config", "RecursiveFolders")))
 			if (p.path().extension() == GetString(lpAppName, lpExtensionKeyName))
-				LoadedPlugins.push_back(LoadPlugin(p.path().generic_string().c_str()));
+				LoadedPlugins.push_back(Load(p.path().generic_string().c_str()));
 		return true;
 	}
 	void Run(const char *iniFilename_)
@@ -544,7 +546,7 @@ struct PlugMan
 			LoadPlugins("Plugins", "Libs");
 	}
 
-	void FreeAllPlugins()
+	void Free()
 	{
 		for (auto Plugin : LoadedPlugins)
 			FreeLibrary(Plugin);
@@ -573,7 +575,7 @@ struct ProxMan
 	{
 		return "Proxied " + Name + "_org.dll";
 	}
-	bool Setup(std::string name)
+	bool Load(std::string name)
 	{
 		Name = name;
 		LoadDll();

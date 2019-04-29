@@ -126,15 +126,15 @@ inline void AddGameStateHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({ GetGameStateDefinitionPointer(e_game_state_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
+		//HookManager.AddHook({ GetGameStateDefinitionPointer(e_game_state_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
 
-		AddHook({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
-		AddHook({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
-		AddHook({ 0x1266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
-		AddHook({ 0x1270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
-		AddHook({ 0x25DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
-		AddHook({ 0x109020 }, &hash_verification_hook, "hash_verification");
-		AddHook({ 0x1254A0 }, &campaign_save_exists_hook, "campaign_save_exists");
+		HookManager.AddHook({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
+		HookManager.AddHook({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
+		HookManager.AddHook({ 0x1266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
+		HookManager.AddHook({ 0x1270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
+		HookManager.AddHook({ 0x25DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
+		HookManager.AddHook({ 0x109020 }, &hash_verification_hook, "hash_verification");
+		HookManager.AddHook({ 0x1254A0 }, &campaign_save_exists_hook, "campaign_save_exists");
 	}
 }
 
@@ -165,7 +165,7 @@ void AddGameStatePatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		//AddPatch(&game_state_level_definition_patch, "");
+		//PatchManager.AddPatch(&game_state_level_definition_patch, "");
 
 	}
 }

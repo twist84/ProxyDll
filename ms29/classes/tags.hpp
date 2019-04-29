@@ -24,6 +24,6 @@ inline void AddTagsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&enable_tag_edits_patch, "enable_tag_edits");
+		PatchManager.AddPatch(&enable_tag_edits_patch, "enable_tag_edits");
 	}
 }

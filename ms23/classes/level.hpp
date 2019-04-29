@@ -104,17 +104,17 @@ inline void AddLevelHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x130440 }, &CustomLevelLoadHook, "CustomLevelLoad");
-		AddHook({ 0x1322D0 }, &game_options_get_hook, "game_options_get");
+		HookManager.AddHook({ 0x130440 }, &CustomLevelLoadHook, "CustomLevelLoad");
+		HookManager.AddHook({ 0x1322D0 }, &game_options_get_hook, "game_options_get");
 
-		//AddHook({ 0x218A10 }, &nullsub_618A10_hook, "nullsub_618A10");
-		//AddHook({ 0x218A20 }, &nullsub_618A20_hook, "nullsub_618A20");
-		//AddHook({ 0x218A30 }, &nullsub_618A30_hook, "nullsub_618A30");
-		//AddHook({ 0x218A50 }, &nullsub_618A50_hook, "nullsub_618A50"); // crashes, most likely wrong args
+		//HookManager.AddHook({ 0x218A10 }, &nullsub_618A10_hook, "nullsub_618A10");
+		//HookManager.AddHook({ 0x218A20 }, &nullsub_618A20_hook, "nullsub_618A20");
+		//HookManager.AddHook({ 0x218A30 }, &nullsub_618A30_hook, "nullsub_618A30");
+		//HookManager.AddHook({ 0x218A50 }, &nullsub_618A50_hook, "nullsub_618A50"); // crashes, most likely wrong args
 
-		AddHook({ 0x14CAB0 }, &campaign_levels_try_and_get_by_map_id_hook, "campaign_levels_try_and_get_by_map_id");
-		AddHook({ 0x14CB00 }, &multiplayer_levels_try_and_get_by_map_id_hook, "multiplayer_levels_try_and_get_by_map_id");
-		AddHook({ 0x14BCA0 }, &levels_get_default_map_id_hook, "levels_get_default_map_id");
+		HookManager.AddHook({ 0x14CAB0 }, &campaign_levels_try_and_get_by_map_id_hook, "campaign_levels_try_and_get_by_map_id");
+		HookManager.AddHook({ 0x14CB00 }, &multiplayer_levels_try_and_get_by_map_id_hook, "multiplayer_levels_try_and_get_by_map_id");
+		HookManager.AddHook({ 0x14BCA0 }, &levels_get_default_map_id_hook, "levels_get_default_map_id");
 	}
 }
 

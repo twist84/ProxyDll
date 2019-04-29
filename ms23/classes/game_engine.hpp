@@ -1252,7 +1252,7 @@ inline void AddGameEngineHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({ 0x715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
+		//HookManager.AddHook({ 0x715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
 	}
 }
 

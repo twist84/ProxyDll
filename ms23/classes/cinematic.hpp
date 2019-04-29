@@ -16,7 +16,7 @@ inline void AddCinematicHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({  }, &_hook, "");
+		//HookManager.AddHook({  }, &_hook, "");
 	}
 }
 
@@ -24,6 +24,6 @@ inline void AddCinematicPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		//AddPatch({  }, &_patch, "");
+		//PatchManager.AddPatch({  }, &_patch, "");
 	}
 }

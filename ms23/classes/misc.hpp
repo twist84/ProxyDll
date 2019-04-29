@@ -290,55 +290,55 @@ inline void AddMiscHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x2796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
-		AddHook({ 0x1314B0 }, &game_in_progress_hook, "game_in_progress");
-		AddHook({ 0x131A60 }, &game_is_campaign_hook, "game_is_campaign");
-		AddHook({ 0x131C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
-		AddHook({ 0x131D10 }, &game_is_theater_hook, "game_is_theater");
-		AddHook({ 0x131D50 }, &game_is_playtest_hook, "game_is_playtest");
-		AddHook({ 0x131E20 }, &game_is_survival_hook, "game_is_survival");
-		AddHook({ 0x131E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
+		HookManager.AddHook({ 0x2796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
+		HookManager.AddHook({ 0x1314B0 }, &game_in_progress_hook, "game_in_progress");
+		HookManager.AddHook({ 0x131A60 }, &game_is_campaign_hook, "game_is_campaign");
+		HookManager.AddHook({ 0x131C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
+		HookManager.AddHook({ 0x131D10 }, &game_is_theater_hook, "game_is_theater");
+		HookManager.AddHook({ 0x131D50 }, &game_is_playtest_hook, "game_is_playtest");
+		HookManager.AddHook({ 0x131E20 }, &game_is_survival_hook, "game_is_survival");
+		HookManager.AddHook({ 0x131E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
 
-		AddHook({ 0x1670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
+		HookManager.AddHook({ 0x1670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
 
-		AddHook({ 0x131FF0 }, &prepare_game_level_hook, "prepare_game_level");
-		AddHook({ 0x132050 }, &game_level_prepare_hook, "game_level_prepare");
+		HookManager.AddHook({ 0x131FF0 }, &prepare_game_level_hook, "prepare_game_level");
+		HookManager.AddHook({ 0x132050 }, &game_level_prepare_hook, "game_level_prepare");
 
-		AddHook({ 0x132B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
-		AddHook({ 0x132EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
+		HookManager.AddHook({ 0x132B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
+		HookManager.AddHook({ 0x132EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
 
-		AddHook({ 0x20AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
-		AddHook({ 0x20AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
+		HookManager.AddHook({ 0x20AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
+		HookManager.AddHook({ 0x20AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
 
 
-		AddHook({ 0x2E130 }, &sub_42E130_hook, "sub_42E130");
+		HookManager.AddHook({ 0x2E130 }, &sub_42E130_hook, "sub_42E130");
 
-		//AddHook({ 0x2E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
+		//HookManager.AddHook({ 0x2E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
 
-		AddHook({ 0x61FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
-		AddHook({ 0x61FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
+		HookManager.AddHook({ 0x61FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
+		HookManager.AddHook({ 0x61FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
 
-		//AddHook({ 0x622169, 0x10BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x622169, 0x10BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
 
-		//AddHook({ 0x1056D0 }, &GameClientShutdownHook, "GameClientShutdown");
-		//AddHook({ 0x200A20 }, &sub_600A20_hook, "sub_600A20");
+		//HookManager.AddHook({ 0x1056D0 }, &GameClientShutdownHook, "GameClientShutdown");
+		//HookManager.AddHook({ 0x200A20 }, &sub_600A20_hook, "sub_600A20");
 
-		AddHook({ 0x130FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
+		HookManager.AddHook({ 0x130FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
 
-		AddHook({ 0x3C966 }, &game_set_initial_network_values_hook, "game_set_initial_network_values", HookFlags::IsCall);
+		HookManager.AddHook({ 0x3C966 }, &game_set_initial_network_values_hook, "game_set_initial_network_values", HookFlags::IsCall);
 
-		AddHook({ 0x149B70 }, &peer_property_get_string_hook, "peer_property_get_string");
+		HookManager.AddHook({ 0x149B70 }, &peer_property_get_string_hook, "peer_property_get_string");
 
-		AddHook({ 0x7232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
+		HookManager.AddHook({ 0x7232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
 
-		AddHook({ 0x7232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
+		HookManager.AddHook({ 0x7232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
 
-		AddHook({ 0x942D3, 0x9432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
+		HookManager.AddHook({ 0x942D3, 0x9432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
 
-		//AddHook({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
+		//HookManager.AddHook({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
 
-		//AddHook({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
-		//AddHook({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
+		//HookManager.AddHook({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
+		//HookManager.AddHook({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
 	}
 }
 
@@ -395,10 +395,10 @@ void AddMiscPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&lod_increase_patch, "lod_increase");
-		AddPatch(&match_beginning_countdown_patch, "match_beginning_countdown");
-		//AddPatch(&unknown_float30_to_float60_patch, "unknown_float30_to_float60"); // this float is what's actually used in get_time_from_frame_count, but we hook it just incase
+		PatchManager.AddPatch(&lod_increase_patch, "lod_increase");
+		PatchManager.AddPatch(&match_beginning_countdown_patch, "match_beginning_countdown");
+		//PatchManager.AddPatch(&unknown_float30_to_float60_patch, "unknown_float30_to_float60"); // this float is what's actually used in get_time_from_frame_count, but we hook it just incase
 
-		AddPatch(&gamestart_status_error_check_patch, "gamestart_status_error_check");
+		PatchManager.AddPatch(&gamestart_status_error_check_patch, "gamestart_status_error_check");
 	}
 }

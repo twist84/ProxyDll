@@ -46,7 +46,7 @@ char *__cdecl strcpy_hook(char *dest_string, char *src_string, unsigned __int32 
 	return dest_string;
 }
 
-wchar_t *__cdecl sub_401670_hook(wchar_t *Dst, wchar_t *Src, size_t MaxCount)
+wchar_t *__cdecl wchar_string_copy_hook(wchar_t *Dst, wchar_t *Src, size_t MaxCount)
 {
 	std::wstring ws(Src);
 	if (wcscmp(Src, L"?:\\") == 0)
@@ -59,7 +59,7 @@ wchar_t *__cdecl sub_401670_hook(wchar_t *Dst, wchar_t *Src, size_t MaxCount)
 	else
 		memset(&Dst[length], 0, 2 * (MaxCount - length));
 
-	hook_print("sub_401670", Dst);
+	hook_print("wchar_string_copy", Dst);
 	return Dst;
 }
 
@@ -319,32 +319,32 @@ inline void AddPrintHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x1610 }, &strcpy_hook, "strcpy");
+		HookManager.AddHook({ 0x1610 }, &strcpy_hook, "strcpy");
 
-		AddHook({ 0x1670 }, &sub_401670_hook, "sub_401670");
-		AddHook({ 0x1760 }, &sub_401760_hook, "sub_401760");
+		HookManager.AddHook({ 0x1670 }, &wchar_string_copy_hook, "wchar_string_copy");
+		HookManager.AddHook({ 0x1760 }, &sub_401760_hook, "sub_401760");
 
-		AddHook({ 0x1910 }, &blam_sprintf_hook, "blam_sprintf");
-		AddHook({ 0x1940 }, &sub_401940_hook, "sub_401940");
-		AddHook({ 0x19C0 }, &vsnprintf_and_end_hook, "vsnprintf_and_end");
+		HookManager.AddHook({ 0x1910 }, &blam_sprintf_hook, "blam_sprintf");
+		HookManager.AddHook({ 0x1940 }, &sub_401940_hook, "sub_401940");
+		HookManager.AddHook({ 0x19C0 }, &vsnprintf_and_end_hook, "vsnprintf_and_end");
 
-		AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
+		HookManager.AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
 
-		AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
-		AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10"); // crashes
-		AddHook({ 0xECBD0 }, &get_wchar_count_hook, "get_wchar_count");
-		AddHook({ 0xECCD0 }, &wcsncpy_hook, "wcsncpy");
-		AddHook({ 0xEDC90 }, &sub_4EDC90_hook, "sub_4EDC90");
+		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
+		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10"); // crashes
+		HookManager.AddHook({ 0xECBD0 }, &get_wchar_count_hook, "get_wchar_count");
+		HookManager.AddHook({ 0xECCD0 }, &wcsncpy_hook, "wcsncpy");
+		HookManager.AddHook({ 0xEDC90 }, &sub_4EDC90_hook, "sub_4EDC90");
 
-		AddHook({ 0x1CF710 }, &sub_5CF710_hook, "sub_5CF710");
-		AddHook({ 0x12EB80 }, &sub_52EB80_hook, "sub_52EB80");
+		HookManager.AddHook({ 0x1CF710 }, &sub_5CF710_hook, "sub_5CF710");
+		HookManager.AddHook({ 0x12EB80 }, &sub_52EB80_hook, "sub_52EB80");
 
-		AddHook({ 0x430ED0 }, &format_chat_hook, "format_chat");
+		HookManager.AddHook({ 0x430ED0 }, &format_chat_hook, "format_chat");
 
-		AddHook({ 0x7F0A93 }, &sprintf_s_hook, "sprintf_s");
-		AddHook({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
+		HookManager.AddHook({ 0x7F0A93 }, &sprintf_s_hook, "sprintf_s");
+		HookManager.AddHook({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
 
-		//AddHook({ 0x9858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
+		//HookManager.AddHook({ 0x9858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
 	}
 }
 

@@ -2131,10 +2131,7 @@ struct s_screen_resolution
 	}
 	const char *ToString()
 	{
-		char DstBuf[32];
-		int SizeInBytes = snprintf(DstBuf, 0, "%dx%d", width, height);
-		DstBuf[SizeInBytes - 1] = '\0';
-		return DstBuf;
+		return (std::to_string(width) + "x" + std::to_string(height)).c_str();
 	}
 };
 
@@ -2552,10 +2549,108 @@ struct s_file_reference
 {
 	uint32_t header_type;
 	uint16_t flags;
-	uint16_t unknown6;
+	int16_t unknown6;
 	char path[256];
 	HANDLE file_handle;
 	uint32_t file_pointer;
+
+	s_file_reference* __cdecl initialize_header(uint16_t a2)
+	{
+		memset(this, 0, 0x110u);
+		header_type = 'filo';
+		unknown6 = a2;
+
+		return this;
+	}
+	s_file_reference* __cdecl initialize(uint16_t a2)
+	{
+		initialize_header(a2);
+		file_handle = (HANDLE)-1;
+
+		return this;
+	}
+	bool close()
+	{
+		bool result;
+		if (CloseHandle(file_handle))
+		{
+			file_handle = (HANDLE)-1;
+			file_pointer = 0;
+			result = true;
+		}
+		else
+		{
+			SetLastError(0);
+			result = false;
+		}
+		return result;
+	}
+	bool read(DWORD nNumberOfBytesToRead, char a3, LPVOID lpBuffer, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	{
+		DWORD v4 = nNumberOfBytesToRead;
+		if (!nNumberOfBytesToRead)
+			return true;
+		DWORD v6 = nNumberOfBytesToRead;
+		nNumberOfBytesToRead = 0;
+		char result = false;
+		if (ReadFile(file_handle, lpBuffer, v6, &nNumberOfBytesToRead, 0))
+		{
+			if (nNumberOfBytesToRead == v4)
+				result = true;
+			else
+				SetLastError(0x26u);
+		}
+		file_pointer += nNumberOfBytesToRead;
+		if (!result)
+			sub_5294F0("file_read", this, 0, a3);
+
+		return result;
+	}
+	bool set_position(LONG lDistanceToMove, char a3, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	{
+		if (file_pointer == lDistanceToMove)
+			return true;
+		void* v4 = file_handle;
+		LONG DistanceToMoveHigh = 0;
+		auto v5 = SetFilePointer(v4, lDistanceToMove, &DistanceToMoveHigh, 0);
+		bool file_pointer_is_valid = v5 != -1;
+		file_pointer = v5;
+		if (v5 == -1)
+			sub_5294F0("file_set_position", this, 0, a3);
+
+		return file_pointer_is_valid;
+	}
+	bool write(DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	{
+		DWORD v3 = nNumberOfBytesToWrite;
+		if (!nNumberOfBytesToWrite)
+			return true;
+		DWORD v5 = nNumberOfBytesToWrite;
+		nNumberOfBytesToWrite = 0;
+		char result = false;
+		if (WriteFile(file_handle, lpBuffer, v5, &nNumberOfBytesToWrite, 0))
+		{
+			result = 0;
+			if (nNumberOfBytesToWrite == v3)
+				result = true;
+		}
+		file_pointer += nNumberOfBytesToWrite;
+		if (!result)
+			sub_5294F0("file_write", this, 0, 0);
+		return result;
+	}
+	int __cdecl get_eof(void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	{
+		DWORD result = GetFileSize(file_handle, 0);
+		if (!result)
+			sub_5294F0("file_get_eof", this, 0, 0);
+		return result;
+	}
+
+	void Print(const char* calling_function)
+	{
+		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (header_type == 'filo' ? "'filo'" : "'????'"), flags, unknown6, file_handle, file_pointer, path, calling_function);
+	}
 };
 auto global_tag_cache_filo = GetStructure<s_file_reference>(0x22AE3A8);
 
@@ -4984,53 +5079,53 @@ struct e_achievement
 
 	const char *GetDescription()
 	{
-		const char *description[] { // TODO: get desciptions, anyone wanna do that for me!?
-			"beat sc110",
-			"beat sc120",
-			"beat sc130",
-			"beat sc140",
-			"beat sc150",
-			"beat l200",
-			"beat l300",
-			"beat campaign normal",
-			"beat campaign heroic",
-			"beat campaign legendary",
-			"wraith killer",
-			"naughty naughty",
-			"good samaritan",
-			"dome inspector",
-			"laser blaster",
-			"both tubes",
-			"i like fire",
-			"my clothes",
-			"pink and deadly",
-			"dark times",
-			"trading down",
-			"headcase",
-			"boom headshot",
-			"ewww sticky",
-			"junior detective",
-			"gumshoe",
-			"super sleuth",
-			"metagame points in sc100",
-			"metagame points in sc110",
-			"metagame points in sc120",
-			"metagame points in sc130a",
-			"metagame points in sc130b",
-			"metagame points in sc140",
-			"metagame points in l200",
-			"metagame points in l300",
-			"be like marty",
-			"find all audio logs",
-			"find 01 audio logs",
-			"find 03 audio logs",
-			"find 15 audio logs",
-			"vidmaster challenge deja vu",
-			"vidmaster challenge endure",
-			"vidmaster challenge classic",
-			"heal up",
-			"stunning",
-			"tourist",
+		const char *description[] {
+			"Complete Uplift Reserve on Normal, Heroic, or Legendary to unlock a new Firefight character.",
+			"Complete Kizingo Blvd. on Normal, Heroic, or Legendary to unlock a new Firefight character.",
+			"Complete ONI Alpha Site on Normal, Heroic, or Legendary to unlock a new Firefight mission.",
+			"Complete NMPD HQ on Normal, Heroic, or Legendary to unlock a new Firefight character.",
+			"Complete Kikowani Station on Normal, Heroic, or Legendary.",
+			"Complete Data Hive on Normal, Heroic, or Legendary to unlock a new Firefight mission.",
+			"Complete Coastal Highway on Normal, Heroic, or Legendary to unlock a new Firefight mission.",
+			"Complete the Campaign on Normal difficulty.",
+			"Complete the Campaign on Heroic difficulty.",
+			"Complete the Campaign on Legendary to unlock a new Firefight character.",
+			"Kill all Wraiths in Uplift Reserve.",
+			"Killing things that are new and different is good, alone or with another ODST.",
+			"Killing things that are new and different is bad, alone or with another ODST.",
+			"Get 15 headshot kills on NMPD HQ.",
+			"Get 10 Spartan Laser kills on ONI Alpha Site.",
+			"Get 10 Rocket kills on Kizingo Boulevard.",
+			"Kill 10 enemies with the Flamethrower on Data Hive.",
+			"Plasma Pistol Overcharge and quickly kill 10 Brutes.",
+			"Get 10 Needler supercombine kills on any covenant.",
+			"Kill 5 enemies while using VISR mode.",
+			"Trade weapons with a fellow character.",
+			"Finish any level with at least one Skull activated.",
+			"Get 10 automag headshot kills in any level.",
+			"Get 5 sticky grenade kills in any level.",
+			"Find the first clue unraveling the mystery.",
+			"Find the 3rd clue unraveling the mystery, alone or with another ODST.",
+			"Find the final clue unraveling the mystery, alone or with another ODST.",
+			"Score over 200,000 points in Firefight on Crater.",
+			"Score over 200,000 points in Firefight on Lost Platoon.",
+			"Score over 200,000 points in Firefight on Rally Point.",
+			"Score over 200,000 points in Firefight on Security Zone.",
+			"Score over 200,000 points in Firefight on Alpha Site.",
+			"Score over 200,000 points in Firefight on Windward.",
+			"Score over 200,000 points in Firefight on Chasm Ten.",
+			"Score over 200,000 points in Firefight on Last Exit.",
+			"In Firefight, finish a full round without killing a single enemy.",
+			"Find all Audio Logs, alone or with another ODST.",
+			"Find the first Audio Log.",
+			"Find 3 Audio Logs, alone or with another ODST.",
+			"Find 15 Audio Logs, alone or with another ODST.",
+			"Complete Highway on 4-player Legendary LIVE co-op, with Iron, and no 'Hog or Scorpion.",
+			"In Firefight, on any mission, pass the 4th Set on 4-player Heroic LIVE co-op.",
+			"Finish any level solo on Legendary, on LIVE, with no shots fired or grenades thrown.",
+			"Find the first Medical Kiosk and heal yourself.",
+			"Stun a vehicle with an overcharged plasma pistol and quickly kill the driver.",
+			"Access and download the city map to your VISR.",
 		};
 		return description[value];
 	}

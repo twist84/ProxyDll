@@ -86,12 +86,12 @@ inline void AddTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		AddHook({ 0x103370 }, &tag_get_definition_hook, "tag_get_definition");
-		AddHook({ 0x1033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
-		AddHook({ 0x15AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
+		HookManager.AddHook({ 0x103370 }, &tag_get_definition_hook, "tag_get_definition");
+		HookManager.AddHook({ 0x1033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
+		HookManager.AddHook({ 0x15AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
 
-		AddHook({ 0x101FC0 }, &maps_path_hook, "maps_path");
-		AddHook({ 0x102E87 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags", HookFlags::IsCall);
+		HookManager.AddHook({ 0x101FC0 }, &maps_path_hook, "maps_path");
+		HookManager.AddHook({ 0x102E87 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags", HookFlags::IsCall);
 	}
 }
 
@@ -111,6 +111,6 @@ inline void AddTagsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		AddPatch(&cache_read_patch, "cache_read_patch");
+		PatchManager.AddPatch(&cache_read_patch, "cache_read_patch");
 	}
 }

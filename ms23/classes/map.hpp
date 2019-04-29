@@ -111,17 +111,17 @@ inline void AddMapHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//AddHook({ 0x10FC2C, 0x1671BE, 0x167B4F }, &main_game_change_immediate_hook, "main_game_change_immediate", HookFlags::IsCall);
-		//AddHook({ 0x14C7FF }, &maps_store_map_info_hook, "maps_store_map_info", HookFlags::IsCall);
-		//AddHook({ 0x14EB54, 0x14EB62, 0x152C15 }, &game__game_engine__start_game_hook, "game::game_engine::start_game", HookFlags::IsCall);
-		//AddHook({ 0x105ABA, 0x105AD7, 0x1063E6 }, &c_stop_watch__start_hook, "c_stop_watch::start", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x10FC2C, 0x1671BE, 0x167B4F }, &main_game_change_immediate_hook, "main_game_change_immediate", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x14C7FF }, &maps_store_map_info_hook, "maps_store_map_info", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x14EB54, 0x14EB62, 0x152C15 }, &game__game_engine__start_game_hook, "game::game_engine::start_game", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x105ABA, 0x105AD7, 0x1063E6 }, &c_stop_watch__start_hook, "c_stop_watch::start", HookFlags::IsCall);
 
-		//AddHook({ 0x101A51 }, &map_file_validation_hook, "map_file_validation", HookFlags::IsCall);
-		//AddHook({ 0x10286A }, &sub_52CCC0_hook, "sub_52CCC0", HookFlags::IsCall);
-		//AddHook({ 0x10309E }, &sub_508F80_hook, "sub_508F80", HookFlags::IsCall);
-		//AddHook({ 0x10C965 }, &compute_blf_hash_hook, "compute_blf_hash", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x101A51 }, &map_file_validation_hook, "map_file_validation", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x10286A }, &sub_52CCC0_hook, "sub_52CCC0", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x10309E }, &sub_508F80_hook, "sub_508F80", HookFlags::IsCall);
+		//HookManager.AddHook({ 0x10C965 }, &compute_blf_hash_hook, "compute_blf_hash", HookFlags::IsCall);
 
-		AddHook({ 0x6C3900 }, &sub_AC3900_hook, "sub_AC3900");
+		HookManager.AddHook({ 0x6C3900 }, &sub_AC3900_hook, "sub_AC3900");
 	}
 }
 
