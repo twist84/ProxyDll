@@ -376,7 +376,7 @@ auto g_language = -1;
 
 struct e_scenario_type
 {
-	enum : int
+	enum e : int
 	{
 		_none = 0,
 
@@ -387,6 +387,12 @@ struct e_scenario_type
 
 		k_number_of_scenario_types
 	} value;
+
+	e_scenario_type(int val)
+	{
+		if (val >= _none && val < k_number_of_scenario_types)
+			value = (e)val;
+	}
 
 	const char *GetName()
 	{
@@ -1033,6 +1039,89 @@ struct XnkAddr
 	}
 };
 #pragma pack(pop)
+
+struct s_game_options_base // this remains the same alpha->12.x
+{
+	e_scenario_type ScenarioType = e_scenario_type(-1);
+	e_game_simulation GameSimulation;
+	int16_t FrameLimit;
+	int32_t GameInstance;
+	int16_t wordC[2];
+	int32_t RandomSeed;
+	int32_t Language;
+	int32_t DeterminismVersion;
+	int32_t CampaignId;
+	int32_t MapId;
+	char ScenarioPath[260];
+	int16_t ZonesetIndex;
+	uint8_t byte12A;
+	uint8_t byte12B;
+	uint8_t byte12C;
+	uint8_t byte12D;
+	bool IsPlaytest;
+	uint8_t byte12F;
+	e_game_playback GamePlayback;
+	uint8_t byte132;
+	uint8_t byte133;
+	uint32_t dword134;
+	uint32_t dword138;
+	e_difficulty_level DifficultyLevel;
+	e_insertion_point InsertionPoint;
+	e_metagame_scoring_option MetagameScoringOption;
+	uint8_t MetagameEnabled;
+	uint8_t SurvivalModeEnabled;
+	uint8_t byte144;
+	uint8_t byte145;
+	uint8_t PlayerArmaments[0x78];
+	int16_t byte10A;
+	uint8_t GameProgression[0x80];
+	uint32_t SkullsPrimary;
+	uint32_t SkullsSecondary;
+	uint8_t byte248[0x80];
+	uint8_t byte2AC;
+	uint8_t byte2AD[7];
+	uint8_t byte2B4[0x5C];
+	char GameVariant[0x264]; // Blam::GameVariant
+	char MapVariant[0xE090]; // Blam::MapVariant
+
+	s_game_options_base* SetScenarioType(int val)
+	{
+		ScenarioType = e_scenario_type(val);
+		return this;
+	}
+	s_game_options_base* SetScenarioPath(const char* val)
+	{
+		printf_s("setting up %s\n", val);
+
+		memset(ScenarioPath, 0, 260);
+		strncpy(ScenarioPath, val, 260);
+		return this;
+	}
+
+	s_game_options_base* GameVariant_SetGameType(int32_t val)
+	{
+		*(int32_t*)GameVariant = val;
+		return this;
+	}
+	s_game_options_base* GameVariant_SetTeamGame(bool val)
+	{
+		GameVariant[0x124] = val;
+		return this;
+	}
+	s_game_options_base* GameVariant_SetTimeLimit(uint8_t val)
+	{
+		GameVariant[0x125] = val;
+		return this;
+	}
+	s_game_options_base* GameVariant_SetRespawnTime(uint8_t val)
+	{
+		GameVariant[0x12D] = val;
+		return this;
+	}
+};
+static_assert(sizeof(s_game_options_base) == 0xE620u, "s_game_options_info wrong size");
+
+auto g_game_options_base = GetStructure<s_game_options_base>(0x45EE6B0);
 
 struct s_screen_resolution
 {

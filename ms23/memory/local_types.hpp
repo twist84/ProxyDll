@@ -300,7 +300,7 @@ auto g_new_system_ui_language = -1;
 
 struct e_scenario_type
 {
-	enum : int
+	enum e : int
 	{
 		_none = 0,
 
@@ -311,6 +311,12 @@ struct e_scenario_type
 
 		k_number_of_scenario_types
 	} value;
+
+	e_scenario_type(int val)
+	{
+		if (val >= _none && val < k_number_of_scenario_types)
+			value = (e)val;
+	}
 
 	const char *GetName()
 	{
@@ -1876,7 +1882,7 @@ struct XnkAddr
 
 struct s_game_options_base // this remains the same alpha->12.x
 {
-	e_scenario_type ScenarioType;
+	e_scenario_type ScenarioType = e_scenario_type(-1);
 	e_game_simulation GameSimulation;
 	int16_t FrameLimit;
 	int32_t GameInstance;
@@ -1932,8 +1938,45 @@ struct s_game_options : s_game_options_base
 		uint8_t unknown8[0x18];
 		char PlayerProperties[0x1620]; // Blam::Players::PlayerProperties
 	} InitialParticipantsArray[16];
+
+	s_game_options* SetScenarioType(int val)
+	{
+		ScenarioType = e_scenario_type(val);
+		return this;
+	}
+	s_game_options* SetScenarioPath(const char* val)
+	{
+		printf_s("setting up %s\n", val);
+
+		memset(ScenarioPath, 0, 260);
+		strncpy(ScenarioPath, val, 260);
+		return this;
+	}
+
+	s_game_options* GameVariant_SetGameType(int32_t val)
+	{
+		*(int32_t*)GameVariant = val;
+		return this;
+	}
+	s_game_options* GameVariant_SetTeamGame(bool val)
+	{
+		GameVariant[0x124] = val;
+		return this;
+	}
+	s_game_options* GameVariant_SetTimeLimit(uint8_t val)
+	{
+		GameVariant[0x125] = val;
+		return this;
+	}
+	s_game_options* GameVariant_SetRespawnTime(uint8_t val)
+	{
+		GameVariant[0x12D] = val;
+		return this;
+	}
 } game_options;
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
+
+auto g_game_options = GetStructure<s_game_options>(0x2391800);
 
 struct s_progression
 {
@@ -2654,6 +2697,7 @@ struct s_file_reference
 
 	void Print(const char* calling_function)
 	{
+		return;
 		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (header_type == 'filo' ? "'filo'" : "'????'"), flags, unknown6, file_handle, file_pointer, path, calling_function);
 	}
 };

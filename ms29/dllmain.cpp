@@ -15,6 +15,27 @@
 
 #include "memory/local_types.hpp"
 
+void ForceLoad()
+{
+	g_game_options_base->SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
+	g_game_options_base->SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
+	g_game_options_base->GameVariant_SetGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
+	g_game_options_base->GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
+	g_game_options_base->GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
+	g_game_options_base->GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
+	*(uint16_t*)0x45EE6A0 = 1;
+}
+
+int ForceLoadThread()
+{
+	while (true)
+	{
+		AssignHotkey(VK_F7, &ForceLoad);
+		Sleep(150);
+	}
+	return 0;
+}
+
 int AssignHotkeys(float sleep_time = 0.5)
 {
 	while (true)
@@ -72,6 +93,7 @@ BOOL InitInstance(HINSTANCE hModule)
 	Console::Resize(995, 520, 250, 250);
 
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
+	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&ForceLoadThread, NULL, 0, NULL);
 
 	return true;
 }
