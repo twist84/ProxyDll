@@ -1874,7 +1874,7 @@ struct XnkAddr
 };
 #pragma pack(pop)
 
-struct s_game_options
+struct s_game_options_base // this remains the same alpha->12.x
 {
 	e_scenario_type ScenarioType;
 	e_game_simulation GameSimulation;
@@ -1886,7 +1886,7 @@ struct s_game_options
 	int32_t DeterminismVersion;
 	int32_t CampaignId;
 	int32_t MapId;
-	char ScenarioPath[0x104];
+	char ScenarioPath[260];
 	int16_t ZonesetIndex;
 	uint8_t byte12A;
 	uint8_t byte12B;
@@ -1906,9 +1906,9 @@ struct s_game_options
 	uint8_t SurvivalModeEnabled;
 	uint8_t byte144;
 	uint8_t byte145;
-	uint8_t byte146[0x78];
+	uint8_t PlayerArmaments[0x78];
 	int16_t byte10A;
-	uint8_t byte10C[0x80];
+	uint8_t GameProgression[0x80];
 	uint32_t SkullsPrimary;
 	uint32_t SkullsSecondary;
 	uint8_t byte248[0x80];
@@ -1917,6 +1917,11 @@ struct s_game_options
 	uint8_t byte2B4[0x5C];
 	char GameVariant[0x264]; // Blam::GameVariant
 	char MapVariant[0xE090]; // Blam::MapVariant
+};
+static_assert(sizeof(s_game_options_base) == 0xE620u, "s_game_options_info wrong size");
+
+struct s_game_options : s_game_options_base
+{
 	uint8_t MachineArray[0x128];
 	struct
 	{
