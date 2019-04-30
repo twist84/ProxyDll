@@ -232,7 +232,7 @@ inline void AddUiHooks(const char *name)
 
 		//HookManager.AddHook({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
 
-		//AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
+		//HookManager.AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
 
 		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
 		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
