@@ -1091,7 +1091,7 @@ struct s_game_options_base // this remains the same alpha->12.x
 	}
 	s_game_options_base* SetScenarioPath(const char* val)
 	{
-		printf_s("setting up %s\n", val);
+		printf_s("loading %s...\n", val);
 
 		memset(ScenarioPath, 0, 260);
 		strncpy(ScenarioPath, val, 260);
