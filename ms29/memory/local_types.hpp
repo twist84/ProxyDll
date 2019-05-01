@@ -30,7 +30,7 @@ void* _mainModule;
 Pointer GetMainModule(size_t moduleOffset)
 {
 	if (_mainModule == nullptr)
-		_mainModule = GetModuleHandleA(NULL);
+		_mainModule = GetModuleHandle(nullptr);
 
 	return Pointer(_mainModule)(moduleOffset);
 }
@@ -1100,8 +1100,6 @@ struct s_game_options_base // this remains the same alpha->12.x
 	}
 	s_game_options_base* SetScenarioPath(const char* val)
 	{
-		printf_s("loading %s...\n", val);
-
 		memset(ScenarioPath, 0, 260);
 		strncpy(ScenarioPath, val, 260);
 		return this;
@@ -1135,16 +1133,43 @@ auto g_game_options_base = (s_game_options_base*)GetMainModule(0x3F8E6B0);
 
 struct
 {
-	Pointer Ptr = GetMainModule(0x3F8E6A0);
+	Pointer ResetPtr = GetMainModule(0x3F8E6A0);
+	s_game_options_base *GameOptionsPtr = GetMainModule(0x3F8E6B0);
 	bool IsLoading()
 	{
-		return Ptr.Read<uint16_t>() == 1;
+		return ResetPtr.Read<uint16_t>() == 1;
 	}
 	void Reset()
 	{
-		Ptr.Write<uint16_t>(1);
+		if (!IsLoading())
+			ResetPtr.Write<uint16_t>(1);
 	}
-} MapLoad;
+	void ChangeMap(const char* val)
+	{
+		GameOptionsPtr->SetScenarioPath(val);
+	}
+	void ChangeMapType(int val)
+	{
+		GameOptionsPtr->SetScenarioType(val);
+	}
+	void ChangeGameType(int val)
+	{
+		GameOptionsPtr->GameVariant_SetGameType(val);
+	}
+	void ChangeTeamGame(bool val)
+	{
+		GameOptionsPtr->GameVariant_SetTeamGame(val);
+	}
+	void ChangeTimeLimit(int val)
+	{
+		GameOptionsPtr->GameVariant_SetTimeLimit(val);
+	}
+	void ChangeRespawnTime(int val)
+	{
+		GameOptionsPtr->GameVariant_SetRespawnTime(val);
+	}
+
+} MapInfo;
 
 struct s_screen_resolution
 {

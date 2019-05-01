@@ -17,39 +17,38 @@
 
 void ReloadMap()
 {
-	if (!MapLoad.IsLoading())
-		MapLoad.Reset();
+	MapInfo.Reset();
+
+	printf_s("reloading %s...\n", MapInfo.GameOptionsPtr->ScenarioPath);
 }
 void ForceLoad()
 {
-	g_game_options_base->SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
-	g_game_options_base->SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
-	g_game_options_base->GameVariant_SetGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
-	g_game_options_base->GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
-	g_game_options_base->GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
-	g_game_options_base->GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
+	MapInfo.ChangeMap(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
+	MapInfo.ChangeMapType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
+	MapInfo.ChangeGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
+	MapInfo.ChangeTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
+	MapInfo.ChangeTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
+	MapInfo.ChangeRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
 
-	ReloadMap();
+	MapInfo.Reset();
+
+	printf_s("loading %s...\n", MapInfo.GameOptionsPtr->ScenarioPath);
 }
 
-auto CanLoad = false;
-
+bool Loaded = false;
 int ForceLoadThread()
 {
-	while (!CanLoad)
-	{
-		Sleep(500);
-	}
-
 	while (true)
 	{
-		if (MapLoad.IsLoading())
+		if (!Loaded || MapInfo.IsLoading())
 			goto End;
 
 		AssignHotkey(VK_F6, &ReloadMap);
-		ConfigManager.CheckBoolAndRun("ForceLoad", "ReloadMap", &ReloadMap);
+		if (ConfigManager.CheckBoolAndRun("ForceLoad", "ReloadMap", &ReloadMap))
+			goto End;
 		AssignHotkey(VK_F7, &ForceLoad);
-		ConfigManager.CheckBoolAndRun("ForceLoad", "LoadNew", &ForceLoad);
+		if (ConfigManager.CheckBoolAndRun("ForceLoad", "LoadNew", &ForceLoad))
+			goto End;
 
 		End:
 		Sleep(500);
@@ -102,7 +101,7 @@ int MainThread()
 		HookManager.ApplyHooks();
 		PatchManager.ApplyPatches();
 
-		CanLoad = true;
+		Loaded = true;
 	}
 
 	return AssignHotkeys(1.5);
