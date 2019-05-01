@@ -38,6 +38,11 @@ void ForceLoad()
 bool Loaded = false;
 int ForceLoadThread()
 {
+	while (!ConfigManager.IsInitialized())
+		Sleep(100);
+	if (ConfigManager.GetBool("ForceLoad", "LoadOnStart"))
+		ConfigManager.SetBool("ForceLoad", "LoadNew", true);
+
 	while (true)
 	{
 		if (!Loaded || MapInfo.IsLoading())

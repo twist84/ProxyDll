@@ -271,8 +271,12 @@ void AssignHotkey(int vKey, void *function)
 
 struct ConMan
 {
-	const char *iniFilename;
+	const char *iniFilename = "";
 
+	bool IsInitialized()
+	{
+		return iniFilename != "";
+	}
 	const char *GetString(const char *lpAppName, const char *lpKeyName)
 	{
 		const size_t ArraySize = 256;
