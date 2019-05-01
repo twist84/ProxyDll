@@ -15,6 +15,11 @@
 
 #include "memory/local_types.hpp"
 
+void ReloadMap()
+{
+	if (!MapLoad.IsLoading())
+		MapLoad.Reset();
+}
 void ForceLoad()
 {
 	g_game_options_base->SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
@@ -23,15 +28,31 @@ void ForceLoad()
 	g_game_options_base->GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
 	g_game_options_base->GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
 	g_game_options_base->GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
-	*(uint16_t*)0x45EE6A0 = 1;
+
+	ReloadMap();
 }
+
+auto CanLoad = false;
 
 int ForceLoadThread()
 {
+	while (!CanLoad)
+	{
+		Sleep(500);
+	}
+
 	while (true)
 	{
+		if (MapLoad.IsLoading())
+			goto End;
+
+		AssignHotkey(VK_F6, &ReloadMap);
+		ConfigManager.CheckBoolAndRun("ForceLoad", "ReloadMap", &ReloadMap);
 		AssignHotkey(VK_F7, &ForceLoad);
-		Sleep(150);
+		ConfigManager.CheckBoolAndRun("ForceLoad", "LoadNew", &ForceLoad);
+
+		End:
+		Sleep(500);
 	}
 	return 0;
 }
@@ -80,6 +101,8 @@ int MainThread()
 	{
 		HookManager.ApplyHooks();
 		PatchManager.ApplyPatches();
+
+		CanLoad = true;
 	}
 
 	return AssignHotkeys(1.5);

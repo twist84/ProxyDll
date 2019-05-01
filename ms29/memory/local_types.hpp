@@ -26,6 +26,15 @@ Pointer GetMainTls(size_t tlsOffset)
 	return Pointer(_mainTLS)(tlsOffset);
 }
 
+void* _mainModule;
+Pointer GetMainModule(size_t moduleOffset)
+{
+	if (_mainModule == nullptr)
+		_mainModule = GetModuleHandleA(NULL);
+
+	return Pointer(_mainModule)(moduleOffset);
+}
+
 static void HandleFinder()
 {
 };
@@ -1121,7 +1130,21 @@ struct s_game_options_base // this remains the same alpha->12.x
 };
 static_assert(sizeof(s_game_options_base) == 0xE620u, "s_game_options_info wrong size");
 
-auto g_game_options_base = GetStructure<s_game_options_base>(0x45EE6B0);
+//auto g_game_options_base = GetStructure<s_game_options_base>((size_t)GetModuleHandleA(NULL), 0, 0x3F8E6B0);
+auto g_game_options_base = (s_game_options_base*)GetMainModule(0x3F8E6B0);
+
+struct
+{
+	Pointer Ptr = GetMainModule(0x3F8E6A0);
+	bool IsLoading()
+	{
+		return Ptr.Read<uint16_t>() == 1;
+	}
+	void Reset()
+	{
+		Ptr.Write<uint16_t>(1);
+	}
+} MapLoad;
 
 struct s_screen_resolution
 {
@@ -2241,6 +2264,22 @@ struct s_camera_definition
 	uint8_t unknownD4[4];
 	uint32_t dword_flagsD8;
 	uint8_t unknownDC[16];
+
+	s_camera_definition* Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
+	{
+		if (direction.i != 0.0f || direction.j != 0.0f || direction.k != 0.0f)
+		{
+			if (position_and_shift)
+				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", position.i, position.j, position.k, position_shift.i, position_shift.j, position_shift.k);
+			if (look_and_depth_and_fov)
+				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", look, look_shift, depth, field_of_view.Get());
+			if (forward_and_up_and_direction)
+				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", forward.i, forward.j, forward.k, up.i, up.j, up.k, direction.i, direction.j, direction.k);
+			if (center_and_zoom_transition_time)
+				printf_s("center: %f %f %f, zoom_transition_time: %f\n", center.i, center.j, center.k, zoom_transition_time);
+		}
+		return this;
+	}
 };
 _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 

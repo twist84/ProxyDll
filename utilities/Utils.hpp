@@ -352,6 +352,16 @@ struct ConMan
 
 		return LANG_NEUTRAL;
 	}
+	void CheckBoolAndRun(const char* lpAppName, const char* lpKeyName, void* function)
+	{
+		if (ConfigManager.GetBool(lpAppName, lpKeyName))
+		{
+			((void(*)())function)();
+
+			Sleep(1000);
+			ConfigManager.SetBool(lpAppName, lpKeyName, false);
+		}
+	}
 } ConfigManager;
 
 template<typename T>
