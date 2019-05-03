@@ -1856,6 +1856,11 @@ struct XnkAddr
 	uint16_t unsigned6;
 	uint8_t unsigned8[8];
 
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+
 	char *String()
 	{
 		static char string[0x40u];
@@ -1923,6 +1928,11 @@ struct s_game_options_base // this remains the same alpha->12.x
 	uint8_t byte2B4[0x5C];
 	char GameVariant[0x264]; // Blam::GameVariant
 	char MapVariant[0xE090]; // Blam::MapVariant
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 static_assert(sizeof(s_game_options_base) == 0xE620u, "s_game_options_info wrong size");
 
@@ -1938,6 +1948,11 @@ struct s_game_options : s_game_options_base
 		uint8_t unknown8[0x18];
 		char PlayerProperties[0x1620]; // Blam::Players::PlayerProperties
 	} InitialParticipantsArray[16];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	s_game_options* SetScenarioType(int val)
 	{
@@ -1981,6 +1996,11 @@ auto g_game_options = GetStructure<s_game_options>(0x2391800);
 struct s_progression
 {
 	unsigned char unknown[0x80];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct game_globals
@@ -2019,6 +2039,11 @@ struct game_globals
 	} unknown24BF8[3];
 	bool cinematic_is_playing;
 	unsigned char unknown251F9[15];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 static_assert(sizeof(game_globals) == 0x25208u, "game_globals wrong size");
 //static_assert(sizeof(game_globals) == 0x1A908, "game_globals wrong size");
@@ -2534,6 +2559,11 @@ struct s_levels
 	uint32_t unknown34C;
 	uint16_t unknown34E;
 	uint8_t game_type[14];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 static_assert(sizeof(s_levels) == 0x360, "s_levels wrong size");
 
@@ -2545,6 +2575,11 @@ struct s_campaigns_data
 	wchar_t unknown8[64];
 	wchar_t unknown88[128];
 	uint32_t unknown188[64];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_levels_unknown
@@ -2561,6 +2596,11 @@ struct s_levels_unknown
 		uint8_t unknown8[320];
 		char scenario_path[256];
 		uint8_t unknown258[280];
+
+		size_t Size()
+		{
+			return sizeof(*this);
+		}
 	} unknown10;
 	static_assert(sizeof(s_levels_unknown_offset_10_of_size_360) == 0x360, "s_levels_unknown_offset_10 wrong size");
 	uint32_t unknown370;
@@ -2568,6 +2608,11 @@ struct s_levels_unknown
 	uint8_t unknownA16;
 	uint8_t unknownA17;
 	uint8_t unknownA18[4];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 static_assert(sizeof(s_levels_unknown) == 0xA1C, "s_levels_unknown wrong size");
 
@@ -2581,6 +2626,11 @@ struct s_game_state_header
 	s_game_options game_options;
 	uint8_t scenario_game_state[24];
 	uint8_t unknown24C90[64];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_runtime_state_allocation
@@ -2591,7 +2641,13 @@ struct s_runtime_state_allocation
 	uint32_t *datum_size;
 	uint32_t *size;
 	bool *valid;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
+auto g_runtime_state_allocation = GetStructure<s_runtime_state_allocation>(0x2497CD0);
 
 struct s_file_reference
 {
@@ -2601,6 +2657,11 @@ struct s_file_reference
 	char path[256];
 	HANDLE file_handle;
 	uint32_t file_pointer;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	s_file_reference* __cdecl initialize_header(uint16_t a2)
 	{
@@ -2738,6 +2799,11 @@ struct s_map_data
 	uint32_t unknown3384;
 	uint32_t unknown3388;
 	int32_t footer_signature;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 auto map_data = GetStructure<s_map_data>(0x22AB018);
 
@@ -2745,6 +2811,11 @@ struct s_unit_action
 {
 	e_unit_action Index;
 	unsigned char Unknown4[0x44];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_content_catalogue
@@ -2767,12 +2838,22 @@ struct s_content_catalogue
 	volatile LONG *unknown2A4;
 	uint32_t long_flags2A8;
 	uint8_t unknown2AC[4];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_storage_device
 {
 	s_content_catalogue *content_catalogue_ptr;
 	uint8_t unknown4[44];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 #pragma pack(push, 1)
@@ -2799,6 +2880,11 @@ struct s_player_profile_offset0_offset8
 	uint32_t unknownB08;
 	uint16_t unknownB0A;
 	uint16_t unknownB0C;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_player_profile_offset0
@@ -2809,6 +2895,11 @@ struct s_player_profile_offset0
 	uint8_t Unknown4[4];
 	s_player_profile_offset0_offset8 *Unknown8;
 	uint8_t UnknownC[1286];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_player_profile
@@ -2819,6 +2910,11 @@ struct s_player_profile
 	uint8_t unkown544[16];
 	uint32_t achievements[2];
 	uint8_t unkown55C[16];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 #pragma pack(pop)
 
@@ -2834,6 +2930,11 @@ struct s_overlapped_task_vftable
 	void(__cdecl *vftable6)(uint32_t *);
 	void(__cdecl *vftable7)(uint16_t *);
 	void(__cdecl *vftable8)(uint32_t, uint32_t, uint32_t);
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 struct XSession
 {
@@ -2847,6 +2948,11 @@ struct XSession
 	uint32_t *Handle;
 	uint32_t Unknown4C;
 	uint64_t XUid[32];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 struct c_managed_session
 {
@@ -2875,6 +2981,11 @@ struct c_managed_session
 	uint32_t Unknown5E0[8];
 	uint32_t Unknown600;
 	uint8_t Unknown604[4];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 #pragma pack(pop)
 struct s_game_state_definition
@@ -2891,6 +3002,11 @@ struct s_game_state_definition
 	void *unknown10;
 	void *initialize_for_new_structure_bsp;
 	void *dispose_from_old_non_bsp_zone_set;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	size_t GetArrayStartAddress(bool base = false)
 	{
@@ -4411,6 +4527,11 @@ struct s_initial_network_values
 	int determinism_version;
 	int unknown16C0;
 
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+
 	void SetMaxOfflinePlayerCount(int player_count)
 	{
 		offline_max_player_count = player_count;
@@ -5362,6 +5483,11 @@ struct s_camera_definition
 	uint32_t dword_flagsD8;
 	uint8_t unknownDC[16];
 
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+
 	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{
 		if (direction.i != 0.0f || direction.j != 0.0f || direction.k != 0.0f)
@@ -5414,11 +5540,21 @@ struct s_join_data
 struct s_session_membership
 {
 	uint8_t membership[0x1A3F20];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 _STATIC_ASSERT(sizeof(s_session_membership) == 0x1A3F20);
 struct s_session_parameters
 {
 	uint8_t parameters[0xB7928];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	void *GetRequestedJoinData()
 	{
@@ -5429,6 +5565,11 @@ _STATIC_ASSERT(sizeof(s_session_parameters) == 0xB7928);
 struct s_session
 {
 	uint8_t session[0x25BC40];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	s_session_membership *GetMembership()
 	{
@@ -5453,6 +5594,11 @@ auto g_squad_session = GetStructure<s_session>(0x19AB848);
 struct s_remote_join_data
 {
 	uint8_t data[0x58];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	void SetJoinData(char a1, uint32_t sign_in_state, XnkAddr *a5, XnkAddr *a6, XnkAddr *a7)
 	{

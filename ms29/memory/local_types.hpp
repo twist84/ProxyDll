@@ -1025,6 +1025,11 @@ struct XnkAddr
 	uint16_t unsigned6;
 	uint8_t unsigned8[8];
 
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+
 	char *String()
 	{
 		static char string[0x40u];
@@ -1092,6 +1097,11 @@ struct s_game_options_base // this remains the same alpha->12.x
 	uint8_t byte2B4[0x5C];
 	char GameVariant[0x264]; // Blam::GameVariant
 	char MapVariant[0xE090]; // Blam::MapVariant
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	s_game_options_base* SetScenarioType(int val)
 	{
@@ -1524,6 +1534,11 @@ struct s_runtime_state_allocation
 	uint32_t *datum_size;
 	uint32_t *size;
 	bool *valid;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 
 struct s_file_reference
@@ -1534,6 +1549,11 @@ struct s_file_reference
 	char path[256];
 	HANDLE file_handle;
 	uint32_t file_pointer;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 };
 auto global_tag_cache_filo = GetStructure<s_file_reference>(0x42E1088);
 
@@ -1551,6 +1571,11 @@ struct s_game_state_definition
 	void *unknown10;
 	void *initialize_for_new_structure_bsp;
 	void *dispose_from_old_non_bsp_zone_set;
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	//size_t GetArrayStartAddress(bool base = false)
 	//{
@@ -2289,6 +2314,11 @@ struct s_camera_definition
 	uint8_t unknownD4[4];
 	uint32_t dword_flagsD8;
 	uint8_t unknownDC[16];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
 
 	s_camera_definition* Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{

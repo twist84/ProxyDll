@@ -13,7 +13,6 @@ char levels_initialize_hook(int a1, double a2)
 	return levels_initiailize(a1, a2);
 }
 
-auto global_game_state_info = GetStructure<s_runtime_state_allocation>(0x2497CD0);
 static const auto game_state_buffer_handle_read = (int(*)())0x50F280;
 
 bool __cdecl file_read_from_path(const wchar_t *path, DWORD size, LPVOID buffer)
@@ -63,11 +62,11 @@ bool __cdecl game_state_read_file_from_storage_hook(int a1, int a2)
 {
 	auto result = false;
 
-	if (*global_game_state_info->initialized)
+	if (*g_runtime_state_allocation->initialized)
 	{
 		((int(__cdecl *)(int))0x58A4B0)(a2);
 
-		result = file_read_from_path(L"gamestate.hdr", *global_game_state_info->size, *global_game_state_info->data);
+		result = file_read_from_path(L"gamestate.hdr", *g_runtime_state_allocation->size, *g_runtime_state_allocation->data);
 
 		game_state_buffer_handle_read();
 		((int(__cdecl *)(char))0x58A5F0)(a2);
@@ -90,10 +89,10 @@ void game_state_write_file_to_storage_hook()
 {
 	auto result = false;
 
-	if (*global_game_state_info->initialized)
-		result = file_write_to_path(L"gamestate.hdr", *global_game_state_info->size, *global_game_state_info->data);
+	if (*g_runtime_state_allocation->initialized)
+		result = file_write_to_path(L"gamestate.hdr", *g_runtime_state_allocation->size, *g_runtime_state_allocation->data);
 
-	*global_game_state_info->valid = result;
+	*g_runtime_state_allocation->valid = result;
 }
 
 int __cdecl game_state_write_file_to_storage_blocking_hook(LPVOID buffer1, DWORD size1, LPVOID buffer2, DWORD size2)
