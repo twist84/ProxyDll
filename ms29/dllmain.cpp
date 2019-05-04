@@ -39,7 +39,7 @@ bool Loaded = false;
 int ForceLoadThread()
 {
 	while (!ConfigManager.IsInitialized())
-		Sleep(100);
+		Sleep(250);
 	if (ConfigManager.GetBool("ForceLoad", "LoadOnStart"))
 		ConfigManager.SetBool("ForceLoad", "LoadNew", true);
 

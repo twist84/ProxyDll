@@ -4,9 +4,11 @@
 #include <codecvt>
 #include <experimental/filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <psapi.h>
 #include <rpcdce.h>
+#include <sstream>
 #include <string>
 #include <thread>
 #include <vector>
@@ -194,72 +196,113 @@ namespace Utils
 			}
 			return result;
 		}
-	}
 
-	void Log(std::string str, std::string file)
-	{
-		std::ofstream log;
-		log.open(file, std::ofstream::app);
-		log << str;
-		log.close();
-	}
-
-	void Con(std::string str)
-	{
-		fStdIn = freopen("CONIN$", "r", stdin);
-		fStdOut = freopen("CONOUT$", "w", stdout);
-		fStdErr = freopen("CONOUT$", "w", stderr);
-
-		std::wcout.clear();
-		std::cout.clear();
-		std::wcerr.clear();
-		std::cerr.clear();
-		std::wcin.clear();
-		std::cin.clear();
-
-		fprintf(fStdOut, str.c_str());
-	}
-
-	void LogOutput(const std::string &line)
-	{
-		std::stringstream ss;
-		ss << line << std::endl;
-		Log(ss.str(), (".\\bin\\log.txt"));
-	}
-
-	std::vector<std::experimental::filesystem::directory_entry> GetDirectoryEntries(std::string path, bool recursive)
-	{
-		std::vector<std::experimental::filesystem::directory_entry> directory_entries;
-		if (recursive)
-			for (auto& p : std::experimental::filesystem::recursive_directory_iterator(path))
-				directory_entries.push_back(p);
-		else
-			for (auto& p : std::experimental::filesystem::directory_iterator(path))
-				directory_entries.push_back(p);
-		return directory_entries;
-	}
-
-	std::vector<std::string> ReadFile(std::string Path, char Dilem = '\n')
-	{
-		std::stringstream ss;
-		ss << std::ifstream(Path).rdbuf();
-		return Utils::String::SplitString(ss.str(), Dilem);
-	}
-
-	std::vector<std::string> ReadLogs(bool RecursiveFolders, std::string LogExtension)
-	{
-		std::vector<std::string> result;
-		for (auto& p : Utils::GetDirectoryEntries(".", RecursiveFolders))
+		namespace
 		{
-			if (p.path().extension() == LogExtension)
+			// Modification of https://tweex.net/post/c-anything-tofrom-a-hex-string/
+
+			std::string FromHex(std::vector<uint8_t> data)
 			{
-				result.push_back(p.path().generic_string());
-				for (std::string line : ReadFile(p.path().generic_string()))
-					result.push_back(line);
-				//DeleteFileA(entry.path().generic_string().c_str());
+				std::stringstream hexStringStream; hexStringStream << std::hex << std::setfill('0');
+				for (size_t index = 0; index < data.size(); ++index)
+					hexStringStream << std::setw(2) << static_cast<int>(data[index]);
+
+				return hexStringStream.str();
+			}
+
+			std::vector<uint8_t> ToHex(const std::string & in_)
+			{
+				auto in = std::string(in_);
+				String::ReplaceString(in, ",", "");
+				String::ReplaceString(in, " ", "");
+				String::ReplaceString(in, "0x", "");
+
+				std::vector<uint8_t> byteData;
+				std::stringstream hexStringStream; hexStringStream >> std::hex;
+				for (size_t strIndex = 0; strIndex < in.length(); )
+				{
+					const char tmpStr[3] = { in[strIndex++], in[strIndex++], 0 };
+
+					hexStringStream.clear();
+					hexStringStream.str(tmpStr);
+
+					int tmpValue = 0;
+					hexStringStream >> tmpValue;
+					byteData.push_back(static_cast<uint8_t>(tmpValue));
+				}
+
+				return byteData;
 			}
 		}
-		return result;
+	}
+
+	namespace
+	{
+		void Log(std::string str, std::string file)
+		{
+			std::ofstream log;
+			log.open(file, std::ofstream::app);
+			log << str;
+			log.close();
+		}
+
+		void Con(std::string str)
+		{
+			fStdIn = freopen("CONIN$", "r", stdin);
+			fStdOut = freopen("CONOUT$", "w", stdout);
+			fStdErr = freopen("CONOUT$", "w", stderr);
+
+			std::wcout.clear();
+			std::cout.clear();
+			std::wcerr.clear();
+			std::cerr.clear();
+			std::wcin.clear();
+			std::cin.clear();
+
+			fprintf(fStdOut, str.c_str());
+		}
+
+		void LogOutput(const std::string& line)
+		{
+			std::stringstream ss;
+			ss << line << std::endl;
+			Log(ss.str(), (".\\bin\\log.txt"));
+		}
+
+		std::vector<std::experimental::filesystem::directory_entry> GetDirectoryEntries(std::string path, bool recursive)
+		{
+			std::vector<std::experimental::filesystem::directory_entry> directory_entries;
+			if (recursive)
+				for (auto& p : std::experimental::filesystem::recursive_directory_iterator(path))
+					directory_entries.push_back(p);
+			else
+				for (auto& p : std::experimental::filesystem::directory_iterator(path))
+					directory_entries.push_back(p);
+			return directory_entries;
+		}
+
+		std::vector<std::string> ReadFile(std::string Path, char Dilem = '\n')
+		{
+			std::stringstream ss;
+			ss << std::ifstream(Path).rdbuf();
+			return Utils::String::SplitString(ss.str(), Dilem);
+		}
+
+		std::vector<std::string> ReadLogs(bool RecursiveFolders, std::string LogExtension)
+		{
+			std::vector<std::string> result;
+			for (auto& p : Utils::GetDirectoryEntries(".", RecursiveFolders))
+			{
+				if (p.path().extension() == LogExtension)
+				{
+					result.push_back(p.path().generic_string());
+					for (std::string line : ReadFile(p.path().generic_string()))
+						result.push_back(line);
+					//DeleteFileA(entry.path().generic_string().c_str());
+				}
+			}
+			return result;
+		}
 	}
 }
 
