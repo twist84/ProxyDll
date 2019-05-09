@@ -87,7 +87,7 @@ bool CanHook(bool shouldPrint, double secondsToWait = 0.5, size_t incrementalSte
 
 int MainThread()
 {
-	ConfigManager = { ".\\bin\\ms29.ini" };
+	ConfigManager.Init(".\\bin\\ms29.ini");
 
 	UnprotectModuleMemory();
 

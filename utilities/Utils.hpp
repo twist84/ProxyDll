@@ -74,7 +74,7 @@ namespace Utils
 
 			if (!Uuid) Uuid = &uuid_nil;
 
-			sprintf((char*)*StringUuid, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+			sprintf((char*)*StringUuid, "%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
 				Uuid->Data1, Uuid->Data2, Uuid->Data3,
 				Uuid->Data4[0], Uuid->Data4[1], Uuid->Data4[2],
 				Uuid->Data4[3], Uuid->Data4[4], Uuid->Data4[5],
@@ -312,14 +312,19 @@ void AssignHotkey(int vKey, void *function)
 		((void(*)())function)();
 }
 
-struct ConMan
+struct BaseMan
 {
 	const char *iniFilename = "";
 
+	void Init(const char* iniFilename_)
+	{
+		iniFilename = iniFilename_;
+	}
 	bool IsInitialized()
 	{
 		return iniFilename != "";
 	}
+
 	const char *GetString(const char *lpAppName, const char *lpKeyName)
 	{
 		const size_t ArraySize = 256;
@@ -336,6 +341,7 @@ struct ConMan
 	{
 		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
 	}
+
 	int GetInt(const char *lpAppName, const char *lpKeyName)
 	{
 		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
@@ -344,6 +350,7 @@ struct ConMan
 	{
 		SetString(lpAppName, lpKeyName, std::to_string(lpValue).c_str());
 	}
+
 	bool GetBool(const char *lpAppName, const char *lpKeyName)
 	{
 		return GetInt(lpAppName, lpKeyName) == 1;
@@ -352,6 +359,7 @@ struct ConMan
 	{
 		SetInt(lpAppName, lpKeyName, lpValue);
 	}
+
 	float GetDouble(const char *lpAppName, const char *lpKeyName)
 	{
 		return (float)std::atof(GetString(lpAppName, lpKeyName));
@@ -360,6 +368,21 @@ struct ConMan
 	{
 		return (float)GetDouble(lpAppName, lpKeyName);
 	}
+
+	void SetEnvironmentVariables()
+	{
+		for (auto var : GetSplitString("Environment", "Variables", ';'))
+		{
+			auto varSplit = Utils::String::SplitString(var.c_str(), '=');
+			SetEnvironmentVariableA(varSplit[0].c_str(), varSplit[1].c_str());
+			printf_s("%s;", var.c_str());
+		}
+		printf_s("\n");
+	}
+};
+
+struct ConMan : BaseMan
+{
 	LANGID GetLanguage(const char* lpAppName, const char* lpKeyName)
 	{
 		std::vector<const char *> languages = {
@@ -526,52 +549,10 @@ struct PatchMan
 	}
 } PatchManager;
 
-struct PlugMan
+struct PlugMan : BaseMan
 {
 	//WritePrivateProfileStringA("Plugins", "Libs", ".\\mtndew.dll", iniFilename);
-	const char *iniFilename;
 	std::vector<HMODULE> LoadedPlugins = {};
-	
-	const char *GetString(const char *lpAppName, const char *lpKeyName)
-	{
-		const size_t ArraySize = 256;
-		char *iniVal = new char[ArraySize];
-		GetPrivateProfileStringA(lpAppName, lpKeyName, "", iniVal, ArraySize, iniFilename);
-
-		return iniVal;
-	}
-	void SetString(const char *lpAppName, const char *lpKeyName, const char *lpValue = "")
-	{
-		WritePrivateProfileStringA(lpAppName, lpKeyName, lpValue, iniFilename);
-	}
-	std::vector<std::string>GetSplitString(const char *lpAppName, const char *lpKeyName, char lpDelim)
-	{
-		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
-	}
-	int GetInt(const char *lpAppName, const char *lpKeyName)
-	{
-		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
-	}
-	void SetInt(const char *lpAppName, const char *lpKeyName, int lpValue = 0)
-	{
-		SetString(lpAppName, lpKeyName, std::to_string(lpValue).c_str());
-	}
-	bool GetBool(const char *lpAppName, const char *lpKeyName)
-	{
-		return GetInt(lpAppName, lpKeyName) == 1;
-	}
-	void SetBool(const char *lpAppName, const char *lpKeyName, bool lpValue = true)
-	{
-		SetInt(lpAppName, lpKeyName, lpValue);
-	}
-	float GetDouble(const char *lpAppName, const char *lpKeyName)
-	{
-		return (float)std::atof(GetString(lpAppName, lpKeyName));
-	}
-	float GetFloat(const char *lpAppName, const char *lpKeyName)
-	{
-		return (float)GetDouble(lpAppName, lpKeyName);
-	}
 	HMODULE Load(const char *path)
 	{
 		printf_s("loading plugin... [%s]\n", path);
@@ -597,7 +578,7 @@ struct PlugMan
 	}
 	void Run(const char *iniFilename_)
 	{
-		iniFilename = iniFilename_;
+		Init(iniFilename_);
 		if (GetBool("Config", "UseFolder"))
 			LoadFolder("Config", "Folder", "Extension");
 		else
