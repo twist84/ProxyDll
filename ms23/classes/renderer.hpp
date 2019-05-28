@@ -240,10 +240,24 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int 
 	return result;
 }
 
+bool IDirect3DDevice9__BeginScene_hook()
+{
+	printf_s("BeginScene\n");
+	return ((bool(__cdecl*)())0xA212A0)();
+}
+bool IDirect3DDevice9__EndScene_hook()
+{
+	printf_s("EndScene\n");
+	return ((bool(__cdecl*)())0xA21510)();
+}
+
 inline void AddRendererHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
+		HookManager.AddHook({ 0x1064C4 /*loading screen*/, 0x106935 /*unknown*/, 0x204372 /*game world*/ }, &IDirect3DDevice9__BeginScene_hook, "IDirect3DDevice9::BeginScene", HookFlags::IsCall);
+		HookManager.AddHook({ 0x10654A /*loading screen*/, 0x106953 /*unknown*/, 0x204A20 /*game world*/ }, &IDirect3DDevice9__EndScene_hook, "IDirect3DDevice9::EndScene", HookFlags::IsCall);
+
 		//HookManager.AddHook({ 0x6233A0 }, &IDirect3DDevice9RenderStateFillModeSetValue, "IDirect3DDevice9RenderStateFillModeSetValue");
 		//HookManager.AddHook({ 0x6233C0 }, &IDirect3DIndexBuffer9SetIndexData, "IDirect3DIndexBuffer9SetIndexData");
 		//HookManager.AddHook({ 0x623500 }, &IDirect3DDevice9PixelShaderSet, "IDirect3DDevice9PixelShaderSet");
