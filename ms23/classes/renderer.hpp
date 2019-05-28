@@ -240,23 +240,74 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int 
 	return result;
 }
 
-bool IDirect3DDevice9__BeginScene_hook()
+struct D3DDevice9
 {
-	//printf_s("BeginScene\n");
-	return ((bool(__cdecl*)())0xA212A0)();
+	std::string Name;
+	bool CanRender;
+
+	D3DDevice9(const char *Name_, bool CanRender_)
+	{
+		Name = Name_;
+		CanRender = CanRender_;
+	}
+
+	bool BeginScene()
+	{
+		if (!CanRender)
+			return false;
+
+		printf_s("%s::BeginScene\n", Name.c_str());
+		return ((bool(__cdecl*)())0xA212A0)();
+	}
+	bool EndScene()
+	{
+		if (!CanRender)
+			return false;
+
+		printf_s("%s::EndScene\n", Name.c_str());
+		return ((bool(__cdecl*)())0xA21510)();
+	}
+} D3DLoadingScreen("LoadingScreen", false), D3DUnknown("Unknown", true), D3DGameWorld("GameWorld", true);
+
+bool LoadingScreen__BeginScene_hook()
+{
+	return D3DLoadingScreen.BeginScene();
 }
-bool IDirect3DDevice9__EndScene_hook()
+bool LoadingScreen__EndScene_hook()
 {
-	//printf_s("EndScene\n");
-	return ((bool(__cdecl*)())0xA21510)();
+	return D3DLoadingScreen.EndScene();
+}
+
+bool Unknown__BeginScene_hook()
+{
+	return D3DUnknown.BeginScene();
+}
+bool Unknown__EndScene_hook()
+{
+	return D3DUnknown.EndScene();
+}
+
+bool GameWorld__BeginScene_hook()
+{
+	return D3DGameWorld.BeginScene();
+}
+bool GameWorld__EndScene_hook()
+{
+	return D3DGameWorld.EndScene();
 }
 
 inline void AddRendererHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x1064C4 /*loading screen*/, 0x106935 /*unknown*/, 0x204372 /*game world*/ }, &IDirect3DDevice9__BeginScene_hook, "IDirect3DDevice9::BeginScene", HookFlags::IsCall);
-		HookManager.AddHook({ 0x10654A /*loading screen*/, 0x106953 /*unknown*/, 0x204A20 /*game world*/ }, &IDirect3DDevice9__EndScene_hook, "IDirect3DDevice9::EndScene", HookFlags::IsCall);
+		HookManager.AddHook({ 0x1064C4 }, &LoadingScreen__BeginScene_hook, "LoadingScreen::BeginScene", HookFlags::IsCall);
+		HookManager.AddHook({ 0x10654A }, &LoadingScreen__EndScene_hook, "LoadingScreen::EndScene", HookFlags::IsCall);
+
+		HookManager.AddHook({ 0x106935 }, &Unknown__BeginScene_hook, "Unknown::BeginScene", HookFlags::IsCall);
+		HookManager.AddHook({ 0x106953 }, &Unknown__EndScene_hook, "Unknown::EndScene", HookFlags::IsCall);
+
+		HookManager.AddHook({ 0x204372 }, &GameWorld__BeginScene_hook, "GameWorld::BeginScene", HookFlags::IsCall);
+		HookManager.AddHook({ 0x204A20 }, &GameWorld__EndScene_hook, "GameWorld::EndScene", HookFlags::IsCall);
 
 		//HookManager.AddHook({ 0x6233A0 }, &IDirect3DDevice9RenderStateFillModeSetValue, "IDirect3DDevice9RenderStateFillModeSetValue");
 		//HookManager.AddHook({ 0x6233C0 }, &IDirect3DIndexBuffer9SetIndexData, "IDirect3DIndexBuffer9SetIndexData");
