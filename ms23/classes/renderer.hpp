@@ -242,12 +242,12 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int 
 
 bool IDirect3DDevice9__BeginScene_hook()
 {
-	printf_s("BeginScene\n");
+	//printf_s("BeginScene\n");
 	return ((bool(__cdecl*)())0xA212A0)();
 }
 bool IDirect3DDevice9__EndScene_hook()
 {
-	printf_s("EndScene\n");
+	//printf_s("EndScene\n");
 	return ((bool(__cdecl*)())0xA21510)();
 }
 
