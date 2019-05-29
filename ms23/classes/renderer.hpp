@@ -242,40 +242,44 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int 
 
 struct D3DDevice9
 {
-	std::string Name;
-	bool CanRender;
+	const char *Name;
+	bool ShouldRender;
 
-	D3DDevice9(const char *Name_, bool CanRender_)
+	D3DDevice9(const char *name, bool should_render = true)
 	{
-		Name = Name_;
-		CanRender = CanRender_;
+		Name = name;
+		ShouldRender = should_render;
 	}
 
-	bool BeginScene()
+	bool BeginScene(bool should_print = false)
 	{
-		if (!CanRender)
+		if (should_print)
+			printf_s("%s::BeginScene\n", Name);
+
+		if (!ShouldRender)
 			return false;
 
-		printf_s("%s::BeginScene\n", Name.c_str());
 		return ((bool(__cdecl*)())0xA212A0)();
 	}
-	bool EndScene()
+	bool EndScene(bool should_print = false)
 	{
-		if (!CanRender)
+		if (should_print)
+			printf_s("%s::EndScene\n", Name);
+
+		if (!ShouldRender)
 			return false;
 
-		printf_s("%s::EndScene\n", Name.c_str());
 		return ((bool(__cdecl*)())0xA21510)();
 	}
-} D3DLoadingScreen("LoadingScreen", false), D3DUnknown("Unknown", true), D3DGameWorld("GameWorld", true);
+} D3DLoadingScreen("LoadingScreen", false), D3DUnknown("Unknown"), D3DGameWorld("GameWorld");
 
 bool LoadingScreen__BeginScene_hook()
 {
-	return D3DLoadingScreen.BeginScene();
+	return D3DLoadingScreen.BeginScene(true);
 }
 bool LoadingScreen__EndScene_hook()
 {
-	return D3DLoadingScreen.EndScene();
+	return D3DLoadingScreen.EndScene(true);
 }
 
 bool Unknown__BeginScene_hook()
