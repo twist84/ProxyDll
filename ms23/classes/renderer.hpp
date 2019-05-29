@@ -259,6 +259,39 @@ int Direct3DDevice9__SetViewport_hook(Rect<int16_t>* rect, float MinZ, float Max
 	return (*g_IDirect3DDevice9)->SetViewport(&rect->ToViewport(MinZ, MaxZ));
 }
 
+bool __cdecl IDirect3DDevice9__BeginScene()
+{
+	if (!g_IDirect3DDevice9)
+		return true;
+
+	*(int*)0x194FEA8 = GetCurrentThreadId();
+
+	if (!*(bool*)0x50DD9D0 && !*(bool*)0x50DD9D1)
+		goto End;
+
+	if (*(int*)0x19104FC != ((int(__cdecl*)())0x51C410)())
+	{
+		((int(__cdecl*)(int, char))0x506EB0)(8, 1);
+		return false;
+	}
+
+	if (!*(bool*)0x50DD9D0)
+	{
+		if (*(bool*)0x50DD9D1)
+			((bool(__cdecl*)())0xA226D0)();
+
+		goto End;
+	}
+
+	if (((bool(__cdecl*)())0xA22670)())
+	{
+	End:
+		((int(__cdecl*)(int, char))0x506EB0)(8, 0);
+		return (*g_IDirect3DDevice9)->BeginScene() >= 0;
+	}
+	return true;
+}
+
 struct D3DDevice9
 {
 	const char *Name;
@@ -278,6 +311,7 @@ struct D3DDevice9
 		if (!ShouldRender)
 			return false;
 
+		//return IDirect3DDevice9__BeginScene();
 		return ((bool(__cdecl*)())0xA212A0)();
 	}
 	bool EndScene(bool should_print = false)
