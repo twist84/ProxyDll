@@ -76,7 +76,7 @@ bool __cdecl sub_AC3900_hook(int content_type, e_map_id map_id, char *DstBuf)
 	s_levels level;
 	char scenario_image_path[256];
 	if (campaign_levels_try_and_get_by_map_id_hook(map_id.value, &level) || multiplayer_levels_try_and_get_by_map_id_hook(map_id.value, &level))
-		strcpy(scenario_image_path, level.scenario_image_path);
+		strcpy(scenario_image_path, level.ScenarioImagePath);
 	if (strlen(scenario_image_path) <= 0)
 		return 0;
 

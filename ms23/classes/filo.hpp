@@ -83,7 +83,7 @@ char __cdecl file_write_hook(s_file_reference* filo, DWORD nNumberOfBytesToWrite
 int __cdecl filo_get_file_pointer_hook(s_file_reference* filo)
 {
 	filo->Print("filo_get_file_pointer");
-	return filo->file_pointer;
+	return filo->FilePointer;
 }
 
 int __cdecl file_get_eof_hook(s_file_reference* filo)

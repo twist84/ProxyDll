@@ -6,8 +6,8 @@
 auto game_globals_get_campaign_difficulty_get_hook()
 {
 	auto game_globals = game_globals_get();
-	if (game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign)
-		return game_globals->game_options.DifficultyLevel.value;
+	if (game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign)
+		return game_globals->GameOptions.DifficultyLevel.value;
 	return e_difficulty_level::_normal;
 }
 
@@ -15,53 +15,53 @@ game_globals *game_globals_update_end_match_wait_time_hook(float a1)
 {
 	static auto game_time_ticks_per_second_delta_whole = (int(*)(float))(0x564BB0);
 	auto game_globals = game_globals_get();
-	if (game_globals->unknown24BE4 && game_globals->end_match_wait_time > 0)
-		game_globals->end_match_wait_time += game_time_ticks_per_second_delta_whole(a1);
+	if (game_globals->unknown24BE4 && game_globals->EndMatchWaitTime > 0)
+		game_globals->EndMatchWaitTime += game_time_ticks_per_second_delta_whole(a1);
 	return game_globals;
 }
 
 int game_globals_get_structure_bsp_index_hook()
 {
-	return game_globals_get()->structure_bsp_index;
+	return game_globals_get()->StructureBspIndex;
 }
 
 game_globals *game_globals_set_playback_none_hook()
 {
 	auto game_globals = game_globals_get();
-	game_globals->game_options.GamePlayback.value = e_game_playback::_none;
+	game_globals->GameOptions.GamePlayback.value = e_game_playback::_none;
 	return game_globals;
 }
 
 e_game_playback *__cdecl game_globals_get_playback_hook()
 {
-	return &game_globals_get()->game_options.GamePlayback;
+	return &game_globals_get()->GameOptions.GamePlayback;
 }
 
 e_game_playback __cdecl game_globals_set_playback_hook(e_game_playback a1)
 {
-	game_globals_get()->game_options.GamePlayback = a1;
+	game_globals_get()->GameOptions.GamePlayback = a1;
 	return a1;
 }
 
 int game_insertion_point_get_hook()
 {
 	auto game_globals = game_globals_get();
-	if (game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign)
-		return game_globals->game_options.InsertionPoint.value;
+	if (game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign)
+		return game_globals->GameOptions.InsertionPoint.value;
 	return 0;
 }
 
 game_globals *game_globals_set_cinematic_is_playing_false_hook()
 {
 	auto game_globals = game_globals_get();
-	game_globals->cinematic_is_playing = false;
+	game_globals->CinematicIsPlaying = false;
 	return game_globals;
 }
 
 game_globals *game_globals_set_cinematic_is_playing_true_hook()
 {
 	auto game_globals = game_globals_get();
-	game_globals->cinematic_is_playing = true;
+	game_globals->CinematicIsPlaying = true;
 	return game_globals;
 }
 
@@ -75,10 +75,10 @@ char game_and_map_variant_initialize_after_load_hook()
 	static auto game_options_verify_game_variant = (bool(*)(uint32_t *))(0x572920);
 	static auto game_options_verify_map_variant = (bool(*)(uint32_t *))(0x586D00);
 	auto game_globals = game_globals_get();
-	game_options_verify_game_variant((uint32_t *)&game_globals->game_options.GameVariant);
+	game_options_verify_game_variant((uint32_t *)&game_globals->GameOptions.GameVariant);
 
 	printf_s("initializing game_variant and map_variant: after_load\n");
-	return game_options_verify_map_variant((uint32_t *)&game_globals->game_options.MapVariant);
+	return game_options_verify_map_variant((uint32_t *)&game_globals->GameOptions.MapVariant);
 }
 
 uint32_t *active_camera_initialize_after_load_hook()

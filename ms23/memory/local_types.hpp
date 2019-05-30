@@ -2009,15 +2009,15 @@ struct game_globals
 	unsigned char unknown1;
 	unsigned char unknown2;
 	unsigned char unknown3;
-	unsigned long structure_bsp_index;
+	unsigned long StructureBspIndex;
 	unsigned long unknown8;
 	unsigned long unknownC;
 
-	s_game_options game_options;
+	s_game_options GameOptions;
 
 	unsigned long unknown24B58; // mapname string_id?
 
-	s_progression progression;
+	s_progression Progression;
 	unsigned char unknown24BDC;
 	unsigned char unknown24BDD;
 	unsigned char unknown24BDE;
@@ -2028,7 +2028,7 @@ struct game_globals
 	unsigned char unknown24BE3;
 	bool unknown24BE4;
 	unsigned char unknown24BD5[3];
-	unsigned long end_match_wait_time;
+	unsigned long EndMatchWaitTime;
 	unsigned long PrimarySkullFlags;
 	unsigned long SecondarySkullFlags;
 	unsigned char unknown24BF4[4];
@@ -2037,7 +2037,7 @@ struct game_globals
 			unsigned char unknown[32];
 		} unknown[16];
 	} unknown24BF8[3];
-	bool cinematic_is_playing;
+	bool CinematicIsPlaying;
 	unsigned char unknown251F9[15];
 
 	size_t Size()
@@ -2050,8 +2050,8 @@ static_assert(sizeof(game_globals) == 0x25208u, "game_globals wrong size");
 
 struct s_lobby_data
 {
-	e_lobby_type lobby_type;
-	uint8_t *data;
+	e_lobby_type LobbyType;
+	uint8_t *Data;
 };
 
 struct s_saved_game_data
@@ -2062,16 +2062,16 @@ struct s_saved_game_data
 		uint8_t unknown1;
 		uint8_t unknown2;
 		uint8_t unknown3;
-		uint32_t campaign_id;
-		uint32_t map_id;
-		uint16_t campaign_insertion_point;
+		uint32_t CampaignId;
+		uint32_t MapId;
+		uint16_t CampaignInsertionPoint;
 		uint16_t unknownE;
-		uint32_t campaign_difficulty_level;
-		uint32_t campaign_metagame_scoring_options;
-		uint32_t campaign_skulls_primary;
-		uint32_t campaign_skulls_secondary;
-		char players_armaments[0x78];
-		s_progression progression;
+		uint32_t CampaignDifficultyLevel;
+		uint32_t CampaignMetagameScoringOptions;
+		uint32_t CampaignSkullsPrimary;
+		uint32_t CampaignSkullsSecondary;
+		char PlayersArmaments[0x78];
+		s_progression Progression;
 		char unknown118[0x80];
 	};
 	struct s_matchmaking_data
@@ -2081,7 +2081,7 @@ struct s_saved_game_data
 		uint16_t unknown2;
 		uint8_t unknown4;
 		uint8_t unknown5;
-		uint16_t matchmaking_hopper;
+		uint16_t MatchmakingHopper;
 	};
 	struct s_multiplayer_data
 	{
@@ -2089,9 +2089,9 @@ struct s_saved_game_data
 		uint8_t unknown1;
 		uint8_t unknown2;
 		uint8_t unknown3;
-		uint8_t game_variant[0x264];
+		uint8_t GameVariant[0x264];
 		uint8_t unknown4[0x210];
-		uint8_t map_variant[0xE090];
+		uint8_t MapVariant[0xE090];
 		uint8_t unknownE508[0x210];
 	};
 	struct s_mapeditor_data
@@ -2101,7 +2101,7 @@ struct s_saved_game_data
 		uint8_t unknown2;
 		uint8_t unknown3;
 		uint32_t unknown4;
-		uint8_t map_variant[0xE090];
+		uint8_t MapVariant[0xE090];
 		uint8_t unknownE098[0x210];
 	};
 	struct s_theater_data
@@ -2113,8 +2113,8 @@ struct s_saved_game_data
 		uint8_t unknown4[0x10];
 		struct s_saved_film_description
 		{
-			uint32_t campaign_id;
-			uint32_t map_id;
+			uint32_t CampaignId;
+			uint32_t MapId;
 			uint8_t unknown8[8];
 			uint32_t unknown10;
 			uint16_t unknown14;
@@ -2124,35 +2124,35 @@ struct s_saved_game_data
 			uint8_t unknown258[0xBA];
 			uint32_t unknown316;
 			uint32_t unknown31A;
-		} saved_film_description;
-		s_game_options game_options;
+		} SavedFilmDescription;
+		s_game_options GameOptions;
 		uint8_t unknown24E78[8];
 	};
 
-	s_campaign_data campaign_data;
-	s_campaign_data survival_data;
-	s_matchmaking_data matchmaking_data;
-	s_multiplayer_data multiplayer_data;
-	s_mapeditor_data mapeditor_data;
-	s_theater_data theater_data;
+	s_campaign_data CampaignData;
+	s_campaign_data SurvivalData;
+	s_matchmaking_data MatchmakingData;
+	s_multiplayer_data MultiplayerData;
+	s_mapeditor_data MapeditorData;
+	s_theater_data TheaterData;
 
-} gamemode_data;
+} GamemodeData;
 
 struct s_save_data
 {
-	const wchar_t *path;
-	DWORD size;
-	LPVOID buffer;
+	const wchar_t *Path;
+	DWORD Size;
+	LPVOID Buffer;
 };
 
 std::vector<s_save_data> save_data = {
-	{ L"mods\\saves\\lobby\\campaign.dat", sizeof(gamemode_data.campaign_data), &gamemode_data.campaign_data },
-	{ L"mods\\saves\\lobby\\matchmaking.dat", sizeof(gamemode_data.matchmaking_data), &gamemode_data.matchmaking_data },
-	{ L"mods\\saves\\lobby\\multiplayer.dat", sizeof(gamemode_data.multiplayer_data), &gamemode_data.multiplayer_data },
-	{ L"mods\\saves\\lobby\\mapeditor.dat", sizeof(gamemode_data.mapeditor_data), &gamemode_data.mapeditor_data },
-	{ L"mods\\saves\\lobby\\theater.dat", sizeof(gamemode_data.theater_data), &gamemode_data.theater_data },
-	{ L"mods\\saves\\lobby\\survival.dat", sizeof(gamemode_data.survival_data), &gamemode_data.survival_data },
-	{ L"mods\\saves\\lobbies.dat", sizeof(gamemode_data), &gamemode_data }
+	{ L"mods\\saves\\lobby\\campaign.dat", sizeof(GamemodeData.CampaignData), &GamemodeData.CampaignData },
+	{ L"mods\\saves\\lobby\\matchmaking.dat", sizeof(GamemodeData.MatchmakingData), &GamemodeData.MatchmakingData },
+	{ L"mods\\saves\\lobby\\multiplayer.dat", sizeof(GamemodeData.MultiplayerData), &GamemodeData.MultiplayerData },
+	{ L"mods\\saves\\lobby\\mapeditor.dat", sizeof(GamemodeData.MapeditorData), &GamemodeData.MapeditorData },
+	{ L"mods\\saves\\lobby\\theater.dat", sizeof(GamemodeData.TheaterData), &GamemodeData.TheaterData },
+	{ L"mods\\saves\\lobby\\survival.dat", sizeof(GamemodeData.SurvivalData), &GamemodeData.SurvivalData },
+	{ L"mods\\saves\\lobbies.dat", sizeof(GamemodeData), &GamemodeData }
 };
 
 struct lobby
@@ -2160,13 +2160,13 @@ struct lobby
 	const char *name;
 	s_lobby_data *get(s_lobby_data *a1)
 	{
-		memmove(&a1->data, save_data[a1->lobby_type.value].buffer, save_data[a1->lobby_type.value].size);
+		memmove(&a1->Data, save_data[a1->LobbyType.value].Buffer, save_data[a1->LobbyType.value].Size);
 		return a1;
 	}
 	void set(s_lobby_data *a1)
 	{
-		printf_s("Saving %s: %s\n", name, a1->lobby_type.GetName());
-		memmove(save_data[a1->lobby_type.value].buffer, &a1->data, save_data[a1->lobby_type.value].size);
+		printf_s("Saving %s: %s\n", name, a1->LobbyType.GetName());
+		memmove(save_data[a1->LobbyType.value].Buffer, &a1->Data, save_data[a1->LobbyType.value].Size);
 	}
 };
 
@@ -2175,13 +2175,13 @@ struct gamemode
 	const char *name;
 	s_saved_game_data *get()
 	{
-		memmove(&gamemode_data, save_data[6].buffer, save_data[6].size);
-		return &gamemode_data;
+		memmove(&GamemodeData, save_data[6].Buffer, save_data[6].Size);
+		return &GamemodeData;
 	}
 	void set(s_saved_game_data *a1)
 	{
 		printf_s("Saving %s\n", name);
-		memmove(save_data[6].buffer, &a1, save_data[6].size);
+		memmove(save_data[6].Buffer, &a1, save_data[6].Size);
 	}
 };
 
@@ -2542,23 +2542,23 @@ uint8_t *Transport()
 }
 
 auto game_globals_get = []() { return (game_globals *)GetMainTls(0x3C)[0]; };
-auto game_options_get = []() { return &game_globals_get()->game_options; };
+auto game_options_get = []() { return &game_globals_get()->GameOptions; };
 auto scenario_type_get = []() { return game_options_get()->ScenarioType.value; };
-auto game_progression_get = []() { return game_globals_get()->progression; };
+auto game_progression_get = []() { return game_globals_get()->Progression; };
 
 struct s_levels
 {
 	uint8_t unknown0[2];
-	uint16_t campaign_id;
-	uint32_t map_id;
-	wchar_t map_name[32];
-	wchar_t map_description[128];
-	char scenario_path[256];
-	char scenario_image_path[256];
+	uint16_t CampaignId;
+	uint32_t MapId;
+	wchar_t MapName[32];
+	wchar_t MapSescription[128];
+	char ScenarioPath[256];
+	char ScenarioImagePath[256];
 	uint32_t unknown348;
 	uint32_t unknown34C;
 	uint16_t unknown34E;
-	uint8_t game_type[14];
+	uint8_t GameType[14];
 
 	size_t Size()
 	{
@@ -2570,8 +2570,8 @@ static_assert(sizeof(s_levels) == 0x360, "s_levels wrong size");
 struct s_campaigns_data
 {
 	uint8_t unknown0[2];
-	uint16_t flags;
-	uint32_t campaign_id;
+	uint16_t Flags;
+	uint32_t CampaignId;
 	wchar_t unknown8[64];
 	wchar_t unknown88[128];
 	uint32_t unknown188[64];
@@ -2584,17 +2584,17 @@ struct s_campaigns_data
 
 struct s_levels_unknown
 {
-	int *campaigns;
-	int *campaign_levels; // s_levels
-	int *campaign_insertions;
-	int *multiplayer_levels; // s_levels
+	int *Campaigns;
+	int *CampaignLevels; // s_levels
+	int *CampaignInsertions;
+	int *MultiplayerLevels; // s_levels
 	struct s_levels_unknown_offset_10_of_size_360
 	{
 		uint8_t unknown0[2];
-		uint16_t maybe_campaign_id;
-		uint32_t map_id;
+		uint16_t CampaignId_Maybe;
+		uint32_t MapId;
 		uint8_t unknown8[320];
-		char scenario_path[256];
+		char ScenarioPath[256];
 		uint8_t unknown258[280];
 
 		size_t Size()
@@ -2620,11 +2620,11 @@ struct s_game_state_header
 {
 	uint32_t *Sessions[3];
 	uint8_t unknownC[252];
-	char build_version[32];
+	char BuildVersion[32];
 	uint32_t unknown108;
 	uint8_t unknown10C[4];
-	s_game_options game_options;
-	uint8_t scenario_game_state[24];
+	s_game_options GameOptions;
+	uint8_t ScenarioGameState[24];
 	uint8_t unknown24C90[64];
 
 	size_t Size()
@@ -2635,14 +2635,14 @@ struct s_game_state_header
 
 struct s_runtime_state_allocation
 {
-	bool *initialized;
-	bool *release_memory;
-	void **data;
-	uint32_t *datum_size;
-	uint32_t *size;
-	bool *valid;
+	bool *IsInitialized;
+	bool *ShouldReleaseMemory;
+	void **Data;
+	uint32_t *DatumSize;
+	uint32_t *Size;
+	bool *IsValid;
 
-	size_t Size()
+	size_t GetSize()
 	{
 		return sizeof(*this);
 	}
@@ -2651,12 +2651,12 @@ auto g_runtime_state_allocation = GetStructure<s_runtime_state_allocation>(0x249
 
 struct s_file_reference
 {
-	uint32_t header_type;
-	uint16_t flags;
+	uint32_t HeaderType;
+	uint16_t Flags;
 	int16_t unknown6;
-	char path[256];
-	HANDLE file_handle;
-	uint32_t file_pointer;
+	char Path[256];
+	HANDLE FileHandle;
+	uint32_t FilePointer;
 
 	size_t Size()
 	{
@@ -2666,7 +2666,7 @@ struct s_file_reference
 	s_file_reference* __cdecl initialize_header(uint16_t a2)
 	{
 		memset(this, 0, 0x110u);
-		header_type = 'filo';
+		HeaderType = 'filo';
 		unknown6 = a2;
 
 		return this;
@@ -2674,17 +2674,17 @@ struct s_file_reference
 	s_file_reference* __cdecl initialize(uint16_t a2)
 	{
 		initialize_header(a2);
-		file_handle = (HANDLE)-1;
+		FileHandle = (HANDLE)-1;
 
 		return this;
 	}
 	bool close()
 	{
 		bool result;
-		if (CloseHandle(file_handle))
+		if (CloseHandle(FileHandle))
 		{
-			file_handle = (HANDLE)-1;
-			file_pointer = 0;
+			FileHandle = (HANDLE)-1;
+			FilePointer = 0;
 			result = true;
 		}
 		else
@@ -2702,14 +2702,14 @@ struct s_file_reference
 		DWORD v6 = nNumberOfBytesToRead;
 		nNumberOfBytesToRead = 0;
 		char result = false;
-		if (ReadFile(file_handle, lpBuffer, v6, &nNumberOfBytesToRead, 0))
+		if (ReadFile(FileHandle, lpBuffer, v6, &nNumberOfBytesToRead, 0))
 		{
 			if (nNumberOfBytesToRead == v4)
 				result = true;
 			else
 				SetLastError(0x26u);
 		}
-		file_pointer += nNumberOfBytesToRead;
+		FilePointer += nNumberOfBytesToRead;
 		if (!result)
 			sub_5294F0("file_read", this, 0, a3);
 
@@ -2717,13 +2717,13 @@ struct s_file_reference
 	}
 	bool set_position(LONG lDistanceToMove, char a3, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
-		if (file_pointer == lDistanceToMove)
+		if (FilePointer == lDistanceToMove)
 			return true;
-		void* v4 = file_handle;
+		void* v4 = FileHandle;
 		LONG DistanceToMoveHigh = 0;
 		auto v5 = SetFilePointer(v4, lDistanceToMove, &DistanceToMoveHigh, 0);
 		bool file_pointer_is_valid = v5 != -1;
-		file_pointer = v5;
+		FilePointer = v5;
 		if (v5 == -1)
 			sub_5294F0("file_set_position", this, 0, a3);
 
@@ -2737,20 +2737,20 @@ struct s_file_reference
 		DWORD v5 = nNumberOfBytesToWrite;
 		nNumberOfBytesToWrite = 0;
 		char result = false;
-		if (WriteFile(file_handle, lpBuffer, v5, &nNumberOfBytesToWrite, 0))
+		if (WriteFile(FileHandle, lpBuffer, v5, &nNumberOfBytesToWrite, 0))
 		{
 			result = 0;
 			if (nNumberOfBytesToWrite == v3)
 				result = true;
 		}
-		file_pointer += nNumberOfBytesToWrite;
+		FilePointer += nNumberOfBytesToWrite;
 		if (!result)
 			sub_5294F0("file_write", this, 0, 0);
 		return result;
 	}
 	int __cdecl get_eof(void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
-		DWORD result = GetFileSize(file_handle, 0);
+		DWORD result = GetFileSize(FileHandle, 0);
 		if (!result)
 			sub_5294F0("file_get_eof", this, 0, 0);
 		return result;
@@ -2759,24 +2759,24 @@ struct s_file_reference
 	void Print(const char* calling_function)
 	{
 		return;
-		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (header_type == 'filo' ? "'filo'" : "'????'"), flags, unknown6, file_handle, file_pointer, path, calling_function);
+		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (HeaderType == 'filo' ? "'filo'" : "'????'"), Flags, unknown6, FileHandle, FilePointer, Path, calling_function);
 	}
 };
 auto global_tag_cache_filo = GetStructure<s_file_reference>(0x22AE3A8);
 
 struct s_map_data
 {
-	int32_t header_signature;
-	int32_t version;
-	int32_t cache_size;
+	int32_t HeaderSignature;
+	int32_t Version;
+	int32_t CacheSize;
 	uint8_t unknownC[16];
-	const char path[256];
-	uint8_t build_version[32];
-	int16_t scenario_type;
+	const char Path[256];
+	uint8_t BuildVersion[32];
+	int16_t ScenarioType;
 	uint8_t unknown13E[4];
 	uint8_t unknown142;
 	uint8_t unknown143;
-	struct _FILETIME file_time;
+	struct _FILETIME FileTime;
 	uint8_t unknown164[28];
 	uint8_t unknown180;
 	uint8_t unknown181;
@@ -2784,12 +2784,12 @@ struct s_map_data
 	uint8_t unknown183;
 	FILETIME unknown184[6];
 	uint8_t unknown1B4[8];
-	const char map_name[128];
+	const char MapName[128];
 	uint8_t unknown224[164];
-	int32_t map_minor_version;
+	int32_t MapMinorMersion;
 	uint8_t unknown2CC[84];
-	uint8_t content_header[20];
-	const char description[256];
+	uint8_t ContentHeader[20];
+	const char Description[256];
 	uint8_t unknown434[4];
 	int32_t unknown438;
 	uint8_t unknown43C[40];
@@ -2798,7 +2798,7 @@ struct s_map_data
 	uint32_t unknown3380;
 	uint32_t unknown3384;
 	uint32_t unknown3388;
-	int32_t footer_signature;
+	int32_t FooterSignature;
 
 	size_t Size()
 	{
@@ -2810,7 +2810,7 @@ auto map_data = GetStructure<s_map_data>(0x22AB018);
 struct s_unit_action
 {
 	e_unit_action Index;
-	unsigned char Unknown4[0x44];
+	unsigned char unknown4[0x44];
 
 	size_t Size()
 	{
@@ -2820,8 +2820,8 @@ struct s_unit_action
 
 struct s_content_catalogue
 {
-	uint32_t storage_device_id;
-	int *data;
+	uint32_t StorageDeviceId;
+	int *Data;
 	uint8_t unknown8[8];
 	struct s_size_240
 	{
@@ -2836,7 +2836,7 @@ struct s_content_catalogue
 	uint8_t unknown278[40];
 	uint32_t unknown2A0;
 	volatile LONG *unknown2A4;
-	uint32_t long_flags2A8;
+	uint32_t Flags2A8;
 	uint8_t unknown2AC[4];
 
 	size_t Size()
@@ -2847,7 +2847,7 @@ struct s_content_catalogue
 
 struct s_storage_device
 {
-	s_content_catalogue *content_catalogue_ptr;
+	s_content_catalogue *ContentCataloguePtr;
 	uint8_t unknown4[44];
 
 	size_t Size()
@@ -2860,19 +2860,19 @@ struct s_storage_device
 struct s_player_profile_offset0_offset8
 {
 	uint8_t unknown0[12];
-	uint32_t user_index;
+	uint32_t UserIndex;
 	uint8_t unknownC[492];
-	uint32_t camera_inversion;
-	uint32_t camera_panning;
-	uint32_t camera_look_sensitivity;
-	uint32_t camera_speed;
-	uint32_t camera_thrust;
-	uint32_t campaign_difficulty_level;
+	uint32_t CameraInversion;
+	uint32_t CameraPanning;
+	uint32_t CameraLookSensitivity;
+	uint32_t CameraSpeed;
+	uint32_t CameraThrust;
+	uint32_t CampaignDifficultyLevel;
 	uint8_t unknown214[4];
 	uint8_t unknown218[2][32];
 	uint8_t unknown258[16];
-	uint32_t user_aquired_primary_skulls_dword_flags;
-	uint32_t user_aquired_secondary_skulls_dword_flags;
+	uint32_t UserAquiredPrimarySkullsFlags;
+	uint32_t UserAquiredSecondarySkullsFlags;
 	uint8_t unknown270[560];
 	uint8_t unknown4A0[1616];
 	uint8_t unknownAF0[20];
@@ -2890,11 +2890,11 @@ struct s_player_profile_offset0_offset8
 struct s_player_profile_offset0
 {
 	uint8_t Flags;
-	uint8_t Unknown1;
+	uint8_t unknown1;
 	uint16_t LocalPlayerIndex;
-	uint8_t Unknown4[4];
-	s_player_profile_offset0_offset8 *Unknown8;
-	uint8_t UnknownC[1286];
+	uint8_t unknown4[4];
+	s_player_profile_offset0_offset8 *unknown8;
+	uint8_t unknownC[1286];
 
 	size_t Size()
 	{
@@ -2906,9 +2906,9 @@ struct s_player_profile
 {
 	s_player_profile_offset0 unkown0;
 	uint8_t unkown512[3822];
-	wchar_t name[16];
+	wchar_t Name[16];
 	uint8_t unkown544[16];
-	uint32_t achievements[2];
+	uint32_t Achievements[2];
 	uint8_t unkown55C[16];
 
 	size_t Size()
@@ -2990,63 +2990,59 @@ struct c_managed_session
 #pragma pack(pop)
 struct s_game_state_definition
 {
-	void *initialize;
-	void *dispose;
-	void *initialize_for_new_map;
-	void *dispose_from_old_map;
-	void *prepare_to_switch_structure_bsp;
-	void *reconnect_to_structure_bsp;
-	void *disconnect_from_structure_bsp;
-	void *switch_structure_bsp;
+	void *Initialize;
+	void *Dispose;
+	void *InitializeForNewMap;
+	void *DisposeFromOldMap;
+	void *PrepareToSwitchStructureBsp;
+	void *ReconnectToStructureBsp;
+	void *DisconnectFromStructureBsp;
+	void *SwitchStructureBsp;
 	void *unknown9;
 	void *unknown10;
-	void *initialize_for_new_structure_bsp;
-	void *dispose_from_old_non_bsp_zone_set;
+	void *InitializeForNewStructureBsp;
+	void *DisposeFromOldnonBspZoneSet;
 
 	size_t Size()
 	{
 		return sizeof(*this);
 	}
-
 	size_t GetArrayStartAddress(bool base = false)
 	{
 		return GetAddress((void *)0x1655950, base);
 	}
-
 	size_t GetInitialize(bool base = false)
 	{
-		return GetAddress(initialize, base);
+		return GetAddress(Initialize, base);
 	}
 	size_t GetDispose(bool base = false)
 	{
-		return GetAddress(dispose, base);
+		return GetAddress(Dispose, base);
 	}
 	size_t GetInitializeForNewMap(bool base = false)
 	{
-		return GetAddress(initialize_for_new_map, base);
+		return GetAddress(InitializeForNewMap, base);
 	}
 	size_t GetDisposeFromOldMap(bool base = false)
 	{
-		return GetAddress(dispose_from_old_map, base);
+		return GetAddress(DisposeFromOldMap, base);
 	}
-
 	size_t GetPrepareToSwitchStructureBsp(bool base = false)
 	{
-		return GetAddress(prepare_to_switch_structure_bsp, base);
+		return GetAddress(PrepareToSwitchStructureBsp, base);
 	}
 	size_t GetReconnectToStructureBsp(bool base = false)
 	{
-		return GetAddress(reconnect_to_structure_bsp, base);
+		return GetAddress(ReconnectToStructureBsp, base);
 	}
 	size_t GetDisconnectFromStructureBsp(bool base = false)
 	{
-		return GetAddress(disconnect_from_structure_bsp, base);
+		return GetAddress(DisconnectFromStructureBsp, base);
 	}
 	size_t GetSwitchStructureBsp(bool base = false)
 	{
-		return GetAddress(switch_structure_bsp, base);
+		return GetAddress(SwitchStructureBsp, base);
 	}
-
 	size_t GetUnknown9(bool base = false)
 	{
 		return GetAddress(unknown9, base);
@@ -3057,11 +3053,11 @@ struct s_game_state_definition
 	}
 	size_t GetInitializeForNewStructureBsp(bool base = false)
 	{
-		return GetAddress(initialize_for_new_structure_bsp, base);
+		return GetAddress(InitializeForNewStructureBsp, base);
 	}
 	size_t GetDisposeFromOldnonBspZoneSet(bool base = false)
 	{
-		return GetAddress(dispose_from_old_non_bsp_zone_set, base);
+		return GetAddress(DisposeFromOldnonBspZoneSet, base);
 	}
 };
 
@@ -3213,7 +3209,7 @@ struct s_initial_network_values
 	int unknown23C;
 	int unknown240;
 	int unknown244;
-	int disband_timeout;
+	int DisbandTimeout;
 	int unknown24C;
 	int unknown250;
 	int unknown254;
@@ -3235,14 +3231,14 @@ struct s_initial_network_values
 	int unknown294;
 	int unknown298;
 	int unknown29C;
-	int grief_timer_timeout;
+	int GriefTimerTimeout;
 	int unknown2A4;
 	int unknown2A8;
 	__int8 unknown2AC;
 	int unknown2B0;
 	int unknown2B4;
-	int simulation_abort_as_host_timeout;
-	int simulation_abort_as_peer_timeout;
+	int SimulationAbortAsHostTimeout;
+	int SimulationAbortAsPeerTimeout;
 	int unknown2C0;
 	int unknown2C4;
 	int unknown2C8;
@@ -3308,10 +3304,10 @@ struct s_initial_network_values
 	int unknown3B8;
 	int unknown3BC;
 	int unknown3C0;
-	int lobby_coop_max_player_count;
-	int lobby_mapeditor_max_player_count;
+	int LobbyCoopMaxPlayerCount;
+	int LobbyMapeditorMaxPlayerCount;
 	int unknown3CC;
-	int machine_file_refresh_timeout;
+	int MachineFileRefreshTimeout;
 	int unknown3D4;
 	int unknown3D8;
 	int unknown3DC;
@@ -3988,16 +3984,16 @@ struct s_initial_network_values
 	float unknownE58;
 	float unknownE5C;
 	int unknownE60;
-	int managed_session_process_pending_timeout;
+	int ManagedSessionProcessPendingTimeout;
 	int unknownE68;
-	int idle_peer_joining_timeout;
-	int peer_join_timed_out;
-	int join_queue_max_wait_time;
+	int IdlePeerJoiningTimeout;
+	int PeerJoinTimedOut;
+	int JoinQueueMaxWaitTime;
 	int unknownE78;
 	int unknownE7C;
-	int idle_peer_join_abort_timeout;
+	int IdlePeerJoinAbortTimeout;
 	int unknownE84;
-	int idle_peer_leaving_timeout;
+	int IdlePeerLeavingTimeout;
 	int unknownE8C;
 	int unknownE90;
 	int unknownE94;
@@ -4040,7 +4036,7 @@ struct s_initial_network_values
 	int unknownF28;
 	int unknownF2C;
 	int unknownF30;
-	int connection_initiation_retry_count;
+	int ConnectionInitiationRetryCount;
 	int unknownF38;
 	int unknownF3C;
 	int unknownF40;
@@ -4325,7 +4321,7 @@ struct s_initial_network_values
 	int unknown1398;
 	int unknown139C;
 	int unknown13A0;
-	int lobby_film_max_player_count;
+	int LobbyFilmMaxPlayerCount;
 	int unknown13A8;
 	int unknown13AC;
 	int unknown13B0;
@@ -4450,8 +4446,8 @@ struct s_initial_network_values
 	int unknown158C;
 	__int16 unknown1590;
 	__int8 unknown1592[2];
-	int network_mode_default;
-	int offline_max_player_count;
+	int NetworkModeDefault;
+	int OfflineMaxPlayerCount;
 	__int8 unknown159C;
 	int unknown15A0;
 	int unknown15A4;
@@ -4524,7 +4520,7 @@ struct s_initial_network_values
 	int unknown16B0;
 	int unknown16B4;
 	int unknown16B8;
-	int determinism_version;
+	int DeterminismVersion;
 	int unknown16C0;
 
 	size_t Size()
@@ -4534,19 +4530,19 @@ struct s_initial_network_values
 
 	void SetMaxOfflinePlayerCount(int player_count)
 	{
-		offline_max_player_count = player_count;
+		OfflineMaxPlayerCount = player_count;
 	}
 	void SetMaxCoopPlayerCount(int player_count)
 	{
-		lobby_coop_max_player_count = player_count;
+		LobbyCoopMaxPlayerCount = player_count;
 	}
 	void SetMaxForgePlayerCount(int player_count)
 	{
-		lobby_mapeditor_max_player_count = player_count;
+		LobbyMapeditorMaxPlayerCount = player_count;
 	}
 	void SetMaxTheaterPlayerCount(int player_count)
 	{
-		lobby_film_max_player_count = player_count;
+		LobbyFilmMaxPlayerCount = player_count;
 	}
 };
 auto initial_network_values = GetStructure<s_initial_network_values>(0x19A62C0);
@@ -5303,7 +5299,7 @@ struct e_achievement
 	bool check_is_valid(int local_user_index, int index)
 	{
 		if (index < k_number_of_achievements)
-			return ((1 << (index & 31)) & GetStructure<s_player_profile>(0x524EC48, local_user_index)->achievements[index >> 5]) != 0;
+			return ((1 << (index & 31)) & GetStructure<s_player_profile>(0x524EC48, local_user_index)->Achievements[index >> 5]) != 0;
 		return false;
 	}
 
@@ -5346,33 +5342,33 @@ std::string g_maps_path = g_default_maps_path;
 
 struct s_cache_file_path
 {
-	std::string filename;
-	size_t offset;
-	std::string file_path;
+	std::string Name;
+	size_t Offset;
+	std::string Path;
 
-	s_cache_file_path(size_t offset_, std::string filename_)
+	s_cache_file_path(size_t offset, std::string filename)
 	{
-		filename = filename_;
-		file_path = g_maps_path + filename;
-		offset = offset_;
+		Name = filename;
+		Path = g_maps_path + Name;
+		Offset = offset;
 	}
 	s_cache_file_path *Update(std::string mapname)
 	{
-		file_path = g_maps_path + mapname + "\\" + filename;
+		Path = g_maps_path + mapname + "\\" + Name;
 		return this;
 	}
 	std::string Read()
 	{
-		return Pointer::Base(offset).Read<char*>();
+		return Pointer::Base(Offset).Read<char*>();
 	}
 	void Write(bool shouldWrite)
 	{
 		if (shouldWrite)
-			Pointer::Base(offset).Write(file_path.c_str());
+			Pointer::Base(Offset).Write(Path.c_str());
 	}
 	void Print()
 	{
-		printf_s("%s\n", file_path.c_str());
+		printf_s("%s\n", Path.c_str());
 	}
 };
 
@@ -5389,14 +5385,14 @@ struct s_cache_path
 {
 	void Update(bool new_cache_style = false)
 	{
-		g_string_ids.Update(map_data->map_name)->Write(new_cache_style);
-		g_tags.Update(map_data->map_name)->Write(new_cache_style);
-		g_tag_list.Update(map_data->map_name)->Write(new_cache_style);
-		g_resources.Update(map_data->map_name)->Write(new_cache_style);
-		g_textures.Update(map_data->map_name)->Write(new_cache_style);
-		g_textures_b.Update(map_data->map_name)->Write(new_cache_style);
-		g_audio.Update(map_data->map_name)->Write(new_cache_style);
-		g_video.Update(map_data->map_name)->Write(new_cache_style);
+		g_string_ids.Update(map_data->MapName)->Write(new_cache_style);
+		g_tags.Update(map_data->MapName)->Write(new_cache_style);
+		g_tag_list.Update(map_data->MapName)->Write(new_cache_style);
+		g_resources.Update(map_data->MapName)->Write(new_cache_style);
+		g_textures.Update(map_data->MapName)->Write(new_cache_style);
+		g_textures_b.Update(map_data->MapName)->Write(new_cache_style);
+		g_audio.Update(map_data->MapName)->Write(new_cache_style);
+		g_video.Update(map_data->MapName)->Write(new_cache_style);
 	}
 	void Print()
 	{
@@ -5449,38 +5445,38 @@ struct vector4d
 
 struct s_field_of_view
 {
-	float radians;
+	float Radians;
 
 	float Get()
 	{
-		return (float)(radians / 0.0174533);
+		return (float)(Radians / 0.0174533);
 	}
 };
 
 struct s_camera_definition
 {
-	uint32_t state_flags;
-	vector3d<float> position;
-	vector3d<float> position_shift;
-	float look;
-	float look_shift;
-	float depth;
-	s_field_of_view field_of_view;
-	vector3d<float> forward;
-	vector3d<float> up;
-	vector3d<float> direction;
+	uint32_t StateFlags;
+	vector3d<float> Position;
+	vector3d<float> PositionShift;
+	float Look;
+	float LookShift;
+	float Depth;
+	s_field_of_view FieldOfView;
+	vector3d<float> Forward;
+	vector3d<float> Up;
+	vector3d<float> Direction;
 	uint8_t unknown50[56];
-	vector3d<float> center; // unsure
+	vector3d<float> Center; // unsure
 	float unknown94;
-	uint32_t root_object_handle;
+	uint32_t RootObjectHandle;
 	uint8_t unknown9C[28];
-	byte byte_flagsB8;
+	byte FlagsB8;
 	uint8_t unknownB9[3];
 	uint8_t unknownBC;
 	uint8_t unknownBD[19];
-	float zoom_transition_time;
+	float ZoomTransitionTime;
 	uint8_t unknownD4[4];
-	uint32_t dword_flagsD8;
+	uint32_t FlagsD8;
 	uint8_t unknownDC[16];
 
 	size_t Size()
@@ -5490,16 +5486,16 @@ struct s_camera_definition
 
 	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{
-		if (direction.i != 0.0f || direction.j != 0.0f || direction.k != 0.0f)
+		if (Direction.i != 0.0f || Direction.j != 0.0f || Direction.k != 0.0f)
 		{
 			if (position_and_shift)
-				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", position.i, position.j, position.k, position_shift.i, position_shift.j, position_shift.k);
+				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", Position.i, Position.j, Position.k, PositionShift.i, PositionShift.j, PositionShift.k);
 			if (look_and_depth_and_fov)
-				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", look, look_shift, depth, field_of_view.Get());
+				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", Look, LookShift, Depth, FieldOfView.Get());
 			if (forward_and_up_and_direction)
-				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", forward.i, forward.j, forward.k, up.i, up.j, up.k, direction.i, direction.j, direction.k);
+				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", Forward.i, Forward.j, Forward.k, Up.i, Up.j, Up.k, Direction.i, Direction.j, Direction.k);
 			if (center_and_zoom_transition_time)
-				printf_s("center: %f %f %f, zoom_transition_time: %f\n", center.i, center.j, center.k, zoom_transition_time);
+				printf_s("center: %f %f %f, zoom_transition_time: %f\n", Center.i, Center.j, Center.k, ZoomTransitionTime);
 		}
 		return this;
 	}
@@ -5549,7 +5545,7 @@ struct s_session_membership
 _STATIC_ASSERT(sizeof(s_session_membership) == 0x1A3F20);
 struct s_session_parameters
 {
-	uint8_t parameters[0xB7928];
+	uint8_t Parameters[0xB7928];
 
 	size_t Size()
 	{
@@ -5558,13 +5554,13 @@ struct s_session_parameters
 
 	void *GetRequestedJoinData()
 	{
-		return (void *)(parameters + 0xB5880);
+		return (void *)(Parameters + 0xB5880);
 	}
 };
 _STATIC_ASSERT(sizeof(s_session_parameters) == 0xB7928);
 struct s_session
 {
-	uint8_t session[0x25BC40];
+	uint8_t Session[0x25BC40];
 
 	size_t Size()
 	{
@@ -5573,19 +5569,19 @@ struct s_session
 
 	s_session_membership *GetMembership()
 	{
-		return (s_session_membership *)(session + 0x20);
+		return (s_session_membership *)(Session + 0x20);
 	}
 	s_session_parameters *GetParameters()
 	{
-		return (s_session_parameters *)(session + 0x1A3F40);
+		return (s_session_parameters *)(Session + 0x1A3F40);
 	}
 	uint32_t GetType()
 	{
-		return *(uint32_t *)(session + 0x25B870);
+		return *(uint32_t *)(Session + 0x25B870);
 	}
 	uint32_t GetAddressIndex()
 	{
-		return *(uint32_t *)(session + 0x25BBF0);
+		return *(uint32_t *)(Session + 0x25BBF0);
 	}
 };
 _STATIC_ASSERT(sizeof(s_session) == 0x25BC40);
@@ -5593,7 +5589,7 @@ auto g_squad_session = GetStructure<s_session>(0x19AB848);
 
 struct s_remote_join_data
 {
-	uint8_t data[0x58];
+	uint8_t Data[0x58];
 
 	size_t Size()
 	{
@@ -5602,15 +5598,15 @@ struct s_remote_join_data
 
 	void SetJoinData(char a1, uint32_t sign_in_state, XnkAddr *a5, XnkAddr *a6, XnkAddr *a7)
 	{
-		*(uint32_t *)(data + 0x10) = ((uint32_t(__cdecl *)())0x431010)(); // generate_random_seed;
-		*(uint32_t *)(data + 0x10) = 1;
+		*(uint32_t *)(Data + 0x10) = ((uint32_t(__cdecl *)())0x431010)(); // generate_random_seed;
+		*(uint32_t *)(Data + 0x10) = 1;
 
-		*(XnkAddr *)(data + 0x1C) = *a5;
-		*(XnkAddr *)(data + 0x2C) = *a6;
-		*(XnkAddr *)(data + 0x3C) = *a7;
+		*(XnkAddr *)(Data + 0x1C) = *a5;
+		*(XnkAddr *)(Data + 0x2C) = *a6;
+		*(XnkAddr *)(Data + 0x3C) = *a7;
 
-		*(uint32_t *)(data + 0x4C) = sign_in_state;
-		*(uint8_t *)(data + 0x54) = a1;
+		*(uint32_t *)(Data + 0x4C) = sign_in_state;
+		*(uint8_t *)(Data + 0x54) = a1;
 	}
 };
 _STATIC_ASSERT(sizeof(s_remote_join_data) == 0x58);

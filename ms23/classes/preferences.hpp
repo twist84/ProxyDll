@@ -139,21 +139,21 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 
 s_saved_game_data *preferences_get_gamemode_data()
 {
-	file_read_from_path(save_data[6].path, save_data[6].size, save_data[6].buffer);
+	file_read_from_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
 	return preferences.game_mode.get();
 }
 
 void preferences_set_gamemode_data(s_saved_game_data *a1)
 {
 	preferences.game_mode.set(a1);
-	file_write_to_path(save_data[6].path, save_data[6].size, save_data[6].buffer);
+	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
 }
 
 void preferences_set_lobby_data(s_lobby_data *a1)
 {
 	preferences.lobby_data.set(a1);
-	file_write_to_path(save_data[6].path, save_data[6].size, save_data[6].buffer);
-	file_write_to_path(save_data[a1->lobby_type.value].path, save_data[a1->lobby_type.value].size, save_data[a1->lobby_type.value].buffer);
+	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
+	file_write_to_path(save_data[a1->LobbyType.value].Path, save_data[a1->LobbyType.value].Size, save_data[a1->LobbyType.value].Buffer);
 }
 
 e_game_language preferences_get_language()

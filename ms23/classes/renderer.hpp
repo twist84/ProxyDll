@@ -41,6 +41,67 @@ struct Rect
 	}
 };
 
+struct D3DDevice9
+{
+	const char* Name;
+	bool ShouldRender;
+
+	D3DDevice9(const char* name, bool should_render = true)
+	{
+		Name = name;
+		ShouldRender = should_render;
+	}
+
+	bool BeginScene(bool should_print = false)
+	{
+		if (should_print)
+			printf_s("%s::BeginScene\n", Name);
+
+		if (!ShouldRender)
+			return false;
+
+		//return IDirect3DDevice9__BeginScene();
+		return ((bool(__cdecl*)())0xA212A0)();
+	}
+	bool EndScene(bool should_print = false)
+	{
+		if (should_print)
+			printf_s("%s::EndScene\n", Name);
+
+		if (!ShouldRender)
+			return false;
+
+		return ((bool(__cdecl*)())0xA21510)();
+	}
+} LoadingScene("Loading", false), UnknownScene("Unknown"), WorldScene("GameWorld");
+
+bool Loading__BeginScene_hook()
+{
+	return LoadingScene.BeginScene(true);
+}
+bool Loading__EndScene_hook()
+{
+	return LoadingScene.EndScene(true);
+}
+
+bool Unknown__BeginScene_hook()
+{
+	return UnknownScene.BeginScene();
+}
+bool Unknown__EndScene_hook()
+{
+	return UnknownScene.EndScene();
+}
+
+bool World__BeginScene_hook()
+{
+	return WorldScene.BeginScene();
+}
+bool World__EndScene_hook()
+{
+	return WorldScene.EndScene();
+}
+
 bool __cdecl IDirect3DDevice9__BeginScene() // 00A212A0
 {
 	if (!g_IDirect3DDevice9)
@@ -308,68 +369,6 @@ int __cdecl IDirect3DDevice9__CreateVolumeTexture(UINT Width, UINT Height, UINT 
 int __cdecl IDirect3DDevice9__UpdateTexture(IDirect3DBaseTexture9* pSourceTexture, IDirect3DBaseTexture9* pDestinationTexture) // 00A75E30
 {
 	return (*g_IDirect3DDevice9_2)->UpdateTexture(pSourceTexture, pDestinationTexture);
-}
-
-
-struct D3DDevice9
-{
-	const char *Name;
-	bool ShouldRender;
-
-	D3DDevice9(const char *name, bool should_render = true)
-	{
-		Name = name;
-		ShouldRender = should_render;
-	}
-
-	bool BeginScene(bool should_print = false)
-	{
-		if (should_print)
-			printf_s("%s::BeginScene\n", Name);
-
-		if (!ShouldRender)
-			return false;
-
-		//return IDirect3DDevice9__BeginScene();
-		return ((bool(__cdecl*)())0xA212A0)();
-	}
-	bool EndScene(bool should_print = false)
-	{
-		if (should_print)
-			printf_s("%s::EndScene\n", Name);
-
-		if (!ShouldRender)
-			return false;
-
-		return ((bool(__cdecl*)())0xA21510)();
-	}
-} LoadingScene("Loading", false), UnknownScene("Unknown"), WorldScene("GameWorld");
-
-bool Loading__BeginScene_hook()
-{
-	return LoadingScene.BeginScene(true);
-}
-bool Loading__EndScene_hook()
-{
-	return LoadingScene.EndScene(true);
-}
-
-bool Unknown__BeginScene_hook()
-{
-	return UnknownScene.BeginScene();
-}
-bool Unknown__EndScene_hook()
-{
-	return UnknownScene.EndScene();
-}
-
-bool World__BeginScene_hook()
-{
-	return WorldScene.BeginScene();
-}
-bool World__EndScene_hook()
-{
-	return WorldScene.EndScene();
 }
 
 inline void AddRendererHooks(const char *name)

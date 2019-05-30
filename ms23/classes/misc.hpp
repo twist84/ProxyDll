@@ -10,7 +10,7 @@
 double get_time_from_frame_count_hook(signed int frame_count)
 {
 	auto gameGlobalsPtr = game_globals_get();
-	return (frame_count / (!gameGlobalsPtr ? 60.0 : gameGlobalsPtr->game_options.FrameLimit));
+	return (frame_count / (!gameGlobalsPtr ? 60.0 : gameGlobalsPtr->GameOptions.FrameLimit));
 }
 
 bool game_is_campaign_hook()
@@ -38,7 +38,7 @@ bool game_is_survival_hook()
 	auto game_globals = game_globals_get();
 	if (game_globals && (game_globals->unknown0 || game_globals->unknown1))
 	{
-		auto game_options = &game_globals->game_options;
+		auto game_options = &game_globals->GameOptions;
 		if (game_options && (game_options->ScenarioType.value == e_scenario_type::_campaign && game_options->SurvivalModeEnabled))
 			return true;
 	}
@@ -48,7 +48,7 @@ bool game_is_survival_hook()
 bool game_is_theater_hook()
 {
 	auto game_globals = game_globals_get();
-	return game_globals && (game_globals->unknown0 || game_globals->unknown1) && game_globals->game_options.GamePlayback.value;
+	return game_globals && (game_globals->unknown0 || game_globals->unknown1) && game_globals->GameOptions.GamePlayback.value;
 }
 
 bool game_is_playtest_hook()
@@ -82,7 +82,7 @@ char prepare_game_level_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign && game_globals->unknown24B58 != a1))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign && game_globals->unknown24B58 != a1))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = false;
@@ -96,7 +96,7 @@ char game_level_prepare_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->game_options.ScenarioType.value == e_scenario_type::_campaign))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = true;

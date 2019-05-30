@@ -62,11 +62,11 @@ bool __cdecl game_state_read_file_from_storage_hook(int a1, int a2)
 {
 	auto result = false;
 
-	if (*g_runtime_state_allocation->initialized)
+	if (*g_runtime_state_allocation->IsInitialized)
 	{
 		((int(__cdecl *)(int))0x58A4B0)(a2);
 
-		result = file_read_from_path(L"gamestate.hdr", *g_runtime_state_allocation->size, *g_runtime_state_allocation->data);
+		result = file_read_from_path(L"gamestate.hdr", *g_runtime_state_allocation->Size, *g_runtime_state_allocation->Data);
 
 		game_state_buffer_handle_read();
 		((int(__cdecl *)(char))0x58A5F0)(a2);
@@ -89,10 +89,10 @@ void game_state_write_file_to_storage_hook()
 {
 	auto result = false;
 
-	if (*g_runtime_state_allocation->initialized)
-		result = file_write_to_path(L"gamestate.hdr", *g_runtime_state_allocation->size, *g_runtime_state_allocation->data);
+	if (*g_runtime_state_allocation->IsInitialized)
+		result = file_write_to_path(L"gamestate.hdr", *g_runtime_state_allocation->Size, *g_runtime_state_allocation->Data);
 
-	*g_runtime_state_allocation->valid = result;
+	*g_runtime_state_allocation->IsValid = result;
 }
 
 int __cdecl game_state_write_file_to_storage_blocking_hook(LPVOID buffer1, DWORD size1, LPVOID buffer2, DWORD size2)
