@@ -122,7 +122,7 @@ void __fastcall c_gui_network_mode_category_datasource_vftable01_player_select_a
 	auto c_gui_network_mode_selected_item_create_category = (int(__thiscall *)(void *, int, int, int, int, char))0xB23870;
 
 	bool xbox_live_private_enabled = false;
-	if (VftableGetMember<char(__thiscall *)(void *, uint8_t *)>(0x169DA04, 1)(thisptr, a2))
+	if (VftableGetMember<char(__thiscall *)(void *, uint8_t *)>((DWORD_PTR*)0x169DA04, 1)(thisptr, a2))
 	{
 		if (xbox_live_private_enabled)
 			c_gui_network_mode_selected_item_create_category(thisptr, 0x103B3, 0x103B4, 0, 5, 1);								 // network_mode_xbox_live_private, network_mode_xbox_live_private_description

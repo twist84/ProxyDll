@@ -436,11 +436,11 @@ struct ConMan : BaseMan
 } ConfigManager;
 
 template<typename T>
-T VftableGetMember(DWORD dwVtable, int member)
+T VftableGetMember(DWORD_PTR* dwVtable, int member)
 {
-	auto memAdr = *(DWORD*)(dwVtable + (4 * member));
-	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, dwVtable, member);
-	return (T)memAdr;
+	DWORD_PTR memAdr = (*(DWORD_PTR**)dwVtable)[member];
+	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, *dwVtable, member);
+	return (T)(memAdr);
 }
 
 struct HookMan
