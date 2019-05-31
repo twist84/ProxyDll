@@ -7,32 +7,13 @@
 #include "filo.hpp"
 #include "level.hpp"
 
-uint8_t *tag_header_get(uint16_t index)
-{
-	if (index == 0xFFFF || index >= *g_max_tag_count_ptr * 4)
-		return nullptr;
-	if ((*g_tag_index_table_ptr)[index] == -1 || (*g_tag_index_table_ptr)[index] >= *g_max_tag_count_ptr * 4)
-		return nullptr;
-	if (!(*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]])
-		return nullptr;
-
-	return (*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]];
-}
-
-template<typename T>
-T *tag_get_definition(uint32_t group, uint16_t index)
-{
-	last_tag = index;
-	return (T *)(tag_header_get(index) + *(uint32_t *)(tag_header_get(index) + 0x10));
-}
-
 uint32_t tag_get_group_tag(uint16_t index)
 {
 	if ((tag_header_get(index) == nullptr) || ((uint32_t)tag_header_get(index) < 0x400000))
 		return -1;
 
 	auto result = *(uint32_t *)(tag_header_get(index) + 0x14);
-	if (result == group_tags.globals.group)
+	if (result == group_tags.globals.Group)
 		globals_tag = result;
 
 	return result;
@@ -58,7 +39,7 @@ uint32_t __cdecl tag_get_group_tag_hook(uint16_t index)
 	return result;
 }
 
-char *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size)
+uint8_t *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size)
 {
 	auto result = &block->address[size * index];
 

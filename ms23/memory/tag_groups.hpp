@@ -1,56 +1,70 @@
 #pragma once
 #include <vector>
 
+#include "../memory/local_types.hpp"
+
 // this entire file could be a lot better
 
 struct tag_block
 {
-	unsigned __int32 count;
-	char *address;
-	__int32 _bf8;
+	uint32_t count;
+	uint8_t *address;
+	uint32_t _bf8;
 };
 
 struct tag_reference
 {
-	unsigned __int32 group_tag;
-	__int32 : 32;
-	__int32 : 32;
-	__int32 tag_index;
+	uint32_t GroupTag;
+	int32_t : 32;
+	int32_t : 32;
+	int32_t TagIndex;
+
+	uint8_t* GetDefinition()
+	{
+		return tag_get_definition<uint8_t>(GroupTag, TagIndex);
+	}
 };
 
 
 struct group_tag
 {
-	uint32_t group;
-	const char *name;
-	uint32_t size;
+	uint32_t Group;
+	const char *Name;
+	uint32_t Size;
+
+	group_tag(uint32_t group, const char* name, uint32_t size)
+	{
+		Group = group;
+		Name = name;
+		Size = size;
+	}
 
 	void print_standard_enum_string()
 	{
-		printf_s("%s = 0x%X", name, group);
+		printf_s("%s = 0x%X", Name, Group);
 	}
 };
 
 struct tag
 {
-	group_tag tag_group;
-	const char *name;
-	uint16_t index;
+	group_tag GroupTag;
+	const char *Name;
+	uint16_t Index;
 
 	uint8_t *GetDefinition()
 	{
-		return ((uint8_t *(__cdecl *)(uint32_t, uint16_t))0x503370)(tag_group.group, index);
+		return tag_get_definition<uint8_t>(GroupTag.Group, Index);
 	}
 
 	bool IsLoaded()
 	{
-		return ((int(__cdecl *)(uint32_t, uint16_t))0x503510)(tag_group.group, index);
+		return ((int(__cdecl *)(uint32_t, uint16_t))0x503510)(GroupTag.Group, Index);
 	}
 };
 
 struct
 {
-	group_tag sound_effect_template = { '<fx>', "sound_effect_template", 0x20 };
+	group_tag sound_effect_template = group_tag('<fx>', "sound_effect_template", 0x20);
 	group_tag achievements = { 'achi', "achievements", 0x18 };
 	group_tag ai_dialogue_globals = { 'adlg', "ai_dialogue_globals", 0x5C };
 	group_tag ai_globals = { 'aigl', "ai_globals", 0x10 };
@@ -370,10 +384,9 @@ struct
 			gui_widget_texture_coordinate_animation_definition,
 			cache_file_resource_gestalt
 		};
-
 	}
-	group_tag GetFirst() { return sound_effect_template; }
-	group_tag GetLast() { return cache_file_resource_gestalt; }
+	group_tag GetFirst() { return GetVector()[0]; }
+	group_tag GetLast() { return GetVector()[GetVector().size() - 1]; }
 } group_tags;
 
 void PrintTagGroupEnum()
@@ -383,7 +396,7 @@ void PrintTagGroupEnum()
 	printf_s("enum e_tag_group\n");
 	printf_s("{\n");
 	for (auto t : group_tag_array)
-		printf_s("    %s = 0x%X%s\n", t.name, t.group, (t.group != group_tags.GetLast().group ? "," : ""));
+		printf_s("    %s = 0x%X%s\n", t.Name, t.Group, (t.Group != group_tags.GetLast().Group ? "," : ""));
 	printf_s("};\n\n");
 }
 
@@ -391,8 +404,8 @@ void PrintTagGroup(uint32_t tag_group, uint16_t tag_index)
 {
 	auto group_tag_array = group_tags.GetVector();
 	for (auto t : group_tag_array)
-		if (tag_group == t.group)
-			printf_s("0x%X, %s\n", tag_index, t.name);
+		if (tag_group == t.Group)
+			printf_s("0x%X, %s\n", tag_index, t.Name);
 }
 
 uint8_t *globals_get_definition(bool *is_loaded)

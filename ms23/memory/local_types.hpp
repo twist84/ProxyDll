@@ -5508,6 +5508,25 @@ const auto g_max_tag_count_ptr = (uint32_t*)0x22AB008;
 uint16_t last_tag = 0xFFFF;
 uint16_t globals_tag = 0xFFFF;
 
+uint8_t* tag_header_get(uint16_t index)
+{
+	if (index == 0xFFFF || index >= *g_max_tag_count_ptr * 4)
+		return nullptr;
+	if ((*g_tag_index_table_ptr)[index] == -1 || (*g_tag_index_table_ptr)[index] >= *g_max_tag_count_ptr * 4)
+		return nullptr;
+	if (!(*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]])
+		return nullptr;
+
+	return (*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]];
+}
+
+template<typename T>
+T* tag_get_definition(uint32_t group, uint16_t index)
+{
+	last_tag = index;
+	return (T*)(tag_header_get(index) + *(uint32_t*)(tag_header_get(index) + 0x10));
+}
+
 struct s_join_data
 {
 	char a1;
