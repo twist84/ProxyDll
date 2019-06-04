@@ -5340,70 +5340,70 @@ struct e_achievement
 auto g_default_maps_path = "maps\\";
 std::string g_maps_path = g_default_maps_path;
 
-struct s_cache_file_path
-{
-	std::string Name;
-	size_t Offset;
-	std::string Path;
-
-	s_cache_file_path(size_t offset, std::string filename)
-	{
-		Name = filename;
-		Path = g_maps_path + Name;
-		Offset = offset;
-	}
-	s_cache_file_path *Update(std::string mapname)
-	{
-		Path = g_maps_path + mapname + "\\" + Name;
-		return this;
-	}
-	std::string Read()
-	{
-		return Pointer::Base(Offset).Read<char*>();
-	}
-	void Write(bool shouldWrite)
-	{
-		if (shouldWrite)
-			Pointer::Base(Offset).Write(Path.c_str());
-	}
-	void Print()
-	{
-		printf_s("%s\n", Path.c_str());
-	}
-};
-
-s_cache_file_path g_string_ids = s_cache_file_path(0x149CFEC, "string_ids.dat");
-s_cache_file_path g_tags = s_cache_file_path(0x149CFF0, "tags.dat");
-s_cache_file_path g_tag_list = s_cache_file_path(0x149CFF4, "tag_list.csv");
-s_cache_file_path g_resources = s_cache_file_path(0x149CFF8, "resources.dat");
-s_cache_file_path g_textures = s_cache_file_path(0x149CFFC, "textures.dat");
-s_cache_file_path g_textures_b = s_cache_file_path(0x149D000, "textures_b.dat");
-s_cache_file_path g_audio = s_cache_file_path(0x149D004, "audio.dat");
-s_cache_file_path g_video = s_cache_file_path(0x149D008, "video.dat");
-
 struct s_cache_path
 {
+	struct s_cache_file_path
+	{
+		std::string Name;
+		size_t Offset;
+		std::string Path;
+
+		s_cache_file_path(size_t offset, std::string filename)
+		{
+			Name = filename;
+			Path = g_maps_path + Name;
+			Offset = offset;
+		}
+		s_cache_file_path* Update(std::string mapname)
+		{
+			Path = g_maps_path + mapname + "\\" + Name;
+			return this;
+		}
+		std::string Read()
+		{
+			return Pointer::Base(Offset).Read<char*>();
+		}
+		void Write(bool shouldWrite)
+		{
+			if (shouldWrite)
+				Pointer::Base(Offset).Write(Path.c_str());
+		}
+		void Print()
+		{
+			printf_s("%s\n", Path.c_str());
+		}
+	};
+
+	s_cache_file_path string_ids = s_cache_file_path(0x149CFEC, "string_ids.dat");
+	s_cache_file_path tags = s_cache_file_path(0x149CFF0, "tags.dat");
+	s_cache_file_path tag_list = s_cache_file_path(0x149CFF4, "tag_list.csv");
+	s_cache_file_path resources = s_cache_file_path(0x149CFF8, "resources.dat");
+	s_cache_file_path textures = s_cache_file_path(0x149CFFC, "textures.dat");
+	s_cache_file_path textures_b = s_cache_file_path(0x149D000, "textures_b.dat");
+	s_cache_file_path audio = s_cache_file_path(0x149D004, "audio.dat");
+	s_cache_file_path video = s_cache_file_path(0x149D008, "video.dat");
+
 	void Update(bool new_cache_style = false)
 	{
-		g_string_ids.Update(map_data->MapName)->Write(new_cache_style);
-		g_tags.Update(map_data->MapName)->Write(new_cache_style);
-		g_tag_list.Update(map_data->MapName)->Write(new_cache_style);
-		g_resources.Update(map_data->MapName)->Write(new_cache_style);
-		g_textures.Update(map_data->MapName)->Write(new_cache_style);
-		g_textures_b.Update(map_data->MapName)->Write(new_cache_style);
-		g_audio.Update(map_data->MapName)->Write(new_cache_style);
-		g_video.Update(map_data->MapName)->Write(new_cache_style);
+		string_ids.Update(map_data->MapName)->Write(new_cache_style);
+		tags.Update(map_data->MapName)->Write(new_cache_style);
+		tag_list.Update(map_data->MapName)->Write(new_cache_style);
+		resources.Update(map_data->MapName)->Write(new_cache_style);
+		textures.Update(map_data->MapName)->Write(new_cache_style);
+		textures_b.Update(map_data->MapName)->Write(new_cache_style);
+		audio.Update(map_data->MapName)->Write(new_cache_style);
+		video.Update(map_data->MapName)->Write(new_cache_style);
 	}
 	void Print()
 	{
-		g_string_ids.Print();
-		g_tag_list.Print();
-		g_resources.Print();
-		g_textures.Print();
-		g_textures_b.Print();
-		g_audio.Print();
-		g_video.Print();
-		g_tags.Print();
+		string_ids.Print();
+		tag_list.Print();
+		resources.Print();
+		textures.Print();
+		textures_b.Print();
+		audio.Print();
+		video.Print();
+		tags.Print();
 	}
 } cache_path;
 

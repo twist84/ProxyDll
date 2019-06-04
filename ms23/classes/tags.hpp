@@ -58,7 +58,7 @@ char __fastcall filo_create_and_open_tags_hook(void *thisptr)
 {
 	cache_path.Update(ConfigManager.GetBool("Maps", "UseNewCacheStyle"));
 	auto result = ((char(__thiscall *)(void *))0x5028C0)(thisptr);
-	g_tags.Print();
+	cache_path.tags.Print();
 
 	return result;
 }
