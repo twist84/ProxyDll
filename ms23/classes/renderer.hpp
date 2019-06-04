@@ -6,26 +6,26 @@
 #include <d3d9.h>
 
 
-auto			 g_clip_plane_near = *(int*)0x0191068C;
-auto			  g_clip_plane_far = *(int*)0x01910690;
-auto					  g_d3d9ex = *(int*)0x01910700;
-auto		   g_D3dFormatIsD24FS8 = *(bool*)0x050DAE03;
-auto			    g_IDirect3D9Ex = GetStructure<IDirect3D9Ex>(0x050DADD8);
-auto		    g_IDirect3DDevice9 = GetStructure<IDirect3DDevice9*>(0x050DADDC);
-auto		 g_RenderStateCullMode = GetStructure<D3DCULL>(0x050DAE1C);
-auto	  g_IDirect3DVertexShader9 = GetStructure<IDirect3DVertexShader9*>(0x050DAE20);
-auto	   g_IDirect3DPixelShader9 = GetStructure<IDirect3DPixelShader9*>(0x050DAE24);
-auto g_IDirect3DVertexDeclaration9 = GetStructure<IDirect3DVertexDeclaration9>(0x050DAE28);
-auto	   g_IDirect3DIndexBuffer9 = GetStructure<IDirect3DIndexBuffer9>(0x050DAE2C);
-auto	   g_IDirect3DBaseTexture9 = GetStructure<IDirect3DBaseTexture9>(0x050DB214);
-auto		  g_DisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD928);
-auto	   g_NewDisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD960);
-auto					 g_adapter = *(int*)0x050DD9C4;
-auto		  g_IDirect3DDevice9_2 = GetStructure<IDirect3DDevice9*>(0x0524B6AC);
+auto g_clip_plane = GetStructure<point2d<int>>(0x0191068C);
+auto g_d3d9ex = *(int*)0x01910700;
+auto g_D3dFormatIsD24FS8 = *(bool*)0x050DAE03;
+auto g_IDirect3D9Ex = GetStructure<IDirect3D9Ex*>(0x050DADD8);
+auto g_IDirect3DDevice9 = GetStructure<IDirect3DDevice9*>(0x050DADDC);
+auto g_RenderStateCullMode = GetStructure<D3DCULL>(0x050DAE1C);
+auto g_IDirect3DVertexShader9 = GetStructure<IDirect3DVertexShader9*>(0x050DAE20);
+auto g_IDirect3DPixelShader9 = GetStructure<IDirect3DPixelShader9*>(0x050DAE24);
+auto g_IDirect3DVertexDeclaration9 = GetStructure<IDirect3DVertexDeclaration9*>(0x050DAE28);
+auto g_IDirect3DIndexBuffer9 = GetStructure<IDirect3DIndexBuffer9*>(0x050DAE2C);
+auto g_IDirect3DTexture9 = GetStructure<IDirect3DTexture9*>(0x050DB214);
+auto g_DisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD928);
+auto g_DisplayPreferencesNew = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD960);
+auto g_adapter = *(int*)0x050DD9C4;
+auto g_IDirect3DDevice9_2 = GetStructure<IDirect3DDevice9*>(0x0524B6AC);
 
-//auto		  g_DisplayPreferences =		  GetStructure<D3DPRESENT_PARAMETERS>(0x4341420);
-//auto	   g_NewDisplayPreferences =		  GetStructure<D3DPRESENT_PARAMETERS>(0x4341458);
-//auto					 g_adapter =							           *(int *)0x278AFD0;
+
+//auto g_DisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x4341420);
+//auto g_NewDisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x4341458);
+//auto g_adapter = *(int *)0x278AFD0;
 
 template<typename T>
 struct Rect
@@ -148,10 +148,10 @@ int __cdecl IDirect3DDevice9__SetRenderState__FillMode(DWORD Value) // 00A233A0
 }
 bool __cdecl IDirect3DDevice9__SetIndices(IDirect3DIndexBuffer9 *pIndexData) // 00A233C0
 {
-	if (pIndexData == g_IDirect3DIndexBuffer9)
+	if (pIndexData == *g_IDirect3DIndexBuffer9)
 		return 1;
 
-	g_IDirect3DIndexBuffer9 = pIndexData;
+	*g_IDirect3DIndexBuffer9 = pIndexData;
 	return (*g_IDirect3DDevice9)->SetIndices(pIndexData) >= 0;
 }
 bool __cdecl IDirect3DDevice9__SetPixelShader(IDirect3DPixelShader9 *pShader) // 00A23500
@@ -206,10 +206,10 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9* IDirect3DDevice9, int Sampler, int 
 }
 bool __cdecl IDirect3DDevice9__SetVertexDeclaration(IDirect3DVertexDeclaration9* pDecl) // 00A24650
 {
-	if (pDecl == g_IDirect3DVertexDeclaration9)
+	if (pDecl == *g_IDirect3DVertexDeclaration9)
 		return 1;
 
-	g_IDirect3DVertexDeclaration9 = pDecl;
+	*g_IDirect3DVertexDeclaration9 = pDecl;
 	return (*g_IDirect3DDevice9)->SetVertexDeclaration(pDecl) >= 0;
 }
 bool __cdecl IDirect3DDevice9__SetVertexShader(IDirect3DVertexShader9 *pShader) // 00A247B0
@@ -391,6 +391,7 @@ inline void AddRendererHooks(const char *name)
 		HookManager.AddHook({ 0x6233A0 }, &IDirect3DDevice9__SetRenderState__FillMode, "IDirect3DDevice9::SetRenderState::FillMode");
 		HookManager.AddHook({ 0x6233C0 }, &IDirect3DDevice9__SetIndices, "IDirect3DDevice9::SetIndices");
 		HookManager.AddHook({ 0x623500 }, &IDirect3DDevice9__SetPixelShader, "IDirect3DDevice9::SetPixelShader");
+		HookManager.AddHook({ 0x624650 }, &IDirect3DDevice9__SetVertexDeclaration, "IDirect3DDevice9::SetVertexDeclaration");
 		HookManager.AddHook({ 0x6247B0 }, &IDirect3DDevice9__SetVertexShader, "IDirect3DDevice9::SetVertexShader");
 		HookManager.AddHook({ 0x648C70 }, &IDirect3DDevice9__SetDepthStencilSurface__ZStencil, "IDirect3DDevice9::DepthStencilSurfaceSetZ");
 		HookManager.AddHook({ 0x649010 }, &IDirect3DDevice9__SetViewport, "IDirect3DDevice9::SetViewport");
@@ -405,7 +406,6 @@ inline void AddRendererHooks(const char *name)
 
 		// incorrect implementations
 		//HookManager.AddHook({ 0x623700 }, &sub_A23700, "sub_A23700");
-		//HookManager.AddHook({ 0x624650 }, &IDirect3DDevice9__SetVertexDeclaration, "IDirect3DDevice9::SetVertexDeclaration");
 		//HookManager.AddHook({ 0x675960 }, &IDirect3DDevice9__CreateIndexBuffer, "IDirect3DDevice9::CreateIndexBuffer");
 		//HookManager.AddHook({ 0x6759B0 }, &IDirect3DDevice9__CreateVertexBuffer, "IDirect3DDevice9::CreateVertexBuffer");
 		//HookManager.AddHook({ 0x675B20 }, &IDirect3DDevice9__CreateTexture, "IDirect3DDevice9::CreateTexture");
