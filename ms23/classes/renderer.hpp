@@ -6,7 +6,7 @@
 #include <d3d9.h>
 
 
-auto g_clip_plane = GetStructure<point2d<int>>(0x0191068C);
+auto g_clip_plane = GetStructure<clip_plane<float>>(0x0191068C);
 auto g_d3d9ex = *(int*)0x01910700;
 auto g_D3dFormatIsD24FS8 = *(bool*)0x050DAE03;
 auto g_IDirect3D9Ex = GetStructure<IDirect3D9Ex*>(0x050DADD8);

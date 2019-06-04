@@ -5410,37 +5410,43 @@ struct s_cache_path
 template<typename T>
 struct point2d
 {
-	T x, y;
+	T X, Y;
 };
 
 template<typename T>
 struct point3d
 {
-	T x, y, z;
+	T X, Y, Z;
 };
 
 template<typename T>
 struct point4d
 {
-	T x, y, z, w;
+	T X, Y, Z, W;
 };
 
 template<typename T>
 struct vector2d
 {
-	T i, j;
+	T I, J;
 };
 
 template<typename T>
 struct vector3d
 {
-	T i, j, k;
+	T I, J, K;
 };
 
 template<typename T>
 struct vector4d
 {
-	T i, j, k, w;
+	T I, J, K, W;
+};
+
+template<typename T>
+struct clip_plane
+{
+	T Near, Far;
 };
 
 struct s_field_of_view
@@ -5486,16 +5492,16 @@ struct s_camera_definition
 
 	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{
-		if (Direction.i != 0.0f || Direction.j != 0.0f || Direction.k != 0.0f)
+		if (Direction.I != 0.0f || Direction.J != 0.0f || Direction.K != 0.0f)
 		{
 			if (position_and_shift)
-				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", Position.i, Position.j, Position.k, PositionShift.i, PositionShift.j, PositionShift.k);
+				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", Position.I, Position.J, Position.K, PositionShift.I, PositionShift.J, PositionShift.K);
 			if (look_and_depth_and_fov)
 				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", Look, LookShift, Depth, FieldOfView.Get());
 			if (forward_and_up_and_direction)
-				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", Forward.i, Forward.j, Forward.k, Up.i, Up.j, Up.k, Direction.i, Direction.j, Direction.k);
+				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", Forward.I, Forward.J, Forward.K, Up.I, Up.J, Up.K, Direction.I, Direction.J, Direction.K);
 			if (center_and_zoom_transition_time)
-				printf_s("center: %f %f %f, zoom_transition_time: %f\n", Center.i, Center.j, Center.k, ZoomTransitionTime);
+				printf_s("center: %f %f %f, zoom_transition_time: %f\n", Center.I, Center.J, Center.K, ZoomTransitionTime);
 		}
 		return this;
 	}
