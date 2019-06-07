@@ -5457,6 +5457,12 @@ struct s_field_of_view
 	{
 		return (float)(Radians / 0.0174533);
 	}
+	void ConvertForWeapon(float *weapon_fov, float(__cdecl* map)(double, double, double, double, double))
+	{
+		auto fov = Get();
+		auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
+		*weapon_fov = new_val + fov < 90 ? new_val + 0.0f : fov < 100 ? new_val + 0.05f : fov < 110 ? new_val + 0.15f : new_val + 0.20f;
+	}
 };
 
 struct s_camera_definition

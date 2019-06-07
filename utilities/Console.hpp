@@ -111,6 +111,8 @@ namespace Console
 
 	bool Resize(int nWidth, int nHeight, int cOffX = 0, int cOffY = 0)
 	{
-		return MoveWindow(GetConsoleWindow(), ((GetSystemMetrics(SM_CXSCREEN) - nWidth) / 2) + cOffX, ((GetSystemMetrics(SM_CYSCREEN) - nHeight) / 2) + cOffY, nWidth, nHeight, TRUE);
+		auto xPos = ((GetSystemMetrics(SM_CXSCREEN) - nWidth) / 2) + cOffX;
+		auto yPos = ((GetSystemMetrics(SM_CYSCREEN) - nHeight) / 2) + cOffY;
+		return MoveWindow(GetConsoleWindow(), xPos, yPos, nWidth, nHeight, TRUE);
 	}
 }
