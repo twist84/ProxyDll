@@ -117,7 +117,7 @@ BOOL InitInstance(HINSTANCE hModule)
 	SetProcessDPIAware();
 	DisableThreadLibraryCalls(hModule);
 
-	Console::Resize(995, 520, 250, 250);
+	Console::Resize(995, 520, -250, 250);
 
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&MainThread, NULL, 0, NULL);
 	CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)&ForceLoadThread, NULL, 0, NULL);
