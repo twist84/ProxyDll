@@ -177,8 +177,7 @@ void sub_600A20_hook()
 
 unsigned long __cdecl podium_duration_call_hook(float a1)
 {
-	auto podium_duration = 7;
-	return (unsigned long)((1.0 * 0.5) + 60 * podium_duration);
+	return (unsigned long)((1.0 * 0.5) + (60 * 7/*podium_duration*/));
 }
 
 int game_set_initial_network_values_hook()

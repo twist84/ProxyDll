@@ -117,7 +117,7 @@ const char *__cdecl session_composition_get_string_hook(e_session_composition se
 // this is the function the game ui uses to connect the hosts | a3, a4, a5 are all the hosts XnkAddr
 char __cdecl game_browser_join_host_hook(char a1, int a2, XnkAddr *a3, XnkAddr *a4, XnkAddr *a5)
 {
-	return (new s_join_data { a1, a2, a3, a4, a5 })->Join();
+	return s_join_data(a1, a2, a3, a4, a5).Join();
 }
 
 // this could probably use some error checking

@@ -125,7 +125,7 @@ inline void AddGameStateHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.AddHook({ GetGameStateDefinitionPointer(e_game_state_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
+		//HookManager.AddHook({ GetGameStateDefinitionPointer(e_game_state::_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
 
 		HookManager.AddHook({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
 		HookManager.AddHook({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");

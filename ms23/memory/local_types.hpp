@@ -2756,9 +2756,9 @@ struct s_file_reference
 		return result;
 	}
 
-	void Print(const char* calling_function)
+	s_file_reference *Print(const char* calling_function)
 	{
-		return;
+		return this;
 		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (HeaderType == 'filo' ? "'filo'" : "'????'"), Flags, unknown6, FileHandle, FilePointer, Path, calling_function);
 	}
 };
@@ -5568,6 +5568,16 @@ struct s_join_data
 	int a2;
 	XnkAddr *a3, *a4, *a5;
 	bool succeeded;
+
+	s_join_data(char a1_, int a2_, XnkAddr *a3_, XnkAddr *a4_, XnkAddr *a5_)
+	{
+		a1 = a1_;
+		a2 = a2_;
+		a3 = a3_;
+		a4 = a4_;
+		a5 = a5_;
+		succeeded = false;
+	}
 
 	void Print()
 	{

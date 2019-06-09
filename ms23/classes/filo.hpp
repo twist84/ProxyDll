@@ -53,43 +53,30 @@ void *__cdecl filo_create_hook(s_file_reference *filo, const char *file_path, bo
 	filo->Print("filo_create");
 	return filo;
 }
-
 char __cdecl file_read_hook(s_file_reference *filo, DWORD nNumberOfBytesToRead, char a3, LPVOID lpBuffer)
 {
-	auto result = filo->read(nNumberOfBytesToRead, a3, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
-	filo->Print("file_read");
-	return result;
+	return filo->Print("file_read")->read(nNumberOfBytesToRead, a3, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
 }
-
 char __cdecl file_close_hook(s_file_reference *filo)
 {
-	filo->Print("file_close");
-	return filo->close();
+	return filo->Print("file_close")->close();
 }
-
 bool __cdecl file_set_position_hook(s_file_reference *filo, LONG lDistanceToMove, char a3)
 {
-	auto result = filo->set_position(lDistanceToMove, a3, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
-	filo->Print("file_set_position");
-	return result;
+	return filo->Print("file_set_position")->set_position(lDistanceToMove, a3, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
 }
-
 char __cdecl file_write_hook(s_file_reference* filo, DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer)
 {
-	auto result = filo->write(nNumberOfBytesToWrite, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
-	filo->Print("file_write");
-	return result;
+	return filo->Print("file_write")->write(nNumberOfBytesToWrite, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
 }
-int __cdecl filo_get_file_pointer_hook(s_file_reference* filo)
+int __cdecl filo_get_file_pointer_hook(s_file_reference *filo)
 {
-	filo->Print("filo_get_file_pointer");
-	return filo->FilePointer;
+	return filo->Print("filo_get_file_pointer")->FilePointer;
 }
 
-int __cdecl file_get_eof_hook(s_file_reference* filo)
+int __cdecl file_get_eof_hook(s_file_reference *filo)
 {
-	filo->Print("file_get_eof");
-	return filo->get_eof((void(__cdecl*)(const char*, s_file_reference *, s_file_reference *, char))(0x5294F0));
+	return filo->Print("file_get_eof")->get_eof((void(__cdecl*)(const char*, s_file_reference *, s_file_reference *, char))(0x5294F0));
 }
 
 static const auto file_create_parent_directories_if_not_present = (bool(__cdecl *)(s_file_reference *))0x527FF0;
