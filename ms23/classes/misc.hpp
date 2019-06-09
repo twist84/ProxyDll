@@ -185,11 +185,7 @@ int game_set_initial_network_values_hook()
 {
 	auto result = ((int(*)())0x43D2B0)();
 
-	initial_network_values->SetMaxOfflinePlayerCount(4); // works
-
-	initial_network_values->SetMaxCoopPlayerCount(8); // unsure
-	initial_network_values->SetMaxForgePlayerCount(16); // unsure
-	initial_network_values->SetMaxTheaterPlayerCount(8); // unsure
+	initial_network_values->SetMaxPlayerCounts(4, 8, 16, 8);
 
 	return result;
 }

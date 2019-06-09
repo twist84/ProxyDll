@@ -4530,19 +4530,38 @@ struct s_initial_network_values
 
 	void SetMaxOfflinePlayerCount(int player_count)
 	{
+		if (player_count == -1)
+			return;
+
 		OfflineMaxPlayerCount = player_count;
 	}
 	void SetMaxCoopPlayerCount(int player_count)
 	{
+		if (player_count == -1)
+			return;
+
 		LobbyCoopMaxPlayerCount = player_count;
 	}
 	void SetMaxForgePlayerCount(int player_count)
 	{
+		if (player_count == -1)
+			return;
+
 		LobbyMapeditorMaxPlayerCount = player_count;
 	}
 	void SetMaxTheaterPlayerCount(int player_count)
 	{
+		if (player_count == -1)
+			return;
+
 		LobbyFilmMaxPlayerCount = player_count;
+	}
+	void SetMaxPlayerCounts(int offline, int coop, int forge, int theater)
+	{
+		SetMaxOfflinePlayerCount(offline);
+		SetMaxCoopPlayerCount(coop);
+		SetMaxForgePlayerCount(forge);
+		SetMaxTheaterPlayerCount(theater);
 	}
 };
 auto initial_network_values = GetStructure<s_initial_network_values>(0x19A62C0);
@@ -5383,7 +5402,7 @@ struct s_cache_path
 	s_cache_file_path audio = s_cache_file_path(0x149D004, "audio.dat");
 	s_cache_file_path video = s_cache_file_path(0x149D008, "video.dat");
 
-	void Update(bool new_cache_style = false)
+	s_cache_path *Update(bool new_cache_style = false)
 	{
 		string_ids.Update(map_data->MapName)->Write(new_cache_style);
 		tags.Update(map_data->MapName)->Write(new_cache_style);
@@ -5393,6 +5412,8 @@ struct s_cache_path
 		textures_b.Update(map_data->MapName)->Write(new_cache_style);
 		audio.Update(map_data->MapName)->Write(new_cache_style);
 		video.Update(map_data->MapName)->Write(new_cache_style);
+
+		return this;
 	}
 	void Print()
 	{
@@ -5457,11 +5478,13 @@ struct s_field_of_view
 	{
 		return (float)(Radians / 0.0174533);
 	}
-	void ConvertForWeapon(float *weapon_fov, float(__cdecl* map)(double, double, double, double, double))
+	s_field_of_view *ConvertForWeapon(float *weapon_fov, float(__cdecl* map)(double, double, double, double, double))
 	{
 		auto fov = Get();
 		auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
 		*weapon_fov = new_val + fov < 90 ? new_val + 0.0f : fov < 100 ? new_val + 0.05f : fov < 110 ? new_val + 0.15f : new_val + 0.20f;
+
+		return this;
 	}
 };
 
