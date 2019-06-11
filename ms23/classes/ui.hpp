@@ -221,18 +221,16 @@ int __cdecl debug_cache_loading_callback_hook() // nullsub
 signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
 {
 	/*
-	0,		exit loading render function
-	1,		render bink function with some bink related function
-	2,		render bink function and endscene, makes the screen green
-	3,		render `hf2p_loading_screen`
-	4, 5,	render bink function with some nullsub
-	8,		render 'debug_print_lobby_percent_loaded'
+	main::main_render::loading_screen
+		0,		exit loading render function
+		2,		goto endscene
+		3,		render `hf2p_loading_screen`
+		8,		render 'debug_print_lobby_percent_loaded'
+	main::main_render::bink
+		1,		execute some bink related functions, `main::main_render::begin` calls `main::main_render::bink` with 1
+		4, 5,	execute (draw_string, nullsub and content_catalogue related) functions
 	*/
 	return debug_loading_type;
-	/*
-		this returns an arg parsed by `main::main_render::bink`
-		`main::main_render::begin` calls `main::main_render::bink` with 1
-	*/
 }
 
 inline void AddUiHooks(const char *name)
