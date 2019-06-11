@@ -11,118 +11,118 @@
 
 struct
 {
-	gamemode game_mode = { "Save Data" };
-	lobby lobby_data = { "Save Data (Lobby Specific)" };
+	gamemode GameMode = { "Save Data" };
+	lobby LobbyData = { "Save Data (Lobby Specific)" };
 
-	stringid lobbytype_string_id = { 0x341, "LobbyType StringId" };
-	//uint32 last_mapid_and_campaignid;
-	//uint32 last_network_mode;
+	stringid LobbyType = { 0x341, "LobbyType StringId" };
+	//uint32 LastMapidAndCampaignid;
+	//uint32 LastNetworkMode;
 
-	//uint32 minor_version;
+	//uint32 MinorVersion;
 	//============================ CONFIG ============================
-	//uint32 display_adapter;
-	toggle hide_watermark = { e_toggle_option::_off, "Hide Watermark", true };
-	game_language language = { e_game_language::_english, "Game Language" };
-	toggle display_subtitles = { e_toggle_option::_on, "Display Subtitles" };
+	//uint32 DisplayAdapter;
+	toggle HideWatermark = { e_toggle_option::_off, "Hide Watermark", true };
+	game_language Language = { e_game_language::_english, "Game Language" };
+	toggle DisplaySubtitles = { e_toggle_option::_on, "Display Subtitles" };
 
 	//=========================== SETTINGS ===========================
 	//=========================== GAMEPLAY ===========================
-	toggle hud_shake = { e_toggle_option::_off, "Hud Shake" };
-	player_marker player_marker = { e_player_marker_option::_default_colors, "Player Marker Colors" };
-	uint32 camera_fov = { 110, "Camera Field-of-View" };
+	toggle HudShake = { e_toggle_option::_off, "Hud Shake" };
+	player_marker PlayerMarker = { e_player_marker_option::_default_colors, "Player Marker Colors" };
+	uint32 CameraFov = { 110, "Camera Field-of-View" };
 
 	//=========================== CONTROLS ===========================
-	control_method control_method = { e_control_method_option::_keyboard_and_mouse, "Control Method" };
-	//uint32 bindings;
-	uint32 mouse_sensitivity_vertical = { 25, "Mouse Sensitivity: Vertical" };
-	uint32 mouse_sensitivity_horizontal = { 25, "Mouse Sensitivity: Horizontal" };
+	control_method ControlMethod = { e_control_method_option::_keyboard_and_mouse, "Control Method" };
+	//uint32 Bindings;
+	uint32 MouseSensitivityVertical = { 25, "Mouse Sensitivity: Vertical" };
+	uint32 MouseSensitivityHorizontal = { 25, "Mouse Sensitivity: Horizontal" };
 
-	uint32 mouse_sensitivity_vehicle_vertical = { 25, "Mouse Sensitivity: Vehicle Vertical" };
-	uint32 mouse_sensitivity_vehicle_horizontal = { 25, "Mouse Sensitivity: Vehicle Horizontal" };
+	uint32 MouseSensitivityVehicleVertical = { 25, "Mouse Sensitivity: Vehicle Vertical" };
+	uint32 MouseSensitivityVehicleHorizontal = { 25, "Mouse Sensitivity: Vehicle Horizontal" };
 
-	uint32 mouse_acceleration = { 0, "Mouse Acceleration" };
-	toggle mouse_filter = { e_toggle_option::_off, "Mouse Filter" };
-	toggle invert_mouse = { e_toggle_option::_off, "Invert Mouse" };
-	toggle toggle_crouch = { e_toggle_option::_on, "Toggle Crouch" };
+	uint32 MouseAcceleration = { 0, "Mouse Acceleration" };
+	toggle MouseFilter = { e_toggle_option::_off, "Mouse Filter" };
+	toggle MouseInverted = { e_toggle_option::_off, "Mouse Inverted" };
+	toggle ToggleCouch = { e_toggle_option::_on, "Toggle Crouch" };
 
 	//============================= VIDEO ============================
-	//uint32 screen_resolution_list;
-	screen_resolution screen_resolution = { 1920, 1080, "Screen Resolution" };
+	//uint32 ScreenResolutionList;
+	screen_resolution ScreenResolution = { 1920, 1080, "Screen Resolution" };
 
-	quality texture_resolution = { e_quality_option::_high, "Texture Resolution (Requires Restart)" };
-	quality texture_filtering_quality = { e_quality_option::_high, "Texture Filtering Quality" };
-	quality lighting_quality = { e_quality_option::_high, "Lighting Quality" };
-	quality effects_quality = { e_quality_option::_high, "Effects Quality" };
-	quality shadow_quality = { e_quality_option::_high, "Shadow Quality" };
-	quality details_quality = { e_quality_option::_high, "Details Quality" };
-	quality postprocessing_quality = { e_quality_option::_high, "Post-Processing Quality" };
-	toggle motion_blur = { e_toggle_option::_off, "Motion Blur", true };
+	quality TextureResolution = { e_quality_option::_high, "Texture Resolution (Requires Restart)" };
+	quality TextureFilteringQuality = { e_quality_option::_high, "Texture Filtering Quality" };
+	quality LightingQuality = { e_quality_option::_high, "Lighting Quality" };
+	quality EffectsQuality = { e_quality_option::_high, "Effects Quality" };
+	quality ShadowQuality = { e_quality_option::_high, "Shadow Quality" };
+	quality DetailsQuality = { e_quality_option::_high, "Details Quality" };
+	quality PostProcessingQuality = { e_quality_option::_high, "Post-Processing Quality" };
+	toggle MotionBlur = { e_toggle_option::_off, "Motion Blur", true };
 
-	uint32 brightness = { 50, "Brightness" };
-	uint32 contrast = { 50, "Contrast" };
-	toggle antialiasing = { e_toggle_option::_on, "Antialiasing", true };
-	toggle fullscreen = { e_toggle_option::_on, "Fullscreen" };
-	toggle vsync = { e_toggle_option::_on, "VSync", true };
+	uint32 Brightness = { 50, "Brightness" };
+	uint32 Contrast = { 50, "Contrast" };
+	toggle AntiAliasing = { e_toggle_option::_on, "AntiAliasing", true };
+	toggle Fullscreen = { e_toggle_option::_on, "Fullscreen" };
+	toggle VSync = { e_toggle_option::_on, "VSync", true };
 
 	//============================= AUDIO ============================
-	uint32 master_volume = { 60, "Master Volume" };
-	uint32 music_volume = { 20, "Music Volume" };
-	uint32 sfx_volume = { 80, "Sound Effects Volume" };
-	//uint32 voice_volume;
-	//uint32 voice_chat_volume;
-	//uint32 voice_chat_control;
+	uint32 MasterVolume = { 60, "Master Volume" };
+	uint32 MusicVolume = { 20, "Music Volume" };
+	uint32 SfxVolume = { 80, "Sound Effects Volume" };
+	//uint32 VoiceVolume;
+	//uint32 VoiceChatVolume;
+	//uint32 VoiceChatControl;
 } preferences;
 
 uint32_t preferences_get_lobbytype_string_id()
 {
-	return preferences.lobbytype_string_id.get();
+	return preferences.LobbyType.get();
 }
 
 void preferences_set_lobbytype_string_id(uint32_t a1)
 {
-	preferences.lobbytype_string_id.set(a1);
+	preferences.LobbyType.set(a1);
 }
 
 e_toggle_option preferences_get_antialiasing()
 {
-	return preferences.antialiasing.get();
+	return preferences.AntiAliasing.get();
 }
 
 void preferences_set_antialiasing(e_toggle_option a1)
 {
-	preferences.antialiasing.set(a1);
+	preferences.AntiAliasing.set(a1);
 }
 
 e_toggle_option preferences_get_hud_shake()
 {
-	return preferences.hud_shake.get();
+	return preferences.HudShake.get();
 }
 
 void preferences_set_hud_shake(e_toggle_option a1)
 {
-	preferences.hud_shake.set(a1);
+	preferences.HudShake.set(a1);
 }
 
 void preferences_get_screen_resolution(int *a1, int *a2)
 {
-	return preferences.screen_resolution.get(a1, a2);
+	return preferences.ScreenResolution.get(a1, a2);
 }
 
 void preferences_set_screen_resolution(int a1, int a2)
 {
-	preferences.screen_resolution.set(a1, a2);
-	preferences.screen_resolution.width = a1;
-	preferences.screen_resolution.height = a2;
+	preferences.ScreenResolution.set(a1, a2);
+	preferences.ScreenResolution.width = a1;
+	preferences.ScreenResolution.height = a2;
 }
 
 void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBufferWidth, int BackBufferHeight, e_toggle_option Fullscreen)
 {
-	if (preferences.screen_resolution.locked)
+	if (preferences.ScreenResolution.locked)
 		return;
 
-	preferences.screen_resolution.set(BackBufferWidth, BackBufferHeight);
-	preferences.screen_resolution.width = BackBufferWidth;
-	preferences.screen_resolution.height = BackBufferHeight;
+	preferences.ScreenResolution.set(BackBufferWidth, BackBufferHeight);
+	preferences.ScreenResolution.width = BackBufferWidth;
+	preferences.ScreenResolution.height = BackBufferHeight;
 	if (adapter == g_adapter)
 	{
 		memcpy(g_DisplayPreferencesNew, g_DisplayPreferences, sizeof(D3DPRESENT_PARAMETERS));
@@ -132,7 +132,7 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 		if (!StandardRendering.val)
 			g_DisplayPreferencesNew->Windowed = !Fullscreen.value; // != 2;
 
-		preferences.fullscreen.set(Fullscreen);
+		preferences.Fullscreen.set(Fullscreen);
 		*(uint8_t *)0x50DD9D1 = 1;
 	}
 }
@@ -140,298 +140,298 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 s_saved_game_data *preferences_get_gamemode_data()
 {
 	file_read_from_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
-	return preferences.game_mode.get();
+	return preferences.GameMode.get();
 }
 
 void preferences_set_gamemode_data(s_saved_game_data *a1)
 {
-	preferences.game_mode.set(a1);
+	preferences.GameMode.set(a1);
 	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
 }
 
 void preferences_set_lobby_data(s_lobby_data *a1)
 {
-	preferences.lobby_data.set(a1);
+	preferences.LobbyData.set(a1);
 	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
 	file_write_to_path(save_data[a1->LobbyType.value].Path, save_data[a1->LobbyType.value].Size, save_data[a1->LobbyType.value].Buffer);
 }
 
 e_game_language preferences_get_language()
 {
-	return preferences.language.get();
+	return preferences.Language.get();
 }
 
 void preferences_set_language(e_game_language a1)
 {
-	preferences.language.set(a1);
+	preferences.Language.set(a1);
 }
 
 e_toggle_option preferences_get_vsync()
 {
-	return preferences.vsync.get();
+	return preferences.VSync.get();
 }
 
 void preferences_set_vsync(e_toggle_option a1)
 {
-	preferences.vsync.set(a1);
+	preferences.VSync.set(a1);
 }
 
 e_toggle_option preferences_get_hide_watermark()
 {
-	return preferences.hide_watermark.get();
+	return preferences.HideWatermark.get();
 }
 
 void preferences_set_hide_watermark(e_toggle_option a1)
 {
-	preferences.hide_watermark.set(a1);
+	preferences.HideWatermark.set(a1);
 }
 
 e_quality_option preferences_get_lighting_quality()
 {
-	return preferences.lighting_quality.get();
+	return preferences.LightingQuality.get();
 }
 
 void preferences_set_lighting_quality(e_quality_option a1)
 {
-	preferences.lighting_quality.set(a1);
+	preferences.LightingQuality.set(a1);
 }
 
 uint32_t preferences_get_master_volume()
 {
-	return preferences.master_volume.get();
+	return preferences.MasterVolume.get();
 }
 
 void preferences_set_master_volume(uint32_t a1)
 {
-	preferences.master_volume.set(a1);
+	preferences.MasterVolume.set(a1);
 }
 
 e_toggle_option preferences_get_motion_blur()
 {
-	return preferences.motion_blur.get();
+	return preferences.MotionBlur.get();
 }
 
 void preferences_set_motion_blur(e_toggle_option a1)
 {
-	preferences.motion_blur.set(a1);
+	preferences.MotionBlur.set(a1);
 }
 
 uint32_t preferences_get_mouse_acceleration()
 {
-	return preferences.mouse_acceleration.get();
+	return preferences.MouseAcceleration.get();
 }
 
 void preferences_set_mouse_acceleration(uint32_t a1)
 {
-	preferences.mouse_acceleration.set(a1);
+	preferences.MouseAcceleration.set(a1);
 }
 
 e_toggle_option preferences_get_mouse_filter()
 {
-	return preferences.mouse_filter.get();
+	return preferences.MouseFilter.get();
 }
 
 void preferences_set_mouse_filter(e_toggle_option a1)
 {
-	preferences.mouse_filter.set(a1);
+	preferences.MouseFilter.set(a1);
 }
 
 e_toggle_option preferences_get_invert_mouse()
 {
-	return preferences.invert_mouse.get();
+	return preferences.MouseInverted.get();
 }
 
 void preferences_set_invert_mouse(e_toggle_option a1)
 {
-	preferences.invert_mouse.set(a1);
+	preferences.MouseInverted.set(a1);
 }
 
 uint32_t preferences_get_mouse_sensitivity_horizontal()
 {
-	return preferences.mouse_sensitivity_horizontal.get();
+	return preferences.MouseSensitivityHorizontal.get();
 }
 
 void preferences_set_mouse_sensitivity_horizontal(uint32_t a1)
 {
-	preferences.mouse_sensitivity_horizontal.set(a1);
+	preferences.MouseSensitivityHorizontal.set(a1);
 }
 uint32_t preferences_get_mouse_sensitivity_vehicle_horizontal()
 {
-	return preferences.mouse_sensitivity_vehicle_horizontal.get();
+	return preferences.MouseSensitivityVehicleHorizontal.get();
 }
 
 void preferences_set_mouse_sensitivity_vehicle_horizontal(uint32_t a1)
 {
-	preferences.mouse_sensitivity_vehicle_horizontal.set(a1);
+	preferences.MouseSensitivityVehicleHorizontal.set(a1);
 }
 
 uint32_t preferences_get_mouse_sensitivity_vehicle_vertical()
 {
-	return preferences.mouse_sensitivity_vehicle_vertical.get();
+	return preferences.MouseSensitivityVehicleVertical.get();
 }
 
 void preferences_set_mouse_sensitivity_vehicle_vertical(uint32_t a1)
 {
-	preferences.mouse_sensitivity_vehicle_vertical.set(a1);
+	preferences.MouseSensitivityVehicleVertical.set(a1);
 }
 
 uint32_t preferences_get_mouse_sensitivity_vertical()
 {
-	return preferences.mouse_sensitivity_vertical.get();
+	return preferences.MouseSensitivityVertical.get();
 }
 
 void preferences_set_mouse_sensitivity_vertical(uint32_t a1)
 {
-	preferences.mouse_sensitivity_vertical.set(a1);
+	preferences.MouseSensitivityVertical.set(a1);
 }
 
 uint32_t preferences_get_music_volume()
 {
-	return preferences.music_volume.get();
+	return preferences.MusicVolume.get();
 }
 
 void preferences_set_music_volume(uint32_t a1)
 {
-	preferences.music_volume.set(a1);
+	preferences.MusicVolume.set(a1);
 }
 
 e_quality_option preferences_get_postprocessing_quality()
 {
-	return preferences.postprocessing_quality.get();
+	return preferences.PostProcessingQuality.get();
 }
 
 void preferences_set_postprocessing_quality(e_quality_option a1)
 {
-	preferences.postprocessing_quality.set(a1);
+	preferences.PostProcessingQuality.set(a1);
 }
 
 uint32_t preferences_get_sfx_volume()
 {
-	return preferences.sfx_volume.get();
+	return preferences.SfxVolume.get();
 }
 
 void preferences_set_sfx_volume(uint32_t a1)
 {
-	preferences.sfx_volume.set(a1);
+	preferences.SfxVolume.set(a1);
 }
 
 e_quality_option preferences_get_shadow_quality()
 {
-	return preferences.shadow_quality.get();
+	return preferences.ShadowQuality.get();
 }
 
 void preferences_set_shadow_quality(e_quality_option a1)
 {
-	preferences.shadow_quality.set(a1);
+	preferences.ShadowQuality.set(a1);
 }
 
 e_toggle_option preferences_get_display_subtitles()
 {
-	return preferences.display_subtitles.get();
+	return preferences.DisplaySubtitles.get();
 }
 void preferences_set_display_subtitles(e_toggle_option a1)
 {
-	preferences.display_subtitles.set(a1);
+	preferences.DisplaySubtitles.set(a1);
 }
 
 e_player_marker_option preferences_get_player_marker()
 {
-	return preferences.player_marker.get();
+	return preferences.PlayerMarker.get();
 }
 
 void preferences_set_player_marker(e_player_marker_option a1)
 {
-	preferences.player_marker.set(a1);
+	preferences.PlayerMarker.set(a1);
 }
 
 e_quality_option preferences_get_texture_filtering_quality()
 {
-	return preferences.texture_filtering_quality.get();
+	return preferences.TextureFilteringQuality.get();
 }
 
 void preferences_set_texture_filtering_quality(e_quality_option a1)
 {
-	preferences.texture_filtering_quality.set(a1);
+	preferences.TextureFilteringQuality.set(a1);
 }
 
 e_quality_option preferences_get_texture_resolution()
 {
-	return preferences.texture_resolution.get();
+	return preferences.TextureResolution.get();
 }
 
 void preferences_set_texture_resolution(e_quality_option a1)
 {
-	preferences.texture_resolution.set(a1);
+	preferences.TextureResolution.set(a1);
 }
 
 e_toggle_option preferences_get_toggle_crouch()
 {
-	return preferences.toggle_crouch.get();
+	return preferences.ToggleCouch.get();
 }
 
 void preferences_set_toggle_crouch(e_toggle_option a1)
 {
-	preferences.toggle_crouch.set(a1);
+	preferences.ToggleCouch.set(a1);
 }
 
 e_quality_option preferences_get_effects_quality()
 {
-	return preferences.effects_quality.get();
+	return preferences.EffectsQuality.get();
 }
 
 void preferences_set_effects_quality(e_quality_option a1)
 {
-	preferences.effects_quality.set(a1);
+	preferences.EffectsQuality.set(a1);
 }
 
 e_toggle_option preferences_get_fullscreen()
 {
-	return preferences.fullscreen.get();
+	return preferences.Fullscreen.get();
 }
 
 void preferences_set_fullscreen(e_toggle_option a1)
 {
-	preferences.fullscreen.set(a1);
+	preferences.Fullscreen.set(a1);
 }
 
 e_control_method_option preferences_get_control_method()
 {
-	return preferences.control_method.get();
+	return preferences.ControlMethod.get();
 }
 
 void preferences_set_control_method(e_control_method_option a1)
 {
-	preferences.control_method.set(a1);
+	preferences.ControlMethod.set(a1);
 }
 
 e_quality_option preferences_get_details_quality()
 {
-	return preferences.details_quality.get();
+	return preferences.DetailsQuality.get();
 }
 
 void preferences_set_details_quality(e_quality_option a1)
 {
-	preferences.details_quality.set(a1);
+	preferences.DetailsQuality.set(a1);
 }
  
 uint32_t preferences_get_brightness()
 {
-	return preferences.brightness.get();
+	return preferences.Brightness.get();
 }
 
 void preferences_set_brightness(uint32_t a1)
 {
-	preferences.brightness.set(a1);
+	preferences.Brightness.set(a1);
 }
 
 uint32_t preferences_get_contrast()
 {
-	return preferences.contrast.get();
+	return preferences.Contrast.get();
 }
 
 void preferences_set_contrast(uint32_t a1)
 {
-	preferences.contrast.set(a1);
+	preferences.Contrast.set(a1);
 }
 
 inline void AddPreferencesHooks(const char *name)
@@ -543,46 +543,46 @@ inline void AddPreferencesPatches(const char *name)
 
 void AllQualitySettingsToggleLock()
 {
-	preferences.texture_resolution.toggle_lock();
-	preferences.texture_filtering_quality.toggle_lock();
-	preferences.lighting_quality.toggle_lock();
-	preferences.effects_quality.toggle_lock();
-	preferences.shadow_quality.toggle_lock();
-	preferences.details_quality.toggle_lock();
+	preferences.TextureResolution.toggle_lock();
+	preferences.TextureFilteringQuality.toggle_lock();
+	preferences.LightingQuality.toggle_lock();
+	preferences.EffectsQuality.toggle_lock();
+	preferences.ShadowQuality.toggle_lock();
+	preferences.DetailsQuality.toggle_lock();
 }
 
 void SetAllQualitySettingsLow()
 {
 	AllQualitySettingsToggleLock();
-	preferences.texture_resolution.set({ e_quality_option::_low });
-	preferences.texture_filtering_quality.set({ e_quality_option::_low });
-	preferences.lighting_quality.set({ e_quality_option::_low });
-	preferences.effects_quality.set({ e_quality_option::_low });
-	preferences.shadow_quality.set({ e_quality_option::_low });
-	preferences.details_quality.set({ e_quality_option::_low });
+	preferences.TextureResolution.set({ e_quality_option::_low });
+	preferences.TextureFilteringQuality.set({ e_quality_option::_low });
+	preferences.LightingQuality.set({ e_quality_option::_low });
+	preferences.EffectsQuality.set({ e_quality_option::_low });
+	preferences.ShadowQuality.set({ e_quality_option::_low });
+	preferences.DetailsQuality.set({ e_quality_option::_low });
 	AllQualitySettingsToggleLock();
 }
 
 void SetAllQualitySettingsMedium()
 {
 	AllQualitySettingsToggleLock();
-	preferences.texture_resolution.set({ e_quality_option::_medium });
-	preferences.texture_filtering_quality.set({ e_quality_option::_medium });
-	preferences.lighting_quality.set({ e_quality_option::_medium });
-	preferences.effects_quality.set({ e_quality_option::_medium });
-	preferences.shadow_quality.set({ e_quality_option::_medium });
-	preferences.details_quality.set({ e_quality_option::_medium });
+	preferences.TextureResolution.set({ e_quality_option::_medium });
+	preferences.TextureFilteringQuality.set({ e_quality_option::_medium });
+	preferences.LightingQuality.set({ e_quality_option::_medium });
+	preferences.EffectsQuality.set({ e_quality_option::_medium });
+	preferences.ShadowQuality.set({ e_quality_option::_medium });
+	preferences.DetailsQuality.set({ e_quality_option::_medium });
 	AllQualitySettingsToggleLock();
 }
 
 void SetAllQualitySettingsHigh()
 {
 	AllQualitySettingsToggleLock();
-	preferences.texture_resolution.set({ e_quality_option::_high });
-	preferences.texture_filtering_quality.set({ e_quality_option::_high });
-	preferences.lighting_quality.set({ e_quality_option::_high });
-	preferences.effects_quality.set({ e_quality_option::_high });
-	preferences.shadow_quality.set({ e_quality_option::_high });
-	preferences.details_quality.set({ e_quality_option::_high });
+	preferences.TextureResolution.set({ e_quality_option::_high });
+	preferences.TextureFilteringQuality.set({ e_quality_option::_high });
+	preferences.LightingQuality.set({ e_quality_option::_high });
+	preferences.EffectsQuality.set({ e_quality_option::_high });
+	preferences.ShadowQuality.set({ e_quality_option::_high });
+	preferences.DetailsQuality.set({ e_quality_option::_high });
 	AllQualitySettingsToggleLock();
 }

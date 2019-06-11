@@ -10,7 +10,7 @@
 
 void SetFpsTarget(int16_t *FrameLimit, int fps)
 {
-	if (preferences.vsync.value.value && fps > 60)
+	if (preferences.VSync.value.value && fps > 60)
 		fps = 60;
 
 	FrameLimit[0] = fps;
