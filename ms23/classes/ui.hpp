@@ -151,17 +151,24 @@ const wchar_t *get_loading_text_hook()
 	//return (*(e_game_language *)0x12E71B4).GetLoadingText();
 }
 
-signed int __cdecl sub_52F930_hook(wchar_t* a1) // loading screen type?
+int __cdecl debug_print_lobby_percent_loaded_hook(float a1) // nullsub
+{
+	if (100 - a1 > 0.1f)
+		printf_s("loaded: %d\n", (int)(100 - a1));
+	return 1;
+}
+
+signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
 {
 	/*
 	0,		exit loading render function
 	1,		render bink function with some bink related function
 	2,		render bink function and endscene, makes the screen green
-	3,		execute saber loading
+	3,		render `hf2p_loading_screen`
 	4, 5,	render bink function with some nullsub
-	8,		execute unknown network function
+	8,		render 'debug_print_lobby_percent_loaded'
 	*/
-	return 2;
+	return 8;
 	/*
 		this returns an arg parsed by `main::main_render::bink`
 		`main::main_render::begin` calls `main::main_render::bink` with 1
@@ -248,9 +255,11 @@ inline void AddUiHooks(const char *name)
 		//HookManager.AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
 
 		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
-		HookManager.AddHook({ 0x12F930 }, &sub_52F930_hook, "sub_52F930");
 		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
 		HookManager.AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
+		
+		HookManager.AddHook({ 0x12F930 }, &main_game_render_get_loading_type_hook, "main_game_render_get_loading_type");
+		HookManager.AddHook({ 0x620540 }, &debug_print_lobby_percent_loaded_hook, "debug_print_lobby_percent_loaded");
 	}
 }
 
