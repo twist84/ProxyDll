@@ -151,30 +151,6 @@ const wchar_t *get_loading_text_hook()
 	//return (*(e_game_language *)0x12E71B4).GetLoadingText();
 }
 
-int __cdecl debug_print_lobby_percent_loaded_hook(float a1) // nullsub
-{
-	if (100 - a1 > 0.1f)
-		printf_s("loaded: %d\n", (int)(100 - a1));
-	return 1;
-}
-
-signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
-{
-	/*
-	0,		exit loading render function
-	1,		render bink function with some bink related function
-	2,		render bink function and endscene, makes the screen green
-	3,		render `hf2p_loading_screen`
-	4, 5,	render bink function with some nullsub
-	8,		render 'debug_print_lobby_percent_loaded'
-	*/
-	return 8;
-	/*
-		this returns an arg parsed by `main::main_render::bink`
-		`main::main_render::begin` calls `main::main_render::bink` with 1
-	*/
-}
-
 int __cdecl system_default_ui_language_to_game_language_hook()
 {
 	auto result = *(int *)0x189DEE4;
@@ -223,6 +199,30 @@ const char *game_get_region_hook(e_game_language game_language, bool foreign)
 {
 	printf_s("game_region: %s\n", game_language.GetRegion());
 	return game_language.GetRegion();
+}
+
+int __cdecl debug_print_lobby_percent_loaded_hook(float a1) // nullsub
+{
+	if (100 - a1 > 0.1f)
+		printf_s("loaded: %d\n", (int)(100 - a1));
+	return 1;
+}
+
+signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
+{
+	/*
+	0,		exit loading render function
+	1,		render bink function with some bink related function
+	2,		render bink function and endscene, makes the screen green
+	3,		render `hf2p_loading_screen`
+	4, 5,	render bink function with some nullsub
+	8,		render 'debug_print_lobby_percent_loaded'
+	*/
+	return 8;
+	/*
+		this returns an arg parsed by `main::main_render::bink`
+		`main::main_render::begin` calls `main::main_render::bink` with 1
+	*/
 }
 
 inline void AddUiHooks(const char *name)
