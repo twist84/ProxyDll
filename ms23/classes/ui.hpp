@@ -201,11 +201,21 @@ const char *game_get_region_hook(e_game_language game_language, bool foreign)
 	return game_language.GetRegion();
 }
 
+int debug_loading_type = 3;
+
 int __cdecl debug_print_lobby_percent_loaded_hook(float a1) // nullsub
 {
-	if (100 - a1 > 0.1f)
-		printf_s("loaded: %d\n", (int)(100 - a1));
-	return 1;
+	int result = 0;
+	if (debug_loading_type == 8 && 100 - a1 > 0.1f)
+		result = printf_s("loaded: %d\n", (int)(100 - a1));
+	return result;
+}
+int __cdecl debug_cache_loading_callback_hook() // nullsub
+{
+	int result = 0;
+	if (debug_loading_type == 8)
+		result = printf_s("loading!\n");
+	return result;
 }
 
 signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
@@ -218,7 +228,7 @@ signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
 	4, 5,	render bink function with some nullsub
 	8,		render 'debug_print_lobby_percent_loaded'
 	*/
-	return 8;
+	return debug_loading_type;
 	/*
 		this returns an arg parsed by `main::main_render::bink`
 		`main::main_render::begin` calls `main::main_render::bink` with 1
@@ -260,6 +270,7 @@ inline void AddUiHooks(const char *name)
 		
 		HookManager.AddHook({ 0x12F930 }, &main_game_render_get_loading_type_hook, "main_game_render_get_loading_type");
 		HookManager.AddHook({ 0x620540 }, &debug_print_lobby_percent_loaded_hook, "debug_print_lobby_percent_loaded");
+		HookManager.AddHook({ 0x620530 }, &debug_cache_loading_callback_hook, "debug_cache_loading_callback");
 	}
 }
 
