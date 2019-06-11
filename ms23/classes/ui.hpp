@@ -147,15 +147,30 @@ void __fastcall c_gui_network_mode_category_datasource_vftable01_player_select_a
 
 const wchar_t *get_loading_text_hook()
 {
-	return (*(e_game_language *)0x189DEE4).GetLoadingText();
+	return (*(e_game_language *)0x189DEE4).Print()->GetLoadingText();
 	//return (*(e_game_language *)0x12E71B4).GetLoadingText();
+}
+
+signed int __cdecl sub_52F930_hook(wchar_t* a1) // loading screen type?
+{
+	/*
+	0,		exit loading render function
+	1,		render bink function with some bink related function
+	2,		render bink function and endscene, makes the screen green
+	3,		execute saber loading
+	4, 5,	render bink function with some nullsub
+	8,		execute unknown network function
+	*/
+	return 2;
+	/*
+		this returns an arg parsed by `main::main_render::bink`
+		`main::main_render::begin` calls `main::main_render::bink` with 1
+	*/
 }
 
 int __cdecl system_default_ui_language_to_game_language_hook()
 {
 	auto result = *(int *)0x189DEE4;
-	//if (*(int *)0x12E71B4 == -1)
-	//auto result = *(int *)0x189DEE4;
 	//if (*(int *)0x12E71B4 == -1)
 	//{
 	switch (g_use_default_system_ui_language ? GetSystemDefaultUILanguage() : g_new_system_ui_language)
@@ -203,8 +218,6 @@ const char *game_get_region_hook(e_game_language game_language, bool foreign)
 	return game_language.GetRegion();
 }
 
-void draw_watermark_hook() {}
-
 inline void AddUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -235,6 +248,7 @@ inline void AddUiHooks(const char *name)
 		//HookManager.AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
 
 		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.AddHook({ 0x12F930 }, &sub_52F930_hook, "sub_52F930");
 		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
 		HookManager.AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
 	}

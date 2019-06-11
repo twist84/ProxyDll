@@ -293,6 +293,12 @@ struct e_game_language
 		};
 		return names[value];
 	}
+
+	e_game_language *Print()
+	{
+		wprintf_s(GetLoadingText());
+		return this;
+	}
 };
 
 bool g_use_default_system_ui_language = true;

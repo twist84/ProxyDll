@@ -198,7 +198,7 @@ int sub_5CF710_hook(wchar_t *dst, wchar_t *src, size_t size)
 	return result;
 }
 
-wchar_t *sub_52EB80_hook(wchar_t *DstBuf, const wchar_t *Format, ...)
+wchar_t *wprintf_12288_hook(wchar_t *DstBuf, const wchar_t *Format, ...)
 {
 	va_list ArgList;
 	va_start(ArgList, Format);
@@ -206,7 +206,7 @@ wchar_t *sub_52EB80_hook(wchar_t *DstBuf, const wchar_t *Format, ...)
 	sub_4EDC90_hook(&DstBuf[wchar_count], 0x3000 - wchar_count, Format, ArgList);
 
 	wprintf_s(L"%s\n", DstBuf); // LOADING %d%
-	hook_print("sub_52EB80", DstBuf);
+	hook_print("wprintf_12288", DstBuf);
 	return DstBuf;
 }
 
@@ -331,13 +331,13 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
 
 		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
-		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10"); // crashes
+		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10");
 		HookManager.AddHook({ 0xECBD0 }, &get_wchar_count_hook, "get_wchar_count");
 		HookManager.AddHook({ 0xECCD0 }, &wcsncpy_hook, "wcsncpy");
 		HookManager.AddHook({ 0xEDC90 }, &sub_4EDC90_hook, "sub_4EDC90");
 
 		HookManager.AddHook({ 0x1CF710 }, &sub_5CF710_hook, "sub_5CF710");
-		HookManager.AddHook({ 0x12EB80 }, &sub_52EB80_hook, "sub_52EB80");
+		HookManager.AddHook({ 0x12EB80 }, &wprintf_12288_hook, "wprintf_12288");
 
 		HookManager.AddHook({ 0x430ED0 }, &format_chat_hook, "format_chat");
 
