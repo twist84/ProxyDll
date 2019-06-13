@@ -90,6 +90,7 @@ char *blam_sprintf_hook(char *DstBuf, size_t SizeInBytes, const char *Format, ..
 {
 	va_list ArgList;
 	va_start(ArgList, Format);
+
 	_vsnprintf_s(DstBuf, SizeInBytes, SizeInBytes - 1, Format, ArgList);
 	DstBuf[SizeInBytes - 1] = 0;
 
@@ -100,8 +101,8 @@ char *blam_sprintf_hook(char *DstBuf, size_t SizeInBytes, const char *Format, ..
 wchar_t *sub_401940_hook(wchar_t *DstBuf, size_t SizeInWords, wchar_t *Format, ...)
 {
 	va_list ArgList;
-
 	va_start(ArgList, Format);
+
 	_vsnwprintf_s(DstBuf, SizeInWords, SizeInWords - 1, Format, ArgList);
 	DstBuf[SizeInWords - 1] = 0;
 
@@ -114,8 +115,25 @@ int __cdecl vsnprintf_and_end_hook(char *DstBuf, size_t SizeInBytes, const char 
 	int result = _vsnprintf_s(DstBuf, SizeInBytes, SizeInBytes - 1, Format, ArgList);
 	DstBuf[SizeInBytes - 1] = 0;
 
-	hook_print("sub_4019C0", DstBuf);
+	hook_print("vsnprintf_and_end", DstBuf);
 	return result;
+}
+
+bool __cdecl string_is_empty_hook(char *a1)
+{
+	if (!(!a1 || !*a1))
+		hook_print("string_is_empty", a1);
+	return !a1 || !*a1;
+}
+
+bool __cdecl find_string_in_string_hook(const char *a1, const char *a2)
+{
+	auto str = strcmp(a1, a2);
+	if (str)
+		return (-(str < 0) | 1) == 0;
+
+	//printf_s("find_string_in_string: %s, %s\n", a1, a2);
+	return true;
 }
 
 //===========================================================================
@@ -194,7 +212,7 @@ int sub_5CF710_hook(wchar_t *dst, wchar_t *src, size_t size)
 		result = 2 * result - 1;
 	}
 
-	hook_wcsn("sub_401670", dst, src, size);
+	hook_wcsn("sub_5CF710", dst, src, size);
 	return result;
 }
 
@@ -327,6 +345,8 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x1910 }, &blam_sprintf_hook, "blam_sprintf");
 		HookManager.AddHook({ 0x1940 }, &sub_401940_hook, "sub_401940");
 		HookManager.AddHook({ 0x19C0 }, &vsnprintf_and_end_hook, "vsnprintf_and_end");
+		HookManager.AddHook({ 0x1AE0 }, &string_is_empty_hook, "string_is_empty");
+		HookManager.AddHook({ 0x1B00 }, &find_string_in_string_hook, "find_string_in_string");
 
 		HookManager.AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
 
