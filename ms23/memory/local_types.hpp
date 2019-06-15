@@ -1994,6 +1994,17 @@ struct s_game_options : s_game_options_base
 		GameVariant[0x12D] = val;
 		return this;
 	}
+
+	void ForceLoad()
+	{
+		SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
+		SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
+		GameVariant_SetGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
+		GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
+		GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
+		GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
+		*(uint16_t*)0x23917F0 = 1;
+	}
 } game_options;
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
 
@@ -2049,6 +2060,15 @@ struct game_globals
 	size_t Size()
 	{
 		return sizeof(*this);
+	}
+
+	float GetPhysicsRateFromFrameLimit()
+	{
+		auto result = (!this ? 0.5f : (30.0f / GameOptions.FrameLimit));
+
+		//printf_s("FrameLimitScale: %f\n", result);
+
+		return result;
 	}
 };
 static_assert(sizeof(game_globals) == 0x25208u, "game_globals wrong size");

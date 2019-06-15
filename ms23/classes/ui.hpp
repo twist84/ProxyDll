@@ -203,6 +203,11 @@ const char *game_get_region_hook(e_game_language game_language, bool foreign)
 
 int debug_loading_type = 3;
 
+void update_debug_loading_type()
+{
+	debug_loading_type = ConfigManager.GetInt("Rendering", "DebugLoadingType");
+}
+
 int __cdecl debug_print_lobby_percent_loaded_hook(float a1) // nullsub
 {
 	int result = 0;
@@ -231,6 +236,14 @@ signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
 		4, 5,	execute (draw_string, nullsub and content_catalogue related) functions
 	*/
 	return debug_loading_type;
+}
+
+std::vector<size_t> render_to_texture_offsets = { 0x3ABEF5, 0x3AC405, 0x3AC425, 0x3AC445, 0x3AC465, 0x3AC485, 0x3B4E7B, 0x3B5D0B, 0x3B5D4B, 0x3B5D6B, 0x3B5D8B, 0x3B5DAB, 0x3B5DCB, 0x3B7AE6, 0x3B7AEF, 0x3B7AF8, 0x3B7B01, 0x3B7B0A };
+int __cdecl render_to_texture_hook(int a1, int a2, int a3)
+{
+	if (a1 == 5)
+		printf("scoreboard opened\n");
+	return ((int(__cdecl*)(int, int, int))0x835DA0)(a1, a2, a3);
 }
 
 inline void AddUiHooks(const char *name)
@@ -269,6 +282,8 @@ inline void AddUiHooks(const char *name)
 		HookManager.AddHook({ 0x12F930 }, &main_game_render_get_loading_type_hook, "main_game_render_get_loading_type");
 		HookManager.AddHook({ 0x620540 }, &debug_print_lobby_percent_loaded_hook, "debug_print_lobby_percent_loaded");
 		HookManager.AddHook({ 0x620530 }, &debug_cache_loading_callback_hook, "debug_cache_loading_callback");
+
+		HookManager.AddHook(render_to_texture_offsets, &render_to_texture_hook, "render_to_texture", HookFlags::IsCall);
 	}
 }
 

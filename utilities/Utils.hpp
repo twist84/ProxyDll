@@ -465,7 +465,10 @@ struct HookMan
 			for (auto offset : offsets)
 			{
 				Hook(offset, dest_func, flags).Apply();
-				printf_s("%s\n", name);
+				if (offsets.size() == 1)
+					printf_s("%s\n", name);
+				else
+					printf_s("%s, 0x%X\n", name, offset + 0x400000);
 			}
 		}
 	};

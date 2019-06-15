@@ -297,6 +297,17 @@ int network_debug_print_hook(char *format, ...)
 
 //===========================================================================
 
+char *format_ip_hook(char *DstBuf, char *Format, ...)
+{
+	va_list ArgList;
+	va_start(ArgList, Format);
+	vsnprintf_and_end_hook(DstBuf, 16, Format, ArgList);
+
+	hook_print("format_ip", DstBuf);
+
+	return DstBuf;
+}
+
 char *sub_430340_hook(char *DstBuf, const char *Format, ...)
 {
 	va_list ArgList; // [esp+10h] [ebp+10h]
@@ -348,6 +359,7 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x1AE0 }, &string_is_empty_hook, "string_is_empty");
 		HookManager.AddHook({ 0x1B00 }, &find_string_in_string_hook, "find_string_in_string");
 
+		HookManager.AddHook({ 0x30320 }, &format_ip_hook, "format_ip");
 		HookManager.AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
 
 		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
