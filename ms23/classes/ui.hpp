@@ -246,6 +246,14 @@ int __cdecl render_to_texture_hook(int a1, int a2, int a3)
 	return ((int(__cdecl*)(int, int, int))0x835DA0)(a1, a2, a3);
 }
 
+void __cdecl ssl_hq__chat_send_general_hook(wchar_t* source)
+{
+	// use this as a console for commands maybe?
+	// TODO: figure out why the box is hidden until you open settings, probably due to ElDewrito
+
+	wprintf_s(L"#general_%s\n", source);
+}
+
 inline void AddUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -284,6 +292,8 @@ inline void AddUiHooks(const char *name)
 		HookManager.AddHook({ 0x620530 }, &debug_cache_loading_callback_hook, "debug_cache_loading_callback");
 
 		HookManager.AddHook(render_to_texture_offsets, &render_to_texture_hook, "render_to_texture", HookFlags::IsCall);
+
+		HookManager.AddHook({ 0x42F880 }, &ssl_hq__chat_send_general_hook, "ssl_hq::chat_send_general");
 	}
 }
 
