@@ -5607,16 +5607,20 @@ struct s_tag
 
 		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]] + offset;
 	}
-	uint32_t GetGroupTag()
+	bool HeaderIsValid()
 	{
 		if ((GetHeader() == nullptr) || ((uint32_t)GetHeader() < 0x400000))
-			return Group;
-		return *(uint32_t*)GetHeader(_group_tag);
+			return false;
+		return true;
+	}
+	uint32_t GetGroupTag()
+	{
+		return HeaderIsValid() ? *(uint32_t*)GetHeader(_group_tag) : Group;
 	}
 	template<typename T>
 	T* GetDefinition()
 	{
-		return (T*)(GetHeader() + *(uint32_t*)GetHeader(_definition));
+		return (T*)GetHeader(*(uint32_t*)GetHeader(_definition));
 	}
 	s_tag* Print(uint32_t group = -1)
 	{
