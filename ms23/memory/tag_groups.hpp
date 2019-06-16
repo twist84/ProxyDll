@@ -21,7 +21,7 @@ struct tag_reference
 
 	uint8_t* GetDefinition()
 	{
-		return tag_get_definition<uint8_t>(GroupTag, TagIndex);
+		return s_tag(TagIndex, GroupTag).GetDefinition<uint8_t>();
 	}
 };
 
@@ -53,7 +53,7 @@ struct tag
 
 	uint8_t *GetDefinition()
 	{
-		return tag_get_definition<uint8_t>(GroupTag.Group, Index);
+		return s_tag(Index, GroupTag.Group).GetDefinition<uint8_t>();
 	}
 
 	bool IsLoaded()
@@ -412,11 +412,11 @@ uint8_t *globals_get_definition(bool *is_loaded)
 {
 	// make a global array of all these and create a function
 	// to enumerate through and get the correct definition
-	tag globals = { group_tags.globals, "globals\\globals", globals_tag };
+	tag globals = { group_tags.globals, "globals\\globals", g_tag_info.globals_tag };
 
-	*is_loaded = true;
-	if (!globals.IsLoaded())
-		*is_loaded = false;
+	*is_loaded = false;
+	if (globals.IsLoaded())
+		*is_loaded = true;
 
 	return globals.GetDefinition();
 }

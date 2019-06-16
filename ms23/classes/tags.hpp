@@ -7,21 +7,9 @@
 #include "filo.hpp"
 #include "level.hpp"
 
-uint32_t tag_get_group_tag(uint16_t index)
+uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 {
-	if ((tag_header_get(index) == nullptr) || ((uint32_t)tag_header_get(index) < 0x400000))
-		return -1;
-
-	auto result = *(uint32_t *)(tag_header_get(index) + 0x14);
-	if (result == group_tags.globals.Group)
-		globals_tag = result;
-
-	return result;
-}
-
-uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint16_t index)
-{
-	auto result = tag_get_definition<uint8_t>(group, index);
+	auto result = s_tag(index, group)./*Print('mulg')->*/GetDefinition<uint8_t>();
 
 	// DO STUFF!
 	//PrintTagGroup(group, index);
@@ -29,9 +17,12 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint16_t index)
 	return result;
 }
 
-uint32_t __cdecl tag_get_group_tag_hook(uint16_t index)
+uint32_t __cdecl tag_get_group_tag_hook(uint32_t index)
 {
-	auto result = tag_get_group_tag(index);
+	auto result = s_tag(index)./*Print('mulg')->*/GetGroupTag();
+
+	if (result == group_tags.globals.Group)
+		g_tag_info.globals_tag = result;
 
 	// DO STUFF!
 	//PrintTagGroup(result, index);

@@ -5563,30 +5563,67 @@ struct s_camera_definition
 };
 _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 
-const auto g_tag_index_table_ptr = (uint32_t**)0x22AAFFC;
-const auto g_tag_table_ptr = (uint8_t***)0x22AAFF8;
-const auto g_max_tag_count_ptr = (uint32_t*)0x22AB008;
-uint16_t last_tag = 0xFFFF;
-uint16_t globals_tag = 0xFFFF;
-
-uint8_t* tag_header_get(uint16_t index)
+struct s_global_tag_info
 {
-	if (index == 0xFFFF || index >= *g_max_tag_count_ptr * 4)
-		return nullptr;
-	if ((*g_tag_index_table_ptr)[index] == -1 || (*g_tag_index_table_ptr)[index] >= *g_max_tag_count_ptr * 4)
-		return nullptr;
-	if (!(*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]])
-		return nullptr;
+	uint32_t** tag_index_table_ptr = (uint32_t**)0x22AAFFC;
+	uint8_t*** tag_table_ptr = (uint8_t***)0x22AAFF8;
+	uint32_t* max_tag_count_ptr = (uint32_t*)0x22AB008;
+	uint16_t last_tag_index = 0xFFFF;
+	uint32_t last_tag_group = 'null';
+	uint16_t globals_tag = 0xFFFF;
+} g_tag_info;
 
-	return (*g_tag_table_ptr)[(*g_tag_index_table_ptr)[index]];
-}
-
-template<typename T>
-T* tag_get_definition(uint32_t group, uint16_t index)
+struct s_tag
 {
-	last_tag = index;
-	return (T*)(tag_header_get(index) + *(uint32_t*)(tag_header_get(index) + 0x10));
-}
+	uint32_t Index;
+	uint32_t Group;
+	char GroupString[5];
+
+	s_tag(uint32_t index, uint32_t group = 'null')
+	{
+		g_tag_info.last_tag_index = Index = index;
+		g_tag_info.last_tag_group = Group = group;
+
+		memset(&GroupString, 0, 5);
+		GroupString[0] = 'n';
+		GroupString[1] = 'u';
+		GroupString[2] = 'l';
+		GroupString[3] = 'l';
+	}
+	uint8_t* GetHeader()
+	{
+		if (Index == 0xFFFF || Index >= *g_tag_info.max_tag_count_ptr * 4)
+			return nullptr;
+		if ((*g_tag_info.tag_index_table_ptr)[Index] == -1 || (*g_tag_info.tag_index_table_ptr)[Index] >= *g_tag_info.max_tag_count_ptr * 4)
+			return nullptr;
+		if (!(*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]])
+			return nullptr;
+
+		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]];
+	}
+	uint32_t GetGroupTag()
+	{
+		if ((GetHeader() == nullptr) || ((uint32_t)GetHeader() < 0x400000))
+			return Group;
+		return *(uint32_t*)(GetHeader() + 0x14);
+	}
+	template<typename T>
+	T* GetDefinition()
+	{
+		return (T*)(GetHeader() + *(uint32_t*)(GetHeader() + 0x10));
+	}
+	s_tag* Print(uint32_t group = -1)
+	{
+		GroupString[0] = ((char*)(GetHeader() + 0x14))[3];
+		GroupString[1] = ((char*)(GetHeader() + 0x14))[2];
+		GroupString[2] = ((char*)(GetHeader() + 0x14))[1];
+		GroupString[3] = ((char*)(GetHeader() + 0x14))[0];
+
+		if (group == -1 || group == GetGroupTag())
+			printf_s("'%s', 0x%08X\n", GroupString, Index);
+		return this;
+	}
+};
 
 struct s_join_data
 {
