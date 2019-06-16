@@ -5575,6 +5575,12 @@ struct s_global_tag_info
 
 struct s_tag
 {
+	enum e_tag_header_offsets
+	{
+		_definition = 0x10,
+		_group_tag = 0x14
+	};
+
 	uint32_t Index;
 	uint32_t Group;
 	char GroupString[5];
@@ -5590,7 +5596,7 @@ struct s_tag
 		GroupString[2] = 'l';
 		GroupString[3] = 'l';
 	}
-	uint8_t* GetHeader()
+	uint8_t* GetHeader(size_t offset = 0)
 	{
 		if (Index == 0xFFFF || Index >= *g_tag_info.max_tag_count_ptr * 4)
 			return nullptr;
@@ -5599,25 +5605,25 @@ struct s_tag
 		if (!(*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]])
 			return nullptr;
 
-		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]];
+		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]] + offset;
 	}
 	uint32_t GetGroupTag()
 	{
 		if ((GetHeader() == nullptr) || ((uint32_t)GetHeader() < 0x400000))
 			return Group;
-		return *(uint32_t*)(GetHeader() + 0x14);
+		return *(uint32_t*)GetHeader(_group_tag);
 	}
 	template<typename T>
 	T* GetDefinition()
 	{
-		return (T*)(GetHeader() + *(uint32_t*)(GetHeader() + 0x10));
+		return (T*)(GetHeader() + *(uint32_t*)GetHeader(_definition));
 	}
 	s_tag* Print(uint32_t group = -1)
 	{
-		GroupString[0] = ((char*)(GetHeader() + 0x14))[3];
-		GroupString[1] = ((char*)(GetHeader() + 0x14))[2];
-		GroupString[2] = ((char*)(GetHeader() + 0x14))[1];
-		GroupString[3] = ((char*)(GetHeader() + 0x14))[0];
+		GroupString[0] = ((char*)GetHeader(_group_tag))[3];
+		GroupString[1] = ((char*)GetHeader(_group_tag))[2];
+		GroupString[2] = ((char*)GetHeader(_group_tag))[1];
+		GroupString[3] = ((char*)GetHeader(_group_tag))[0];
 
 		if (group == -1 || group == GetGroupTag())
 			printf_s("'%s', 0x%08X\n", GroupString, Index);
