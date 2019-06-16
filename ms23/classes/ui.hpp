@@ -241,6 +241,13 @@ signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
 std::vector<size_t> render_to_texture_offsets = { 0x3ABEF5, 0x3AC405, 0x3AC425, 0x3AC445, 0x3AC465, 0x3AC485, 0x3B4E7B, 0x3B5D0B, 0x3B5D4B, 0x3B5D6B, 0x3B5D8B, 0x3B5DAB, 0x3B5DCB, 0x3B7AE6, 0x3B7AEF, 0x3B7AF8, 0x3B7B01, 0x3B7B0A };
 int __cdecl render_to_texture_hook(int a1, int a2, int a3)
 {
+	//0 == _biped_profile
+	//1 == _biped_class_selection
+	//2 == _biped_lobby_left
+	//3 == _biped_lobby_right
+	//4 == _biped_killer
+	//5 == _biped_scoreboard
+
 	if (a1 == 5)
 		printf("scoreboard opened\n");
 	return ((int(__cdecl*)(int, int, int))0x835DA0)(a1, a2, a3);
