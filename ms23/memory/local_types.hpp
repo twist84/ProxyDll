@@ -5583,18 +5583,12 @@ struct s_tag
 
 	uint32_t Index;
 	uint32_t Group;
-	char GroupString[5];
+	std::string GroupString;
 
-	s_tag(uint32_t index, uint32_t group = 'null')
+	s_tag(uint32_t index, uint32_t group = 'llun')
 	{
 		g_tag_info.last_tag_index = Index = index;
 		g_tag_info.last_tag_group = Group = group;
-
-		memset(&GroupString, 0, 5);
-		GroupString[0] = 'n';
-		GroupString[1] = 'u';
-		GroupString[2] = 'l';
-		GroupString[3] = 'l';
 	}
 	uint8_t *GetHeader(size_t offset = 0)
 	{
@@ -5622,15 +5616,17 @@ struct s_tag
 	{
 		return (T*)GetHeader(*(uint32_t*)GetHeader(_definition));
 	}
+	void UpdateGroupString()
+	{
+		GroupString = "";
+		for (size_t i = 4; i > 0; ) GroupString += ((char *)GetHeader(_group_tag))[--i];
+	}
 	s_tag *Print(uint32_t group = -1)
 	{
-		GroupString[0] = ((char*)GetHeader(_group_tag))[3];
-		GroupString[1] = ((char*)GetHeader(_group_tag))[2];
-		GroupString[2] = ((char*)GetHeader(_group_tag))[1];
-		GroupString[3] = ((char*)GetHeader(_group_tag))[0];
+		UpdateGroupString();
 
 		if (group == -1 || group == GetGroupTag())
-			printf_s("'%s', 0x%08X\n", GroupString, Index);
+			printf_s("['%s', 0x%04X]\n", GroupString.c_str(), Index);
 		return this;
 	}
 };
