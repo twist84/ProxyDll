@@ -9,7 +9,7 @@
 
 uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 {
-	auto result = s_tag(index, group)./*Print('mulg')->*/GetDefinition<uint8_t>();
+	auto result = s_tag(index, group)./*Print('matg')->*/GetDefinition<uint8_t>();
 
 	// DO STUFF!
 	//PrintTagGroup(group, index);
@@ -19,7 +19,7 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 
 uint32_t __cdecl tag_get_group_tag_hook(uint32_t index)
 {
-	auto result = s_tag(index)./*Print('mulg')->*/GetGroupTag();
+	auto result = s_tag(index)./*Print('matg')->*/GetGroupTag();
 
 	if (result == group_tags.globals.Group)
 		g_tag_info.globals_tag = result;
