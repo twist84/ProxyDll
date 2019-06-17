@@ -14,7 +14,7 @@ void SetFpsTarget(int16_t *FrameLimit, int fps)
 		fps = 60;
 
 	FrameLimit[0] = fps;
-	SetMemoryAtOffset<float>(0x165C83C, (float)fps);
+	SetMemoryAtOffset(0x165C83C, (float)fps);
 }
 
 void *NewGameOptions(s_game_options *data)

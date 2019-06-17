@@ -177,7 +177,7 @@ void sub_600A20_hook()
 
 unsigned long __cdecl podium_duration_call_hook(float a1)
 {
-	return (unsigned long)((1.0 * 0.5) + (60 * 7/*podium_duration*/));
+	return (unsigned long)((1.0 * 0.5) + (60 * ConfigManager.GetInt("Timing", "PodiumDuration")));
 }
 
 int game_set_initial_network_values_hook()
@@ -348,7 +348,7 @@ bool lod_increase_patch()
 
 bool unknown_float30_to_float60_patch()
 {
-	SetMemoryAtOffset<float>(0x1615F34, 60);
+	SetMemoryAtOffset(0x1615F34, 60.0f);
 
 	return true;
 }
@@ -357,15 +357,10 @@ bool match_beginning_countdown_patch()
 {
 	unsigned long seconds = 0;
 
-	Pointer::Base(0x153708).Write<uint8_t>((uint8_t)seconds + 0); // player control
-	Pointer::Base(0x153738).Write<uint8_t>((uint8_t)seconds + 4); // camera position
-	Pointer::Base(0x1521D1).Write<uint8_t>((uint8_t)seconds + 4); // ui timer
-
-	// Fix team notification
-	if (seconds == 4)
-		Pointer::Base(0x1536F0).Write<uint8_t>(2);
-	else
-		Pointer::Base(0x1536F0).Write<uint8_t>(3);
+	SetMemoryAtOffset(0x553708, uint8_t(seconds + 0)); // player control
+	SetMemoryAtOffset(0x553738, uint8_t(seconds + 4)); // camera position
+	SetMemoryAtOffset(0x5521D1, uint8_t(seconds + 4)); // ui timer	
+	SetMemoryAtOffset(0x5536F0, uint8_t(seconds == 4 ? 2 : 3)); // Fix team notification
 
 	return true;
 }
