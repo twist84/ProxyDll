@@ -223,7 +223,7 @@ int __cdecl debug_cache_loading_callback_hook() // nullsub
 	return result;
 }
 
-signed int __cdecl main_game_render_get_loading_type_hook(wchar_t* a1)
+signed int __cdecl main_game_render_get_loading_type_hook(wchar_t *a1)
 {
 	/*
 	main::main_render::loading_screen
@@ -253,7 +253,7 @@ int __cdecl render_to_texture_hook(int a1, int a2, int a3)
 	return ((int(__cdecl*)(int, int, int))0x835DA0)(a1, a2, a3);
 }
 
-void __cdecl ssl_hq__chat_send_general_hook(wchar_t* source)
+void __cdecl ssl_hq__chat_send_general_hook(wchar_t *source)
 {
 	// use this as a console for commands maybe?
 	// TODO: figure out why the box is hidden until you open settings, probably due to ElDewrito

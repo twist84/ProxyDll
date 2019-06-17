@@ -8,7 +8,7 @@
 
 #include <Pointer.hpp>
 
-void* _mainTLS;
+void *_mainTLS;
 Pointer GetMainTls(size_t tlsOffset)
 {
 	// cache the result allowing future cross-thread calls to succeed
@@ -1960,12 +1960,12 @@ struct s_game_options : s_game_options_base
 		return sizeof(*this);
 	}
 
-	s_game_options* SetScenarioType(int val)
+	s_game_options *SetScenarioType(int val)
 	{
 		ScenarioType = e_scenario_type(val);
 		return this;
 	}
-	s_game_options* SetScenarioPath(const char* val)
+	s_game_options *SetScenarioPath(const char *val)
 	{
 		printf_s("loading %s...\n", val);
 
@@ -1974,22 +1974,22 @@ struct s_game_options : s_game_options_base
 		return this;
 	}
 
-	s_game_options* GameVariant_SetGameType(int32_t val)
+	s_game_options *GameVariant_SetGameType(int32_t val)
 	{
 		*(int32_t*)GameVariant = val;
 		return this;
 	}
-	s_game_options* GameVariant_SetTeamGame(bool val)
+	s_game_options *GameVariant_SetTeamGame(bool val)
 	{
 		GameVariant[0x124] = val;
 		return this;
 	}
-	s_game_options* GameVariant_SetTimeLimit(uint8_t val)
+	s_game_options *GameVariant_SetTimeLimit(uint8_t val)
 	{
 		GameVariant[0x125] = val;
 		return this;
 	}
-	s_game_options* GameVariant_SetRespawnTime(uint8_t val)
+	s_game_options *GameVariant_SetRespawnTime(uint8_t val)
 	{
 		GameVariant[0x12D] = val;
 		return this;
@@ -2689,7 +2689,7 @@ struct s_file_reference
 		return sizeof(*this);
 	}
 
-	s_file_reference* __cdecl initialize_header(uint16_t a2)
+	s_file_reference *__cdecl initialize_header(uint16_t a2)
 	{
 		memset(this, 0, 0x110u);
 		HeaderType = 'filo';
@@ -2697,7 +2697,7 @@ struct s_file_reference
 
 		return this;
 	}
-	s_file_reference* __cdecl initialize(uint16_t a2)
+	s_file_reference *__cdecl initialize(uint16_t a2)
 	{
 		initialize_header(a2);
 		FileHandle = (HANDLE)-1;
@@ -2720,7 +2720,7 @@ struct s_file_reference
 		}
 		return result;
 	}
-	bool read(DWORD nNumberOfBytesToRead, char a3, LPVOID lpBuffer, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	bool read(DWORD nNumberOfBytesToRead, char a3, LPVOID lpBuffer, void(__cdecl *sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
 		DWORD v4 = nNumberOfBytesToRead;
 		if (!nNumberOfBytesToRead)
@@ -2741,11 +2741,11 @@ struct s_file_reference
 
 		return result;
 	}
-	bool set_position(LONG lDistanceToMove, char a3, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	bool set_position(LONG lDistanceToMove, char a3, void(__cdecl *sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
 		if (FilePointer == lDistanceToMove)
 			return true;
-		void* v4 = FileHandle;
+		void *v4 = FileHandle;
 		LONG DistanceToMoveHigh = 0;
 		auto v5 = SetFilePointer(v4, lDistanceToMove, &DistanceToMoveHigh, 0);
 		bool file_pointer_is_valid = v5 != -1;
@@ -2755,7 +2755,7 @@ struct s_file_reference
 
 		return file_pointer_is_valid;
 	}
-	bool write(DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer, void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	bool write(DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer, void(__cdecl *sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
 		DWORD v3 = nNumberOfBytesToWrite;
 		if (!nNumberOfBytesToWrite)
@@ -2774,7 +2774,7 @@ struct s_file_reference
 			sub_5294F0("file_write", this, 0, 0);
 		return result;
 	}
-	int __cdecl get_eof(void(__cdecl* sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
+	int __cdecl get_eof(void(__cdecl *sub_5294F0)(const char*, s_file_reference*, s_file_reference*, char))
 	{
 		DWORD result = GetFileSize(FileHandle, 0);
 		if (!result)
@@ -2782,7 +2782,7 @@ struct s_file_reference
 		return result;
 	}
 
-	s_file_reference *Print(const char* calling_function)
+	s_file_reference *Print(const char *calling_function)
 	{
 		return this;
 		printf_s("type: %s, flags: %d, unk6: %d, handle: 0x%p, pointer: 0x%08X, path: %s, %s\n", (HeaderType == 'filo' ? "'filo'" : "'????'"), Flags, unknown6, FileHandle, FilePointer, Path, calling_function);
@@ -5399,7 +5399,7 @@ struct s_cache_path
 			Path = g_maps_path + Name;
 			Offset = offset;
 		}
-		s_cache_file_path* Update(std::string mapname)
+		s_cache_file_path *Update(std::string mapname)
 		{
 			Path = g_maps_path + mapname + "\\" + Name;
 			return this;
@@ -5504,7 +5504,7 @@ struct s_field_of_view
 	{
 		return (float)(Radians / 0.0174533);
 	}
-	s_field_of_view *ConvertForWeapon(float *weapon_fov, float(__cdecl* map)(double, double, double, double, double))
+	s_field_of_view *ConvertForWeapon(float *weapon_fov, float(__cdecl *map)(double, double, double, double, double))
 	{
 		auto fov = Get();
 		auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
@@ -5565,9 +5565,9 @@ _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 
 struct s_global_tag_info
 {
-	uint32_t** tag_index_table_ptr = (uint32_t**)0x22AAFFC;
-	uint8_t*** tag_table_ptr = (uint8_t***)0x22AAFF8;
-	uint32_t* max_tag_count_ptr = (uint32_t*)0x22AB008;
+	uint32_t **tag_index_table_ptr = (uint32_t**)0x22AAFFC;
+	uint8_t* **tag_table_ptr = (uint8_t***)0x22AAFF8;
+	uint32_t *max_tag_count_ptr = (uint32_t*)0x22AB008;
 	uint16_t last_tag_index = 0xFFFF;
 	uint32_t last_tag_group = 'null';
 	uint16_t globals_tag = 0xFFFF;
@@ -5596,7 +5596,7 @@ struct s_tag
 		GroupString[2] = 'l';
 		GroupString[3] = 'l';
 	}
-	uint8_t* GetHeader(size_t offset = 0)
+	uint8_t *GetHeader(size_t offset = 0)
 	{
 		if (Index == 0xFFFF || Index >= *g_tag_info.max_tag_count_ptr * 4)
 			return nullptr;
@@ -5618,11 +5618,11 @@ struct s_tag
 		return HeaderIsValid() ? *(uint32_t*)GetHeader(_group_tag) : Group;
 	}
 	template<typename T>
-	T* GetDefinition()
+	T *GetDefinition()
 	{
 		return (T*)GetHeader(*(uint32_t*)GetHeader(_definition));
 	}
-	s_tag* Print(uint32_t group = -1)
+	s_tag *Print(uint32_t group = -1)
 	{
 		GroupString[0] = ((char*)GetHeader(_group_tag))[3];
 		GroupString[1] = ((char*)GetHeader(_group_tag))[2];

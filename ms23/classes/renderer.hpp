@@ -43,10 +43,10 @@ struct Rect
 
 struct D3DDevice9
 {
-	const char* Name;
+	const char *Name;
 	bool ShouldRender;
 
-	D3DDevice9(const char* name, bool should_render = true)
+	D3DDevice9(const char *name, bool should_render = true)
 	{
 		Name = name;
 		ShouldRender = should_render;
@@ -138,7 +138,7 @@ bool __cdecl IDirect3DDevice9__BeginScene() // 00A212A0
 int IDirect3DDevice9__SetRenderState__CullMode(D3DCULL Value) // 00A232D0
 {
 	if (Value != *g_RenderStateCullMode)
-		* g_RenderStateCullMode = Value;
+		 *g_RenderStateCullMode = Value;
 
 	return (*g_IDirect3DDevice9)->SetRenderState(D3DRS_CULLMODE, Value);
 }
@@ -162,7 +162,7 @@ bool __cdecl IDirect3DDevice9__SetPixelShader(IDirect3DPixelShader9 *pShader) //
 	*g_IDirect3DPixelShader9 = pShader;
 	return (*g_IDirect3DDevice9)->SetPixelShader(pShader) >= 0;
 }
-HRESULT __cdecl sub_A23700(IDirect3DDevice9* IDirect3DDevice9, int Sampler, int a4) // 00A23700
+HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int a4) // 00A23700
 {
 	HRESULT result;
 	DWORD Sampler_1 = Sampler;
@@ -204,7 +204,7 @@ HRESULT __cdecl sub_A23700(IDirect3DDevice9* IDirect3DDevice9, int Sampler, int 
 	}
 	return result;
 }
-bool __cdecl IDirect3DDevice9__SetVertexDeclaration(IDirect3DVertexDeclaration9* pDecl) // 00A24650
+bool __cdecl IDirect3DDevice9__SetVertexDeclaration(IDirect3DVertexDeclaration9 *pDecl) // 00A24650
 {
 	if (pDecl == *g_IDirect3DVertexDeclaration9)
 		return 1;
@@ -220,7 +220,7 @@ bool __cdecl IDirect3DDevice9__SetVertexShader(IDirect3DVertexShader9 *pShader) 
 	*g_IDirect3DVertexShader9 = pShader;
 	return (*g_IDirect3DDevice9)->SetVertexShader(pShader) >= 0;
 }
-int __cdecl IDirect3DDevice9__SetDepthStencilSurface__ZStencil(IDirect3DSurface9* pNewZStencil) // 00A48C70
+int __cdecl IDirect3DDevice9__SetDepthStencilSurface__ZStencil(IDirect3DSurface9 *pNewZStencil) // 00A48C70
 {
 	D3DSURFACE_DESC pDesc;
 	pNewZStencil->GetDesc(&pDesc);
@@ -228,7 +228,7 @@ int __cdecl IDirect3DDevice9__SetDepthStencilSurface__ZStencil(IDirect3DSurface9
 	return (*g_IDirect3DDevice9)->SetDepthStencilSurface(pNewZStencil);
 }
 
-int IDirect3DDevice9__SetViewport(Rect<int16_t>* rect, float MinZ, float MaxZ) // 00A49010
+int IDirect3DDevice9__SetViewport(Rect<int16_t> *rect, float MinZ, float MaxZ) // 00A49010
 {
 	return (*g_IDirect3DDevice9)->SetViewport(&rect->ToViewport(MinZ, MaxZ));
 }
@@ -251,7 +251,7 @@ BOOL IDirect3DDevice9__IsNull() // 00A75810
 {
 	return (*g_IDirect3DDevice9_2) == 0;
 }
-HRESULT __cdecl IDirect3DDevice9__CreateCubeTexture(int EdgeLength, int Levels, int a3, D3DFORMAT Format, D3DPOOL Pool, IDirect3DCubeTexture9** ppCubeTexture) // 00A758F0
+HRESULT __cdecl IDirect3DDevice9__CreateCubeTexture(int EdgeLength, int Levels, int a3, D3DFORMAT Format, D3DPOOL Pool, IDirect3DCubeTexture9 **ppCubeTexture) // 00A758F0
 {
 	if (!(*g_IDirect3DDevice9_2))
 		return 0;
@@ -270,7 +270,7 @@ HRESULT __cdecl IDirect3DDevice9__CreateCubeTexture(int EdgeLength, int Levels, 
 
 	return v8;
 }
-int __cdecl IDirect3DDevice9__CreateIndexBuffer(UINT Length, DWORD a2, D3DFORMAT Format, D3DPOOL Pool, IDirect3DIndexBuffer9* ppIndexBuffer, HANDLE* pSharedHandle) // 00A75960
+int __cdecl IDirect3DDevice9__CreateIndexBuffer(UINT Length, DWORD a2, D3DFORMAT Format, D3DPOOL Pool, IDirect3DIndexBuffer9 *ppIndexBuffer, HANDLE *pSharedHandle) // 00A75960
 {
 	if (!(*g_IDirect3DDevice9_2))
 		return 0;
@@ -313,7 +313,7 @@ HRESULT __cdecl IDirect3DDevice9__CreateDepthStencilSurface__MultisampleNone(UIN
 
 	return (*g_IDirect3DDevice9_2)->CreateDepthStencilSurface(Width, Height, Format, D3DMULTISAMPLE_NONE, MultisampleQuality, Discard, ppSurface, 0);
 }
-int __cdecl IDirect3DDevice9__CreateTexture(int a1, int a2, int a3, int a4, D3DFORMAT Format, D3DPOOL Pool, IDirect3DTexture9** ppTexture) // 00A75B20
+int __cdecl IDirect3DDevice9__CreateTexture(int a1, int a2, int a3, int a4, D3DFORMAT Format, D3DPOOL Pool, IDirect3DTexture9 **ppTexture) // 00A75B20
 {
 	if (!(*g_IDirect3DDevice9_2))
 		return 0;
@@ -344,7 +344,7 @@ int __cdecl IDirect3DDevice9__CreateTexture(int a1, int a2, int a3, int a4, D3DF
 
 	return (*g_IDirect3DDevice9_2)->CreateTexture(v9, v8, a3, v11, Format, Pool, ppTexture, 0);
 }
-HRESULT __cdecl IDirect3DDevice9__CreateVertexDeclaration(const D3DVERTEXELEMENT9* a1, IDirect3DVertexDeclaration9** a2) // 00A75BD0
+HRESULT __cdecl IDirect3DDevice9__CreateVertexDeclaration(const D3DVERTEXELEMENT9 *a1, IDirect3DVertexDeclaration9 **a2) // 00A75BD0
 {
 	if (!(*g_IDirect3DDevice9_2))
 		return 0;
@@ -366,7 +366,7 @@ int __cdecl IDirect3DDevice9__CreateVolumeTexture(UINT Width, UINT Height, UINT 
 	}
 	return (*g_IDirect3DDevice9_2)->CreateVolumeTexture(Width, Height, Depth, Levels, Usage, Format, Pool, ppVolumeTexture, 0);
 }
-int __cdecl IDirect3DDevice9__UpdateTexture(IDirect3DBaseTexture9* pSourceTexture, IDirect3DBaseTexture9* pDestinationTexture) // 00A75E30
+int __cdecl IDirect3DDevice9__UpdateTexture(IDirect3DBaseTexture9 *pSourceTexture, IDirect3DBaseTexture9 *pDestinationTexture) // 00A75E30
 {
 	return (*g_IDirect3DDevice9_2)->UpdateTexture(pSourceTexture, pDestinationTexture);
 }
@@ -384,7 +384,7 @@ inline void AddRendererHooks(const char *name)
 		//HookManager.AddHook({ 0x204372 }, &World__BeginScene_hook, "World::BeginScene", HookFlags::IsCall);
 		//HookManager.AddHook({ 0x204A20 }, &World__EndScene_hook, "World::EndScene", HookFlags::IsCall);
 
-		// correct* implementations
+		// correct *implementations
 		
 		HookManager.AddHook({ 0x6212A0 }, &IDirect3DDevice9__BeginScene, "IDirect3DDevice9::BeginScene");
 		HookManager.AddHook({ 0x6232D0 }, &IDirect3DDevice9__SetRenderState__CullMode, "IDirect3DDevice9::SetRenderState::CullMode");

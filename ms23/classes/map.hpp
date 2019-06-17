@@ -13,7 +13,7 @@ bool main_game_change_immediate_hook(s_game_options *data)
 	return true;
 }
 
-void maps_store_map_info_hook(uint8_t* mapinfo, char a2, char *mapsPath, char a4)
+void maps_store_map_info_hook(uint8_t *mapinfo, char a2, char *mapsPath, char a4)
 {
 	*reinterpret_cast<uint32_t*>(mapinfo + 0x111C) = 0x08081002;
 	*reinterpret_cast<uint32_t*>(mapinfo + 0x1120) = 0x08080808;

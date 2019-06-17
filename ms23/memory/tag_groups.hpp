@@ -19,7 +19,7 @@ struct tag_reference
 	int32_t : 32;
 	int32_t TagIndex;
 
-	uint8_t* GetDefinition()
+	uint8_t *GetDefinition()
 	{
 		return s_tag(TagIndex, GroupTag).GetDefinition<uint8_t>();
 	}
@@ -32,7 +32,7 @@ struct group_tag
 	const char *Name;
 	uint32_t Size;
 
-	group_tag(uint32_t group, const char* name, uint32_t size)
+	group_tag(uint32_t group, const char *name, uint32_t size)
 	{
 		Group = group;
 		Name = name;

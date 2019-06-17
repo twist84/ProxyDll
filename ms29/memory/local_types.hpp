@@ -10,7 +10,7 @@
 
 #include <Pointer.hpp>
 
-void* _mainTLS;
+void *_mainTLS;
 Pointer GetMainTls(size_t tlsOffset)
 {
 	// cache the result allowing future cross-thread calls to succeed
@@ -26,7 +26,7 @@ Pointer GetMainTls(size_t tlsOffset)
 	return Pointer(_mainTLS)(tlsOffset);
 }
 
-void* _mainModule;
+void *_mainModule;
 Pointer GetMainModule(size_t moduleOffset)
 {
 	if (_mainModule == nullptr)
@@ -67,9 +67,9 @@ std::string GetModuleName()
 	return Module;
 }
 
-void* GetModuleAddress(const DWORD offset)
+void *GetModuleAddress(const DWORD offset)
 {
-	static void* base_address = nullptr;
+	static void *base_address = nullptr;
 
 	if (base_address == nullptr)
 	{
@@ -1103,34 +1103,34 @@ struct s_game_options_base // this remains the same alpha->12.x
 		return sizeof(*this);
 	}
 
-	s_game_options_base* SetScenarioType(int val)
+	s_game_options_base *SetScenarioType(int val)
 	{
 		ScenarioType = e_scenario_type(val);
 		return this;
 	}
-	s_game_options_base* SetScenarioPath(const char* val)
+	s_game_options_base *SetScenarioPath(const char *val)
 	{
 		memset(ScenarioPath, 0, 260);
 		strncpy(ScenarioPath, val, 260);
 		return this;
 	}
 
-	s_game_options_base* GameVariant_SetGameType(int32_t val)
+	s_game_options_base *GameVariant_SetGameType(int32_t val)
 	{
 		*(int32_t*)GameVariant = val;
 		return this;
 	}
-	s_game_options_base* GameVariant_SetTeamGame(bool val)
+	s_game_options_base *GameVariant_SetTeamGame(bool val)
 	{
 		GameVariant[0x124] = val;
 		return this;
 	}
-	s_game_options_base* GameVariant_SetTimeLimit(uint8_t val)
+	s_game_options_base *GameVariant_SetTimeLimit(uint8_t val)
 	{
 		GameVariant[0x125] = val;
 		return this;
 	}
-	s_game_options_base* GameVariant_SetRespawnTime(uint8_t val)
+	s_game_options_base *GameVariant_SetRespawnTime(uint8_t val)
 	{
 		GameVariant[0x12D] = val;
 		return this;
@@ -1154,7 +1154,7 @@ struct
 		if (!IsLoading())
 			ResetPtr.Write<uint16_t>(1);
 	}
-	void ChangeMap(const char* val)
+	void ChangeMap(const char *val)
 	{
 		GameOptionsPtr->SetScenarioPath(val);
 	}
@@ -2320,7 +2320,7 @@ struct s_camera_definition
 		return sizeof(*this);
 	}
 
-	s_camera_definition* Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
+	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{
 		if (direction.i != 0.0f || direction.j != 0.0f || direction.k != 0.0f)
 		{

@@ -65,7 +65,7 @@ bool __cdecl file_set_position_hook(s_file_reference *filo, LONG lDistanceToMove
 {
 	return filo->Print("file_set_position")->set_position(lDistanceToMove, a3, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
 }
-char __cdecl file_write_hook(s_file_reference* filo, DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer)
+char __cdecl file_write_hook(s_file_reference *filo, DWORD nNumberOfBytesToWrite, LPCVOID lpBuffer)
 {
 	return filo->Print("file_write")->write(nNumberOfBytesToWrite, lpBuffer, (void(__cdecl*)(const char*, s_file_reference*, s_file_reference*, char))(0x5294F0));
 }

@@ -93,7 +93,7 @@ bool transport_available()
 	return Transport()[0] && Transport()[1];
 }
 
-bool __fastcall network_session_parameter_countdown_timer_request_change_hook(void* thisPtr, void* unused, int state, int value)
+bool __fastcall network_session_parameter_countdown_timer_request_change_hook(void *thisPtr, void *unused, int state, int value)
 {
 	if (state == 2) // start
 		value = 0;

@@ -15,9 +15,9 @@ enum HookFlags : int
 size_t GetMainThreadId();
 size_t GetMainThreadId(size_t ProcessId);
 
-void* GetModuleBase();
-void* GetModuleBase(const std::string& ModuleName);
-inline void* GetBasePointer()
+void *GetModuleBase();
+void *GetModuleBase(const std::string& ModuleName);
+inline void *GetBasePointer()
 {
 	return GetModuleBase();
 }
@@ -33,7 +33,7 @@ public:
 	Pointer() : _Pointer(nullptr)
 	{
 	}
-	Pointer(void* Pointer) : _Pointer(Pointer)
+	Pointer(void *Pointer) : _Pointer(Pointer)
 	{
 	}
 	Pointer(size_t Offset) : _Pointer((void*)Offset)
@@ -55,7 +55,7 @@ public:
 	}
 
 	template <typename T>
-	inline T* operator ->() const
+	inline T *operator ->() const
 	{
 		return (T*)_Pointer;
 	}
@@ -74,7 +74,7 @@ public:
 
 	//Assignment
 	template <class T>
-	inline void operator= (T* Pointer)
+	inline void operator= (T *Pointer)
 	{
 		_Pointer = (void*)Pointer;
 	}
@@ -86,7 +86,7 @@ public:
 
 	//Implicit cast to any other pointer type
 	template <class T>
-	inline operator T* () const
+	inline operator T *() const
 	{
 		return (T*)_Pointer;
 	}
@@ -125,7 +125,7 @@ public:
 		*((T*)_Pointer) = value;
 	}
 
-	inline void Write(const void* data, size_t size) const
+	inline void Write(const void *data, size_t size) const
 	{
 		DWORD temp;
 		DWORD temp2;
@@ -140,7 +140,7 @@ public:
 		VirtualProtect(_Pointer, size, temp, &temp2);
 	}
 
-	inline void WriteCall(void* newFunction) const
+	inline void WriteCall(void *newFunction) const
 	{
 		DWORD temp;
 		DWORD temp2;
@@ -158,7 +158,7 @@ public:
 		VirtualProtect(_Pointer, 5, temp, &temp2);
 	}
 
-	inline void WriteJump(void* newFunction, int jmpFlags) const
+	inline void WriteJump(void *newFunction, int jmpFlags) const
 	{
 		DWORD temp;
 		DWORD temp2;
@@ -193,7 +193,7 @@ public:
 		return *((T*)_Pointer);
 	}
 
-	inline void Read(void* Dest, size_t size) const
+	inline void Read(void *Dest, size_t size) const
 	{
 		memcpy(Dest, _Pointer, size);
 	}
@@ -222,5 +222,5 @@ public:
 	}
 
 private:
-	void* _Pointer;
+	void *_Pointer;
 };

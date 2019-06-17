@@ -50,9 +50,9 @@ size_t GetMainThreadId(size_t ProcessId)
 	return dwTid;
 }
 
-void* GetModuleBase()
+void *GetModuleBase()
 {
-	static void* Base = nullptr;
+	static void *Base = nullptr;
 
 	if( Base == nullptr )
 	{
@@ -69,7 +69,7 @@ void* GetModuleBase()
 	return Base;
 }
 
-void* GetModuleBase(const std::string& ModuleName)
+void *GetModuleBase(const std::string& ModuleName)
 {
 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
 	if( hSnapShot == INVALID_HANDLE_VALUE )

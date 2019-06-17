@@ -53,7 +53,7 @@ class Hook
 {
 public:
 	Hook();
-	Hook(size_t Offset, void* destFunc, int flags = 0, std::initializer_list<uint8_t> Reset = {});
+	Hook(size_t Offset, void *destFunc, int flags = 0, std::initializer_list<uint8_t> Reset = {});
 
 	inline void Apply(bool revert = false, Pointer offset = Pointer::Base()) const
 	{
@@ -74,7 +74,7 @@ public:
 
 private:
 	size_t Offset;
-	void* DestFunc;
+	void *DestFunc;
 	const int Flags;
 	std::vector<uint8_t> Orig;
 };

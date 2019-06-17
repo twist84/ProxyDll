@@ -17,7 +17,7 @@
 
 FILE *fStdIn, *fStdOut, *fStdErr;
 
-FILE* stream;
+FILE *stream;
 
 namespace std {
 	template <typename _CharT, typename _Traits>
@@ -67,7 +67,7 @@ namespace Utils
 			return RPC_S_OK;
 		}
 
-		RPC_STATUS uuidToString(UUID *Uuid, RPC_CSTR* StringUuid)
+		RPC_STATUS uuidToString(UUID *Uuid, RPC_CSTR *StringUuid)
 		{
 			if (!(*StringUuid))
 				return RPC_S_OUT_OF_MEMORY;
@@ -316,7 +316,7 @@ struct BaseMan
 {
 	const char *iniFilename = "";
 
-	void Init(const char* iniFilename_)
+	void Init(const char *iniFilename_)
 	{
 		iniFilename = iniFilename_;
 	}
@@ -383,7 +383,7 @@ struct BaseMan
 
 struct ConMan : BaseMan
 {
-	LANGID GetLanguage(const char* lpAppName, const char* lpKeyName)
+	LANGID GetLanguage(const char *lpAppName, const char *lpKeyName)
 	{
 		std::vector<const char *> languages = {
 			"english",
@@ -422,7 +422,7 @@ struct ConMan : BaseMan
 
 		return LANG_NEUTRAL;
 	}
-	bool CheckBoolAndRun(const char* lpAppName, const char* lpKeyName, void* function)
+	bool CheckBoolAndRun(const char *lpAppName, const char *lpKeyName, void *function)
 	{
 		if (ConfigManager.GetBool(lpAppName, lpKeyName))
 		{
@@ -436,7 +436,7 @@ struct ConMan : BaseMan
 } ConfigManager;
 
 template<typename T>
-T VftableGetMember(DWORD_PTR* dwVtable, int member)
+T VftableGetMember(DWORD_PTR *dwVtable, int member)
 {
 	DWORD_PTR memAdr = (*(DWORD_PTR**)dwVtable)[member];
 	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, *dwVtable, member);
@@ -447,12 +447,12 @@ struct HookMan
 {
 	struct HookInfo
 	{
-		const char* name;
+		const char *name;
 		std::vector<size_t> offsets;
-		void* dest_func;
+		void *dest_func;
 		HookFlags flags;
 
-		HookInfo(std::vector<size_t> _offsets, void* _dest_func, const char* _name = "untitled", HookFlags _flags = HookFlags::None)
+		HookInfo(std::vector<size_t> _offsets, void *_dest_func, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
 		{
 			name = _name;
 			offsets = _offsets;
@@ -474,13 +474,13 @@ struct HookMan
 	};
 	struct VftHookInfo
 	{
-		const char* name;
+		const char *name;
 		size_t table_addr;
 		int table_member;
-		void* dest_func;
+		void *dest_func;
 		HookFlags flags;
 
-		VftHookInfo(size_t _offset, void* _dest_func, int _member, const char* _name = "untitled", HookFlags _flags = HookFlags::None)
+		VftHookInfo(size_t _offset, void *_dest_func, int _member, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
 		{
 			name = _name;
 			table_addr = _offset;
@@ -502,11 +502,11 @@ struct HookMan
 	std::vector<HookInfo> hooks;
 	std::vector<VftHookInfo> vfthooks;
 
-	inline void AddHook(std::vector<size_t> offsets, void* dest_func, const char* name = "untitled", HookFlags flags = HookFlags::None)
+	inline void AddHook(std::vector<size_t> offsets, void *dest_func, const char *name = "untitled", HookFlags flags = HookFlags::None)
 	{
 		hooks.push_back(HookInfo(offsets, dest_func, name, flags));
 	}
-	inline void AddVftHook(size_t offset, void* dest_func, int member, const char* name = "untitled", HookFlags flags = HookFlags::None)
+	inline void AddVftHook(size_t offset, void *dest_func, int member, const char *name = "untitled", HookFlags flags = HookFlags::None)
 	{
 		vfthooks.push_back(VftHookInfo(offset, dest_func, member, name, flags));
 	}
@@ -523,10 +523,10 @@ struct PatchMan
 {
 	struct PatchInfo
 	{
-		const char* name;
-		void* dest_func;
+		const char *name;
+		void *dest_func;
 
-		PatchInfo(void* _dest_func, const char* _name = "untitled")
+		PatchInfo(void *_dest_func, const char *_name = "untitled")
 		{
 			name = _name;
 			dest_func = _dest_func;
@@ -541,7 +541,7 @@ struct PatchMan
 
 	std::vector<PatchInfo> patches;
 
-	inline void AddPatch(void* dest_func, const char* name = "untitled")
+	inline void AddPatch(void *dest_func, const char *name = "untitled")
 	{
 		patches.push_back(PatchInfo(dest_func, name));
 	}
