@@ -297,6 +297,7 @@ struct e_game_language
 	e_game_language *Print()
 	{
 		wprintf_s(GetLoadingText());
+
 		return this;
 	}
 };
@@ -1963,6 +1964,7 @@ struct s_game_options : s_game_options_base
 	s_game_options *SetScenarioType(int val)
 	{
 		ScenarioType = e_scenario_type(val);
+
 		return this;
 	}
 	s_game_options *SetScenarioPath(const char *val)
@@ -1971,27 +1973,32 @@ struct s_game_options : s_game_options_base
 
 		memset(ScenarioPath, 0, 260);
 		strncpy(ScenarioPath, val, 260);
+
 		return this;
 	}
 
 	s_game_options *GameVariant_SetGameType(int32_t val)
 	{
 		*(int32_t*)GameVariant = val;
+
 		return this;
 	}
 	s_game_options *GameVariant_SetTeamGame(bool val)
 	{
 		GameVariant[0x124] = val;
+
 		return this;
 	}
 	s_game_options *GameVariant_SetTimeLimit(uint8_t val)
 	{
 		GameVariant[0x125] = val;
+
 		return this;
 	}
 	s_game_options *GameVariant_SetRespawnTime(uint8_t val)
 	{
 		GameVariant[0x12D] = val;
+
 		return this;
 	}
 
@@ -5402,6 +5409,7 @@ struct s_cache_path
 		s_cache_file_path *Update(std::string mapname)
 		{
 			Path = g_maps_path + mapname + "\\" + Name;
+
 			return this;
 		}
 		std::string Read()
@@ -5413,9 +5421,11 @@ struct s_cache_path
 			if (shouldWrite)
 				Pointer::Base(Offset).Write(Path.c_str());
 		}
-		void Print()
+		s_cache_file_path *Print()
 		{
 			printf_s("%s\n", Path.c_str());
+
+			return this;
 		}
 	};
 
@@ -5441,7 +5451,7 @@ struct s_cache_path
 
 		return this;
 	}
-	void Print()
+	s_cache_path *Print()
 	{
 		string_ids.Print();
 		tag_list.Print();
@@ -5451,6 +5461,8 @@ struct s_cache_path
 		audio.Print();
 		video.Print();
 		tags.Print();
+
+		return this;
 	}
 } cache_path;
 
@@ -5504,11 +5516,27 @@ struct s_field_of_view
 	{
 		return (float)(Radians / 0.0174533);
 	}
+	s_field_of_view *Set(float fov)
+	{
+		Radians = (float)(fov * 0.0174533);
+
+		return this;
+	}
 	s_field_of_view *ConvertForWeapon(float *weapon_fov, float(__cdecl *map)(double, double, double, double, double))
 	{
 		auto fov = Get();
-		auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
-		*weapon_fov = new_val + fov < 90 ? new_val + 0.0f : fov < 100 ? new_val + 0.05f : fov < 110 ? new_val + 0.15f : new_val + 0.20f;
+		if (fov > 90)
+		{
+			auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
+			*weapon_fov = new_val + 
+				fov < 90 ? new_val + 0.0f : 
+				fov < 100 ? new_val + 0.05f : 
+				fov < 110 ? new_val + 0.15f :
+				fov < 120 ? new_val + 0.25f :
+				fov < 130 ? new_val + 0.35f :
+				fov < 140 ? new_val + 0.45f :
+				new_val + 0.55f;
+		}
 
 		return this;
 	}
@@ -5540,9 +5568,29 @@ struct s_camera_definition
 	uint32_t FlagsD8;
 	uint8_t unknownDC[16];
 
+	s_camera_definition(uint8_t *camera_definition)
+	{
+		*this = *(s_camera_definition *)camera_definition;
+	}
+
 	size_t Size()
 	{
 		return sizeof(*this);
+	}
+
+	s_camera_definition *Validate(bool *result)
+	{
+		*result = ((char(__cdecl *)(uint8_t *))0x614CB0)((uint8_t *)this);
+
+		return this;
+	}
+
+	s_camera_definition *ConvertForWeapon(float *weapon_fov, float(__cdecl *map)(double, double, double, double, double))
+	{
+		if (LookShift == 0.17f) // check the crosshair is lower third
+			FieldOfView.ConvertForWeapon(weapon_fov, map); // scales the biped arms doesn't pull the weapon back, thus still covers 1/3rd the screen space
+
+		return this;
 	}
 
 	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
@@ -5550,14 +5598,15 @@ struct s_camera_definition
 		if (Direction.I != 0.0f || Direction.J != 0.0f || Direction.K != 0.0f)
 		{
 			if (position_and_shift)
-				printf_s("pos: %f %f %f, pos_shift: %f %f %f\n", Position.I, Position.J, Position.K, PositionShift.I, PositionShift.J, PositionShift.K);
+				printf_s("pos: %.2f %.2f %.2f, pos_shift: %.2f %.2f %.2f\n", Position.I, Position.J, Position.K, PositionShift.I, PositionShift.J, PositionShift.K);
 			if (look_and_depth_and_fov)
-				printf_s("look: %f, look_shift: %f, depth: %f, fov: %f\n", Look, LookShift, Depth, FieldOfView.Get());
+				printf_s("look: %.2f, look_shift: %.2f, depth: %.2f, fov: %.0f\n", Look, LookShift, Depth, FieldOfView.Get());
 			if (forward_and_up_and_direction)
-				printf_s("forward: %f %f %f, up: %f %f %f, direction: %f %f %f\n", Forward.I, Forward.J, Forward.K, Up.I, Up.J, Up.K, Direction.I, Direction.J, Direction.K);
+				printf_s("forward: %.2f %.2f %.2f, up: %.2f %.2f %.2f, direction: %.2f %.2f %.2f\n", Forward.I, Forward.J, Forward.K, Up.I, Up.J, Up.K, Direction.I, Direction.J, Direction.K);
 			if (center_and_zoom_transition_time)
-				printf_s("center: %f %f %f, zoom_transition_time: %f\n", Center.I, Center.J, Center.K, ZoomTransitionTime);
+				printf_s("center: %.2f %.2f %.2f, zoom_transition_time: %.2f\n", Center.I, Center.J, Center.K, ZoomTransitionTime);
 		}
+
 		return this;
 	}
 };
@@ -5627,6 +5676,7 @@ struct s_tag
 
 		if (group == -1 || group == GetGroupTag())
 			printf_s("['%s', 0x%04X]\n", GroupString.c_str(), Index);
+
 		return this;
 	}
 };
@@ -5648,21 +5698,18 @@ struct s_join_data
 		succeeded = false;
 	}
 
-	void Print()
-	{
-		printf_s("%s | %d | %s | %s | %s\n", a1 ? "true" : "false", a2, a3->String(), a4->String(), a5->String());
-	}
-
 	bool Join(bool use_network_join_to_remote_squad = false)
 	{
 		if (use_network_join_to_remote_squad)
-			succeeded = ((char(__cdecl *)(char, char, char, int, XnkAddr *, XnkAddr *, XnkAddr *))0x47ECF0)(((char(__cdecl *)())0x455320)() == false, a1, true, a2, a3, a5, a4);
-		else
-			succeeded = ((char(__cdecl *)(char, int, XnkAddr *, XnkAddr *, XnkAddr *))0xA7E3C0)(a1, a2, a3, a4, a5);
+			return ((char(__cdecl *)(char, char, char, int, XnkAddr *, XnkAddr *, XnkAddr *))0x47ECF0)(((char(__cdecl *)())0x455320)() == false, a1, true, a2, a3, a5, a4);
+		return ((char(__cdecl *)(char, int, XnkAddr *, XnkAddr *, XnkAddr *))0xA7E3C0)(a1, a2, a3, a4, a5);
+	}
 
-		Print();
+	s_join_data *Print()
+	{
+		printf_s("%s | %d | %s | %s | %s\n", a1 ? "true" : "false", a2, a3->String(), a4->String(), a5->String());
 
-		return succeeded;
+		return this;
 	}
 };
 

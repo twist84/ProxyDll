@@ -195,8 +195,10 @@ int __cdecl system_default_ui_language_to_game_language_hook()
 	//return *(int *)0x12E71B4 = result;
 }
 
+int g_game_region_call_count = 0;
 const char *game_get_region_hook(e_game_language game_language, bool foreign)
 {
+	g_game_region_call_count++;
 	printf_s("game_region: %s\n", game_language.GetRegion());
 	return game_language.GetRegion();
 }
