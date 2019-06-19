@@ -2035,7 +2035,7 @@ auto g_game_options = GetStructure<s_game_options>(0x2391800);
 
 void LaunchScenario(int scenario_type, const char *scenario_path)
 {
-	//replace tutorial scenario_type and scenario_path with new ones
+	// replace tutorial scenario_type and scenario_path with new ones
 	*(int *)0x7B5E97 = scenario_type; // 1;
 	*(const char **)0x7B5E8C = scenario_path; // "levels\\solo\\s3d_tutorial\\s3d_tutorial";
 
@@ -2043,6 +2043,15 @@ void LaunchScenario(int scenario_type, const char *scenario_path)
 
 	// execute ssl_hq_start_tutorial_level
 	((void(__cdecl *)())0x7B5E40)();
+
+	// if multiplayer set default gametype to slayer
+	if (scenario_type == e_scenario_type::_multiplayer)
+	{
+		g_game_options->GameVariant_SetGameType(2);
+		g_game_options->GameVariant_SetTeamGame(true);
+		g_game_options->GameVariant_SetTimeLimit(0);
+		g_game_options->GameVariant_SetRespawnTime(0);
+	}
 }
 
 struct s_progression
