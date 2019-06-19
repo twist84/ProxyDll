@@ -238,7 +238,7 @@ char *format(char *DstBuf, const char *Format, ...)
 	vsnprintf_and_end_hook(DstBuf, SizeInBytes, Format, ArgList);
 
 	char str[32]; sprintf_s(str, "format<%d>", SizeInBytes); hook_print(str, DstBuf);
-	printf_s("%s: %s\n", str, DstBuf);
+	//printf_s("%s: %s\n", str, DstBuf);
 	return DstBuf;
 }
 
@@ -339,20 +339,20 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x1AE0 }, &string_is_empty_hook, "string_is_empty");
 		HookManager.AddHook({ 0x1B00 }, &find_string_in_string_hook, "find_string_in_string");
 
-		HookManager.AddHook({ 0x521A0 }, &format<4>, "format_4");
-		HookManager.AddHook({ 0x30320 }, &format<16>, "format_16");
-		HookManager.AddHook({ 0x779F0 }, &format<17>, "format_17");
-		HookManager.AddHook({ 0x1547D0 }, &format<32>, "format_32");
-		HookManager.AddHook({ 0x30360 }, &format<33>, "format_33");
-		HookManager.AddHook({ 0x77A10 }, &format<48>, "format_48");
-		HookManager.AddHook({ 0x2E8E0 }, &format<64>, "format_64");
-		HookManager.AddHook({ 0x430ED0 }, &format<128>, "format_128");
-		HookManager.AddHook({ 0x1C5520 }, &format<255>, "format_255");
-		HookManager.AddHook({ 0x30340 }, &format<256>, "format_256");
-		HookManager.AddHook({ 0x40C10 }, &format<260>, "format_260");
-		HookManager.AddHook({ 0x329D0 }, &format<1024>, "format_1024");
-		HookManager.AddHook({ 0x329F0 }, &format<1536>, "format_1536");
-		HookManager.AddHook({ 0x26D2B0 }, &format<3976>, "format_3976");
+		HookManager.AddHook({ 0x521A0 }, &format<4>, "format<4>");
+		HookManager.AddHook({ 0x30320 }, &format<16>, "format<16>");
+		HookManager.AddHook({ 0x779F0 }, &format<17>, "format<17>");
+		HookManager.AddHook({ 0x1547D0 }, &format<32>, "format<32>");
+		HookManager.AddHook({ 0x30360 }, &format<33>, "format<33>");
+		HookManager.AddHook({ 0x77A10 }, &format<48>, "format<48>");
+		HookManager.AddHook({ 0x2E8E0 }, &format<64>, "format<64>");
+		HookManager.AddHook({ 0x430ED0 }, &format<128>, "format<128>");
+		HookManager.AddHook({ 0x1C5520 }, &format<255>, "format<255>");
+		HookManager.AddHook({ 0x30340 }, &format<256>, "format<256>");
+		HookManager.AddHook({ 0x40C10 }, &format<260>, "format<260>");
+		HookManager.AddHook({ 0x329D0 }, &format<1024>, "format<1024>");
+		HookManager.AddHook({ 0x329F0 }, &format<1536>, "format<1536>");
+		HookManager.AddHook({ 0x26D2B0 }, &format<3976>, "format<3976>");
 
 		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
 		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10");

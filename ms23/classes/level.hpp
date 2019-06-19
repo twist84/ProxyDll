@@ -100,6 +100,16 @@ int levels_get_default_map_id_hook()
 	return 320; // guardian
 }
 
+bool initial_map_load_called = false;
+int __cdecl GameOptions__LoadIntoGlobalGameOptions_hook(s_game_options *game_options)
+{
+	if (ConfigManager.GetBool("ForceLoad", "OnStartup") && !initial_map_load_called)
+		game_options->ForceUpdate();
+
+	initial_map_load_called = true;
+	return game_options->LoadIntoGlobalGameOptions();
+}
+
 inline void AddLevelHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -115,6 +125,8 @@ inline void AddLevelHooks(const char *name)
 		HookManager.AddHook({ 0x14CAB0 }, &campaign_levels_try_and_get_by_map_id_hook, "campaign_levels_try_and_get_by_map_id");
 		HookManager.AddHook({ 0x14CB00 }, &multiplayer_levels_try_and_get_by_map_id_hook, "multiplayer_levels_try_and_get_by_map_id");
 		HookManager.AddHook({ 0x14BCA0 }, &levels_get_default_map_id_hook, "levels_get_default_map_id");
+
+		HookManager.AddHook({ 0x166E70 }, &GameOptions__LoadIntoGlobalGameOptions_hook, "GameOptions::LoadIntoGlobalGameOptions");
 	}
 }
 

@@ -1960,7 +1960,21 @@ struct s_game_options : s_game_options_base
 	{
 		return sizeof(*this);
 	}
+	int LoadIntoGlobalGameOptions()
+	{
+		auto v1 = this == 0;
+		if (this)
+		{
+			memmove((void *)0x2391800, this, 0x24B48u);
+			v1 = this == 0;
+		}
 
+		*(uint8_t *)0x23917F1 = v1;
+		*(uint8_t *)0x23917F0 = true;
+		if (!this)
+			return 0;
+		return 1;
+	}
 	s_game_options *SetScenarioType(int val)
 	{
 		ScenarioType = e_scenario_type(val);
@@ -1976,7 +1990,6 @@ struct s_game_options : s_game_options_base
 
 		return this;
 	}
-
 	s_game_options *GameVariant_SetGameType(int32_t val)
 	{
 		*(int32_t*)GameVariant = val;
@@ -2001,8 +2014,7 @@ struct s_game_options : s_game_options_base
 
 		return this;
 	}
-
-	void ForceLoad()
+	void ForceUpdate()
 	{
 		SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
 		SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
@@ -2010,7 +2022,11 @@ struct s_game_options : s_game_options_base
 		GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
 		GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
 		GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
-		*(uint16_t*)0x23917F0 = 1;
+	}
+	void ForceLoad()
+	{
+		ForceUpdate();
+		*(uint16_t *)0x23917F0 = true;
 	}
 } game_options;
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
