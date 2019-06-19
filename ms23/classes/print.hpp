@@ -299,6 +299,28 @@ int network_debug_print_hook(char *format, ...)
 
 //===========================================================================
 
+int __stdcall print_string_with_int_hook(const char *a1, int a2)
+{
+	return printf_s("%s: %d\n", a1, a2);
+}
+
+int __stdcall print_string_with_vector3d_hook(const char *a1, vector3d<float> a2)
+{
+	return printf_s("%s: %.2f, %.2f, %.2f\n", a1, a2.I, a2.J, a2.K);
+}
+
+int __stdcall print_string_with_string_hook(const char *a1, const char *a2)
+{
+	return printf_s("%s: %s\n", a1, a2);
+}
+
+int __stdcall print_string_with_wide_string_hook(const char *a1, const wchar_t *a2)
+{
+	return printf_s("%s: %S\n", a1, a2);
+}
+
+//===========================================================================
+
 static const auto sub_52BA30 = (wchar_t *(*)(wchar_t *DstBuf, wchar_t *Format, ...))0x52BA30;
 
 void print_vftable(uint32_t *a1)
@@ -367,6 +389,11 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
 
 		//HookManager.AddHook({ 0x9858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
+
+		HookManager.AddHook({ 0x218A10 }, &print_string_with_int_hook, "print_string_with_int");
+		HookManager.AddHook({ 0x218A20 }, &print_string_with_vector3d_hook, "print_string_with_vector3d");
+		HookManager.AddHook({ 0x218A30 }, &print_string_with_string_hook, "print_string_with_string");
+		HookManager.AddHook({ 0x218A50 }, &print_string_with_wide_string_hook, "print_string_with_wide_string");
 	}
 }
 
