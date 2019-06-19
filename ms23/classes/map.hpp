@@ -75,9 +75,10 @@ bool __cdecl sub_AC3900_hook(int content_type, e_map_id map_id, char *DstBuf)
 
 	s_levels level;
 	char scenario_image_path[256];
+	memset(&scenario_image_path, 0, 256);
 	if (campaign_levels_try_and_get_by_map_id_hook(map_id.value, &level) || multiplayer_levels_try_and_get_by_map_id_hook(map_id.value, &level))
 		strcpy(scenario_image_path, level.ScenarioImagePath);
-	if (strlen(scenario_image_path) <= 0)
+	if (!strlen(scenario_image_path))
 		return 0;
 
 	const char *image_name = map_id.GetImageName();
@@ -85,19 +86,19 @@ bool __cdecl sub_AC3900_hook(int content_type, e_map_id map_id, char *DstBuf)
 	switch (content_type)
 	{
 	case 0:
-		sub_430340_hook(DstBuf, "%s%s.blf", scenario_image_path, image_name);
+		format<256>(DstBuf, "%s%s.blf", scenario_image_path, image_name);
 		break;
 	case 1:
-		sub_430340_hook(DstBuf, "%s%s_sm.blf", scenario_image_path, image_name);
+		format<256>(DstBuf, "%s%s_sm.blf", scenario_image_path, image_name);
 		break;
 	case 2:
-		sub_430340_hook(DstBuf, "%s%s_variant.blf", scenario_image_path, image_name);
+		format<256>(DstBuf, "%s%s_variant.blf", scenario_image_path, image_name);
 		break;
 	case 3:
-		sub_430340_hook(DstBuf, "%s%s_film.blf", scenario_image_path, image_name);
+		format<256>(DstBuf, "%s%s_film.blf", scenario_image_path, image_name);
 		break;
 	case 4:
-		sub_430340_hook(DstBuf, "%s%s_clip.blf", scenario_image_path, image_name);
+		format<256>(DstBuf, "%s%s_clip.blf", scenario_image_path, image_name);
 		break;
 	default:
 		return strlen(DstBuf) > 0;

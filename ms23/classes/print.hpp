@@ -230,13 +230,15 @@ wchar_t *wprintf_12288_hook(wchar_t *DstBuf, const wchar_t *Format, ...)
 
 //===========================================================================
 
-char *format_chat_hook(char *DstBuf, char *Format, ...)
+template<size_t SizeInBytes>
+char *format(char *DstBuf, const char *Format, ...)
 {
 	va_list ArgList;
 	va_start(ArgList, Format);
-	vsnprintf_and_end_hook(DstBuf, 128u, Format, ArgList);
+	vsnprintf_and_end_hook(DstBuf, SizeInBytes, Format, ArgList);
 
-	hook_print("format_chat", DstBuf);
+	char str[32]; sprintf_s(str, "format<%d>", SizeInBytes); hook_print(str, DstBuf);
+	printf_s("%s: %s\n", str, DstBuf);
 	return DstBuf;
 }
 
@@ -297,28 +299,6 @@ int network_debug_print_hook(char *format, ...)
 
 //===========================================================================
 
-char *format_ip_hook(char *DstBuf, char *Format, ...)
-{
-	va_list ArgList;
-	va_start(ArgList, Format);
-	vsnprintf_and_end_hook(DstBuf, 16, Format, ArgList);
-
-	hook_print("format_ip", DstBuf);
-
-	return DstBuf;
-}
-
-char *sub_430340_hook(char *DstBuf, const char *Format, ...)
-{
-	va_list ArgList; // [esp+10h] [ebp+10h]
-
-	va_start(ArgList, Format);
-	vsnprintf_and_end_hook(DstBuf, 256, Format, ArgList);
-
-	hook_print("sub_430340", DstBuf);
-	return DstBuf;
-}
-
 static const auto sub_52BA30 = (wchar_t *(*)(wchar_t *DstBuf, wchar_t *Format, ...))0x52BA30;
 
 void print_vftable(uint32_t *a1)
@@ -359,8 +339,20 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x1AE0 }, &string_is_empty_hook, "string_is_empty");
 		HookManager.AddHook({ 0x1B00 }, &find_string_in_string_hook, "find_string_in_string");
 
-		HookManager.AddHook({ 0x30320 }, &format_ip_hook, "format_ip");
-		HookManager.AddHook({ 0x30340 }, &sub_430340_hook, "sub_430340");
+		HookManager.AddHook({ 0x521A0 }, &format<4>, "format_4");
+		HookManager.AddHook({ 0x30320 }, &format<16>, "format_16");
+		HookManager.AddHook({ 0x779F0 }, &format<17>, "format_17");
+		HookManager.AddHook({ 0x1547D0 }, &format<32>, "format_32");
+		HookManager.AddHook({ 0x30360 }, &format<33>, "format_33");
+		HookManager.AddHook({ 0x77A10 }, &format<48>, "format_48");
+		HookManager.AddHook({ 0x2E8E0 }, &format<64>, "format_64");
+		HookManager.AddHook({ 0x430ED0 }, &format<128>, "format_128");
+		HookManager.AddHook({ 0x1C5520 }, &format<255>, "format_255");
+		HookManager.AddHook({ 0x30340 }, &format<256>, "format_256");
+		HookManager.AddHook({ 0x40C10 }, &format<260>, "format_260");
+		HookManager.AddHook({ 0x329D0 }, &format<1024>, "format_1024");
+		HookManager.AddHook({ 0x329F0 }, &format<1536>, "format_1536");
+		HookManager.AddHook({ 0x26D2B0 }, &format<3976>, "format_3976");
 
 		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
 		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10");
@@ -370,8 +362,6 @@ inline void AddPrintHooks(const char *name)
 
 		HookManager.AddHook({ 0x1CF710 }, &sub_5CF710_hook, "sub_5CF710");
 		HookManager.AddHook({ 0x12EB80 }, &wprintf_12288_hook, "wprintf_12288");
-
-		HookManager.AddHook({ 0x430ED0 }, &format_chat_hook, "format_chat");
 
 		HookManager.AddHook({ 0x7F0A93 }, &sprintf_s_hook, "sprintf_s");
 		HookManager.AddHook({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
