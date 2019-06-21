@@ -5,17 +5,15 @@
 
 #include "filo.hpp"
 
-void PrintGameSystems( bool print_null = false)
+void PrintGameSystems(bool print_null = false)
 {
 	for (int i = 0; i < e_game_system::k_number_of_game_systems; i++)
 	{
 		printf_s("%s\n", e_game_system(i).GetName());
 		for (size_t j = 0; j < e_game_system_member::k_number_of_game_system_members; j++)
 		{
-			auto member = e_game_system(i).GetAddress(j);
-			if (print_null)
-				printf_s("[0x%08X, 0x%08X]: %s\n", member, *(size_t *)member, e_game_system_member(j).GetName());
-			else if (*(size_t *)member)
+			auto member = e_game_system(i).GetMember(j);
+			if (print_null || *(size_t *)member)
 				printf_s("[0x%08X, 0x%08X]: %s\n", member, *(size_t *)member, e_game_system_member(j).GetName());
 		}
 	}
@@ -26,15 +24,6 @@ inline void AddGameSystemsHooks(const char *name)
 	if (ConfigManager.GetBool("Hooks", name))
 	{
 
-	}
-}
-
-void replace_game_system_member(int game_system, int member, void *function)
-{
-	if ((game_system >= e_game_system::_determinism_debug_manager && game_system < e_game_system::k_number_of_game_systems) &&
-		(member >= e_game_system_member::_initialize && member < e_game_system_member::k_number_of_game_system_members))
-	{
-		Pointer((0x1655950 + ((sizeof(s_game_system) * game_system) + (sizeof(uint32_t) * member)))).Write(uint32_t(function));
 	}
 }
 
@@ -60,10 +49,10 @@ void levels_dispose_from_old_map()
 }
 void levels_game_system()
 {
-	replace_game_system_member(e_game_system::_levels, e_game_system_member::_initialize, &levels_initialize);
-	replace_game_system_member(e_game_system::_levels, e_game_system_member::_dispose, &levels_dispose);
-	replace_game_system_member(e_game_system::_levels, e_game_system_member::_initialize_for_new_map, &levels_initialize_for_new_map);
-	replace_game_system_member(e_game_system::_levels, e_game_system_member::_dispose_from_old_map, &levels_dispose_from_old_map);
+	Pointer(e_game_system(e_game_system::_levels).GetMember(e_game_system_member::_initialize)).Write(uint32_t(&levels_initialize));
+	Pointer(e_game_system(e_game_system::_levels).GetMember(e_game_system_member::_dispose)).Write(uint32_t(&levels_dispose));
+	Pointer(e_game_system(e_game_system::_levels).GetMember(e_game_system_member::_initialize_for_new_map)).Write(uint32_t(&levels_initialize_for_new_map));
+	Pointer(e_game_system(e_game_system::_levels).GetMember(e_game_system_member::_dispose_from_old_map)).Write(uint32_t(&levels_dispose_from_old_map));
 }
 
 void AddGameSystemsPatches(const char *name)

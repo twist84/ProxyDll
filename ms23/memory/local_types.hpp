@@ -727,7 +727,7 @@ struct e_network_mode
 	}
 };
 
-struct s_game_system
+struct s_game_system_definition
 {
 	void(*initialize)();
 	void(*dispose)();
@@ -903,9 +903,9 @@ struct e_game_system
 			value = (e)val;
 	}
 
-	int GetAddress(int member, bool base = false)
+	int GetMember(int member, bool base = false)
 	{
-		return (0x1655950 - base ? 0x400000 : 0) + (sizeof(s_game_system) * value) + (4 * member);
+		return (!base ? 0x1655950 : 0x1655950 - 0x400000) + (sizeof(s_game_system_definition) * value) + (sizeof(uint32_t) * member);
 	}
 
 	const char *GetName()
