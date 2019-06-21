@@ -4,7 +4,6 @@
 #include "../memory/local_types.hpp"
 
 #include <d3d9.h>
-#include <dxgi.h>
 
 
 auto g_clip_plane = GetStructure<clip_plane<float>>(0x0191068C);
