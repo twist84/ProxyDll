@@ -910,7 +910,7 @@ struct e_game_system
 
 	void ReplaceMember(int member, void *func)
 	{
-		Pointer(e_game_system(e_game_system::_levels).GetMember(member)).Write(uint32_t(func));
+		Pointer(GetMember(member)).Write(uint32_t(func));
 	}
 
 	const char *GetName()
