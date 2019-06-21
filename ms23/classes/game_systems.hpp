@@ -21,41 +21,55 @@ void PrintGameSystems( bool print_null = false)
 	}
 }
 
-void cheats_initialize_hook()
-{
-	printf_s("initialize hooked!\n");
-}
-
-void cheats_dispose_hook()
-{
-	printf_s("dispose hooked!\n");
-}
-
-void cheats_initialize_for_new_map_hook()
-{
-	printf_s("initialize_for_new_map hooked!\n");
-}
-
-void cheats_dispose_from_old_map_hook()
-{
-	printf_s("dispose_from_old_map hooked!\n");
-}
-
 inline void AddGameSystemsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
-	{	
-		HookManager.AddHook({ 0x1301C0 }, &cheats_initialize_hook, "cheats_initialize");
-		HookManager.AddHook({ 0x1301D0 }, &cheats_dispose_hook, "cheats_dispose");
-		HookManager.AddHook({ 0x1301E0 }, &cheats_initialize_for_new_map_hook, "cheats_initialize_for_new_map");
-		HookManager.AddHook({ 0x1301F0 }, &cheats_dispose_from_old_map_hook, "cheats_dispose_from_old_map");
+	{
+
 	}
+}
+
+void replace_game_system_member(int game_system, int member, void *function)
+{
+	if ((game_system >= e_game_system::_determinism_debug_manager && game_system < e_game_system::k_number_of_game_systems) &&
+		(member >= e_game_system_member::_initialize && member < e_game_system_member::k_number_of_game_system_members))
+	{
+		Pointer((0x1655950 + ((sizeof(s_game_system) * game_system) + (sizeof(uint32_t) * member)))).Write(uint32_t(function));
+	}
+}
+
+void levels_initialize()
+{
+	printf_s("levels_initialize hooked!\n");
+	((void(*)())0x0054C110)();
+}
+void levels_dispose()
+{
+	printf_s("levels_dispose hooked!\n");
+	((void(*)())0x0054ADF0)();
+}
+void levels_initialize_for_new_map()
+{
+	printf_s("levels_initialize_for_new_map hooked!\n");
+	((void(*)())0x0054C2D0)();
+}
+void levels_dispose_from_old_map()
+{
+	printf_s("levels_dispose_from_old_map hooked!\n");
+	((void(*)())0x0054AEA0)();
+}
+void levels_game_system()
+{
+	replace_game_system_member(e_game_system::_levels, e_game_system_member::_initialize, &levels_initialize);
+	replace_game_system_member(e_game_system::_levels, e_game_system_member::_dispose, &levels_dispose);
+	replace_game_system_member(e_game_system::_levels, e_game_system_member::_initialize_for_new_map, &levels_initialize_for_new_map);
+	replace_game_system_member(e_game_system::_levels, e_game_system_member::_dispose_from_old_map, &levels_dispose_from_old_map);
 }
 
 void AddGameSystemsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-
+		PatchManager.AddPatch(&levels_game_system, "levels_game_system");
 	}
 }
