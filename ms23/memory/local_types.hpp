@@ -1960,27 +1960,14 @@ struct s_game_options : s_game_options_base
 	{
 		return sizeof(*this);
 	}
-	int LoadIntoGlobalGameOptions()
-	{
-		auto v1 = this == 0;
-		if (this)
-		{
-			memmove((void *)0x2391800, this, 0x24B48u);
-			v1 = this == 0;
-		}
-
-		*(uint8_t *)0x23917F1 = v1;
-		*(uint8_t *)0x23917F0 = true;
-		if (!this)
-			return 0;
-		return 1;
-	}
 	s_game_options *SetScenarioType(int val)
 	{
 		ScenarioType = e_scenario_type(val);
 
 		return this;
 	}
+	// only needs the last part `scenario_path` I.E. s3d_tutorial
+	// the game must iterate over scenarios until a match is found, if no match is found the game crashes
 	s_game_options *SetScenarioPath(const char *val)
 	{
 		printf_s("loading %s...\n", val);
@@ -2014,30 +2001,50 @@ struct s_game_options : s_game_options_base
 
 		return this;
 	}
-	void ForceUpdate()
+	int LoadIntoGlobalGameOptions(bool is_force_loaded = false)
 	{
-		SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
-		SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
-		GameVariant_SetGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
-		GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
-		GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
-		GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
-	}
-	void ForceLoad()
-	{
-		ForceUpdate();
-		*(uint16_t *)0x23917F0 = true;
+		if (is_force_loaded)
+		{
+			SetScenarioPath(ConfigManager.GetString("ForceLoad", "ScenarioPath"));
+			SetScenarioType(ConfigManager.GetInt("ForceLoad", "ScenarioType"));
+			GameVariant_SetGameType(ConfigManager.GetInt("ForceLoad", "GameType"));
+			GameVariant_SetTeamGame(ConfigManager.GetBool("ForceLoad", "TeamGame"));
+			GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
+			GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
+		}
+
+		auto v1 = this == 0;
+		if (this)
+		{
+			memmove((void *)0x2391800, this, 0x24B48u);
+			v1 = this == 0;
+		}
+
+		*(uint8_t *)0x23917F1 = v1;
+		*(uint8_t *)0x23917F0 = true;
+
+		auto result = (int)GetTickCount64();
+		if (!this && !is_force_loaded)
+		{
+			if (((int16_t(__cdecl *)())0x454DB0)())
+				result = ((int(__cdecl *)(bool))0x455260)(false);
+			else
+				result = ((int(__cdecl *)())0x454B40)();
+		}
+		return result;
 	}
 } game_options;
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
 
 auto g_game_options = GetStructure<s_game_options>(0x2391800);
 
-void LaunchScenario(int scenario_type, const char *scenario_path)
+// only needs the last part `scenario_path` I.E. s3d_tutorial
+// the game must iterate over scenarios until a match is found, if no match is found the game crashes
+void LaunchScenario(const char *scenario_path = "levels\\solo\\s3d_tutorial\\s3d_tutorial", int scenario_type = 1, int game_type = 0, bool team_game = false, uint8_t time_limit = 0, uint8_t respawn_time = 0)
 {
 	// replace tutorial scenario_type and scenario_path with new ones
-	*(int *)0x7B5E97 = scenario_type; // 1;
-	*(const char **)0x7B5E8C = scenario_path; // "levels\\solo\\s3d_tutorial\\s3d_tutorial";
+	*(const char **)0x7B5E8C = scenario_path;
+	*(int *)0x7B5E97 = scenario_type;
 
 	printf_s("Launching Scenario(%s, %s)\n", e_scenario_type(scenario_type).GetName(), scenario_path);
 
@@ -2047,10 +2054,10 @@ void LaunchScenario(int scenario_type, const char *scenario_path)
 	// if multiplayer set default gametype to slayer
 	if (scenario_type == e_scenario_type::_multiplayer)
 	{
-		g_game_options->GameVariant_SetGameType(2);
-		g_game_options->GameVariant_SetTeamGame(true);
-		g_game_options->GameVariant_SetTimeLimit(0);
-		g_game_options->GameVariant_SetRespawnTime(0);
+		g_game_options->GameVariant_SetGameType(game_type);
+		g_game_options->GameVariant_SetTeamGame(team_game);
+		g_game_options->GameVariant_SetTimeLimit(time_limit);
+		g_game_options->GameVariant_SetRespawnTime(respawn_time);
 	}
 }
 

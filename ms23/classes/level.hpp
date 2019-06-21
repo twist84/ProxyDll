@@ -103,11 +103,12 @@ int levels_get_default_map_id_hook()
 bool initial_map_load_called = false;
 int __cdecl GameOptions__LoadIntoGlobalGameOptions_hook(s_game_options *game_options)
 {
+	bool is_force_loaded = false;
 	if (ConfigManager.GetBool("ForceLoad", "OnStartup") && !initial_map_load_called)
-		game_options->ForceUpdate();
+		is_force_loaded = true;
 
 	initial_map_load_called = true;
-	return game_options->LoadIntoGlobalGameOptions();
+	return game_options->LoadIntoGlobalGameOptions(is_force_loaded);
 }
 
 inline void AddLevelHooks(const char *name)
