@@ -28,6 +28,7 @@
     <ClInclude Include="classes\game_engine.hpp" />
     <ClInclude Include="classes\game_globals.hpp" />
     <ClInclude Include="classes\game_state.hpp" />
+    <ClInclude Include="classes\game_systems.hpp" />
     <ClInclude Include="classes\game_update.hpp" />
     <ClInclude Include="classes\level.hpp" />
     <ClInclude Include="classes\map.hpp" />

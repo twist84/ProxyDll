@@ -5,14 +5,6 @@
 
 #include "filo.hpp"
 
-char levels_initialize_hook(int a1, double a2)
-{
-	static const auto levels_initiailize = (char(*)(int, double))0x54C110;
-
-	printf_s("levels_initiailize hooked!\n");
-	return levels_initiailize(a1, a2);
-}
-
 static const auto game_state_buffer_handle_read = (int(*)())0x50F280;
 
 bool __cdecl file_read_from_path(const wchar_t *path, DWORD size, LPVOID buffer)
@@ -137,34 +129,9 @@ inline void AddGameStateHooks(const char *name)
 	}
 }
 
-s_game_state_definition *GetGameStateDefinitionArray()
-{
-	return GetStructure<s_game_state_definition>(0x1655950, 0);
-}
-
-s_game_state_definition *GetGameStateDefinitionPointer(int offset)
-{
-	return GetStructure<s_game_state_definition>(0x1655950, offset);
-}
-
-void game_state_level_definition_patch()
-{
-	auto game_state_levels_definition_ptr = GetGameStateDefinitionPointer(e_game_state::_levels);
-	auto game_state_levels_definition_arr = GetGameStateDefinitionArray()[e_game_state::_levels];
-
-	std::stringstream ss;
-	ss << "game_state_level_definition:       definition address = 0x" << std::hex << game_state_levels_definition_ptr->GetArrayStartAddress() << std::endl;
-	ss << "game_state_level_definition:       initialize address = 0x" << std::hex << game_state_levels_definition_ptr->GetInitialize() << std::endl;
-	ss << "game_state_level_definition:  definition base address = 0x" << std::hex << game_state_levels_definition_ptr->GetArrayStartAddress(true) << std::endl;
-	ss << "game_state_level_definition:  initialize base address = 0x" << std::hex << game_state_levels_definition_ptr->GetInitialize(true) << std::endl;
-	printf_s("%s\n", ss.str().c_str());
-}
-
 void AddGameStatePatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		//PatchManager.AddPatch(&game_state_level_definition_patch, "");
-
 	}
 }

@@ -727,207 +727,285 @@ struct e_network_mode
 	}
 };
 
-struct e_game_state
+struct s_game_system
 {
-	enum : int
-	{
-		_unknown0 = 0,
-		_unknown1,
-		_screenshots_loader_optional_cache,
-		_transport,
-		_unknown4,
-		_unknown5,
-		_unknown6,
-		_xoverlapped_memory_pool,
-		_random_math_globals,
-		_network_game_packets,
-		_unknown10,
-		_unknown11,
-		_unknown12,
-		_unknown13,
-		_unknown14,
-		_input_globals,
-		_unknown16,
-		_levels,
-		_unknown18,
-		_unknown19,
-		_unknown20,
-		_game_state_header,
-		_game_time_globals,
-		_unknown23,
-		_game_allegiance_globals,
-		_players_globals,
-		_player_control_globals,
-		_player_training_globals,
-		_game_engine_globals,
-		_simulation_globals,
-		_structure_seam_globals,
-		_physics_globals,
-		_unknown32,
-		_object_globals,
-		_object_early_mover_globals,
-		_objects_scripting_globals,
-		_object_schedule,
-		_object_activation_regions,
-		_kill_volumes,
-		_unknown39,
-		_soft_surface_globals,
-		_campaign_metagame_globals,
-		_cache1_autosave,
-		_unknown43,
-		_survival_mode_globals,
-		_rasterizer_globals,
-		_render_object_globals,
-		_unknown47,
-		_breakable_surface_set_broken_events,
-		_director_globals,
-		_observer_globals,
-		_depth_of_field_globals,
-		_water_interaction_ripples,
-		_render_texture_globals,
-		_render_hud_globals,
-		_scripted_exposure_globals,
-		_render_game_globals,
-		_decals,
-		_effects,
-		_unknown59,
-		_atmosphere_fog_globals,
-		_screen_effect,
-		_sound_classes,
-		_sound_globals,
-		_deterministic_game_sound_globals,
-		_object_looping_sounds,
-		_game_sound_player_effects_globals,
-		_user_interface_controllers,
-		_player_effects,
-		_unknown69,
-		_interface_globals,
-		_chud_cortana_effect,
-		_unknown72,
-		_unknown73,
-		_cinematic_globals,
-		_unknown75,
-		_unknown76,
-		_unknown77,
-		_hs_globals,
-		_recorded_animations,
-		_unknown80,
-		_unknown81,
-		_object_placement_globals,
-		_havok_shit,
-		_object_broadphase_globals,
-		_havok_proxies,
-		_unknown86,
-		_ai_globals,
-		_visibility_active_portals,
-		_scenario_interpolator,
-		_game_save_globals,
-		_unknown91,
-		_bink_globals,
-		_unknown93,
-		_unknown94,
+	void(*initialize)();
+	void(*dispose)();
+	void(*initialize_for_new_map)();
+	void(*dispose_from_old_map)();
+	void(*prepare_for_new_zone_set)(long, long);
+	void(*initialize_for_new_structure_bsp)(long);
+	void(*dispose_from_old_structure_bsp)(long);
+	void(*change_pvs)(unsigned char *, unsigned char *, bool);
+	void(*activation)(unsigned char *, unsigned char *);
+	void(*prepare_for_non_bsp_zone_set_switch)(unsigned char *, unsigned char *, unsigned char *);
+	void(*initialize_for_new_non_bsp_zone_set)(unsigned char *);
+	void(*dispose_from_old_non_bsp_zone_set)(unsigned char *);
 
-		k_number_of_game_states
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+};
+
+struct e_game_system_member
+{
+	enum e : int
+	{
+		_game_system_member_initialize = 0,
+		_game_system_member_dispose,
+		_game_system_member_initialize_for_new_map,
+		_game_system_member_dispose_from_old_map,
+		_game_system_member_prepare_for_new_zone_set,
+		_game_system_member_initialize_for_new_structure_bsp,
+		_game_system_member_dispose_from_old_structure_bsp,
+		_game_system_member_change_pvs,
+		_game_system_member_activation,
+		_game_system_member_prepare_for_non_bsp_zone_set_switch,
+		_game_system_member_initialize_for_new_non_bsp_zone_set,
+		_game_system_member_dispose_from_old_non_bsp_zone_set,
+
+		k_number_of_game_system_members
 	} value;
+
+	e_game_system_member(int val)
+	{
+		if (val >= _game_system_member_initialize && val < k_number_of_game_system_members)
+			value = (e)val;
+	}
+
+	const char *GetName()
+	{
+		const char *names[]{
+			"initialize",
+			"dispose",
+			"initialize_for_new_map",
+			"dispose_from_old_map",
+			"prepare_for_new_zone_set",
+			"initialize_for_new_structure_bsp",
+			"dispose_from_old_structure_bsp",
+			"change_pvs",
+			"activation",
+			"prepare_for_non_bsp_zone_set_switch",
+			"initialize_for_new_non_bsp_zone_set",
+			"dispose_from_old_non_bsp_zone_set"
+		};
+		return names[value];
+	}
+};
+
+struct e_game_system
+{
+	enum e : int
+	{
+		_game_system_determinism_debug_manager = 0,
+		_game_system_optional_cache,
+		_game_system_screenshots_loader_optional_cache,
+		_game_system_transport,
+		_game_system_runtime,
+		_game_system_structure_renderer,
+		_game_system_datamine,
+		_game_system_overlapped,
+		_game_system_random_math,
+		_game_system_network,
+		_game_system_network_webstats,
+		_game_system_xbox_connection,
+		_game_system_remote_command,
+		_game_system_telnet_console,
+		_game_system_console,
+		_game_system_input_abstraction,
+		_game_system_collision_log,
+		_game_system_levels,
+		_game_system_visibility_collection,
+		_game_system_game_grief,
+		_game_system_achievements,
+		_game_system_game_state,
+		_game_system_game_time,
+		_game_system_profiler,
+		_game_system_game_allegiance,
+		_game_system_players,
+		_game_system_player_control,
+		_game_system_player_training,
+		_game_system_game_engine,
+		_game_system_simulation,
+		_game_system_scenario,
+		_game_system_physics_constants,
+		_game_system_collision_debug,
+		_game_system_objects,
+		_game_system_object_early_movers,
+		_game_system_object_scripting,
+		_game_system_object_scheduler,
+		_game_system_object_activation_regions,
+		_game_system_scenario_kill_trigger_volumes,
+		_game_system_scenario_sky_objects,
+		_game_system_soft_ceilings,
+		_game_system_campaign_metagame_globals,
+		_game_system_autosave_queue,
+		_game_system_saved_game_files,
+		_game_system_fire_teams,
+		_game_system_rasterizer,
+		_game_system_render,
+		_game_system_unknown,
+		_game_system_breakable_surfaces,
+		_game_system_director,
+		_game_system_observer,
+		_game_system_depth_of_field,
+		_game_system_water_renderer,
+		_game_system_render_texture_camera,
+		_game_system_render_hud_camera,
+		_game_system_scripted_exposure,
+		_game_system_render_game_state,
+		_game_system_decals,
+		_game_system_effects,
+		_game_system_point_physics,
+		_game_system_atmosphere_fog,
+		_game_system_screen_effects,
+		_game_system_sound_classes,
+		_game_system_sound,
+		_game_system_game_sound_deterministic,
+		_game_system_game_sound,
+		_game_system_game_sound_player_effects,
+		_game_system_rumble,
+		_game_system_player_effects,
+		_game_system_simulated_input,
+		_game_system_interface,
+		_game_system_chud_cortana_effect,
+		_game_system_overhead_map,
+		_game_system_cheats,
+		_game_system_cinematic,
+		_game_system_closed_captions,
+		_game_system_screenshots,
+		_game_system_player_rewards,
+		_game_system_hs,
+		_game_system_recorded_animations,
+		_game_system_debug_menu,
+		_game_system_error_report_rendering,
+		_game_system_object_placement,
+		_game_system_havok,
+		_game_system_havok_contact_points,
+		_game_system_havok_proxies,
+		_game_system_player_positions,
+		_game_system_ai,
+		_game_system_portal_activation,
+		_game_system_scenario_interpolators,
+		_game_system_game_save,
+		_game_system_watch_window,
+		_game_system_bink_playback,
+		_game_system_editor,
+		_game_system_render_state,
+
+		k_number_of_game_systems
+	} value;
+
+	e_game_system(int val)
+	{
+		if (val >= _game_system_determinism_debug_manager && val < k_number_of_game_systems)
+			value = (e)val;
+	}
+
+	size_t GetAddress(int member, bool base = false)
+	{
+		return (0x1655950 - base ? 0x400000 : 0) + (sizeof(s_game_system) * value) + (4 * member);
+	}
 
 	const char *GetName()
 	{
 		const char *names[] {
-			"unknown0",
-			"unknown1",
-			"screenshots loader optional cache",
+			"determinism_debug_manager",
+			"optional_cache",
+			"screenshots_loader_optional_cache",
 			"transport",
-			"unknown4",
-			"unknown5",
-			"unknown6",
-			"xoverlapped memory pool",
-			"random math globals",
-			"network game packets",
-			"unknown10",
-			"unknown11",
-			"unknown12",
-			"unknown13",
-			"unknown14",
-			"input globals",
-			"unknown16",
+			"runtime",
+			"structure_renderer",
+			"datamine",
+			"overlapped",
+			"random_math",
+			"network",
+			"network_webstats",
+			"xbox_connection",
+			"remote_command",
+			"telnet_console",
+			"console",
+			"input_abstraction",
+			"collision_log",
 			"levels",
-			"unknown18",
-			"unknown19",
-			"unknown20",
-			"game state header",
-			"game time globals",
-			"unknown23",
-			"game allegiance globals",
-			"players globals",
-			"player control globals",
-			"player training globals",
-			"game engine globals",
-			"simulation globals",
-			"structure seam globals",
-			"physics globals",
-			"unknown32",
-			"object globals",
-			"object early mover globals",
-			"objects scripting globals",
-			"object schedule",
-			"object activation regions",
-			"kill volumes",
-			"unknown39",
-			"soft surface globals",
-			"campaign metagame globals",
-			"cache1 autosave",
-			"unknown43",
-			"survival mode globals",
-			"rasterizer globals",
-			"render object globals",
+			"visibility_collection",
+			"game_grief",
+			"achievements",
+			"game_state",
+			"game_time",
+			"profiler",
+			"game_allegiance",
+			"players",
+			"player_control",
+			"player_training",
+			"game_engine",
+			"simulation",
+			"scenario",
+			"physics_constants",
+			"collision_debug",
+			"objects",
+			"object_early_movers",
+			"object_scripting",
+			"object_scheduler",
+			"object_activation_regions",
+			"scenario_kill_trigger_volumes",
+			"scenario_sky_objects",
+			"soft_ceilings",
+			"campaign_metagame_globals",
+			"autosave_queue",
+			"saved_game_files",
+			"fire_teams",
+			"rasterizer",
+			"render",
 			"unknown47",
-			"breakable surface set broken events",
-			"director globals",
-			"observer globals",
-			"depth of field globals",
-			"water interaction ripples",
-			"render texture globals",
-			"render hud globals",
-			"scripted exposure globals",
-			"render game globals",
+			"breakable_surfaces",
+			"director",
+			"observer",
+			"depth_of_field",
+			"water_renderer",
+			"render_texture_camera",
+			"render_hud_camera",
+			"scripted_exposure",
+			"render_game_state",
 			"decals",
 			"effects",
-			"unknown59",
-			"atmosphere fog globals",
-			"screen effect",
-			"sound classes",
-			"sound globals",
-			"deterministic game sound globals",
-			"object looping sounds",
-			"game sound player effects globals",
-			"user interface controllers",
-			"player effects",
-			"unknown69",
-			"interface globals",
-			"chud cortana effect",
-			"unknown72",
-			"unknown73",
-			"cinematic globals",
-			"unknown75",
-			"unknown76",
-			"unknown77",
-			"hs globals",
-			"recorded animations",
-			"unknown80",
-			"unknown81",
-			"object placement globals",
-			"havok shit",
-			"object broadphase globals",
-			"havok proxies",
-			"unknown86",
-			"ai globals",
-			"visibility active portals",
-			"scenario interpolator",
-			"game save globals",
-			"unknown91",
-			"bink globals",
-			"unknown93",
-			"unknown94"
+			"point_physics",
+			"atmosphere_fog",
+			"screen_effects",
+			"sound_classes",
+			"sound",
+			"game_sound_deterministic",
+			"game_sound",
+			"game_sound_player_effects",
+			"rumble",
+			"player_effects",
+			"simulated_input",
+			"interface",
+			"chud_cortana_effect",
+			"overhead_map",
+			"cheats",
+			"cinematic",
+			"closed_captions",
+			"screenshots",
+			"player_rewards",
+			"hs",
+			"recorded_animations",
+			"debug_menu",
+			"error_report_rendering",
+			"object_placement",
+			"havok",
+			"havok_contact_points",
+			"havok_proxies",
+			"player_positions",
+			"ai",
+			"portal_activation",
+			"scenario_interpolators",
+			"game_save",
+			"watch_window",
+			"bink_playback",
+			"editor",
+			"render_state"
 		};
 		return names[value];
 	}
@@ -3070,78 +3148,6 @@ struct c_managed_session
 	}
 };
 #pragma pack(pop)
-struct s_game_state_definition
-{
-	void *Initialize;
-	void *Dispose;
-	void *InitializeForNewMap;
-	void *DisposeFromOldMap;
-	void *PrepareToSwitchStructureBsp;
-	void *ReconnectToStructureBsp;
-	void *DisconnectFromStructureBsp;
-	void *SwitchStructureBsp;
-	void *unknown9;
-	void *unknown10;
-	void *InitializeForNewStructureBsp;
-	void *DisposeFromOldnonBspZoneSet;
-
-	size_t Size()
-	{
-		return sizeof(*this);
-	}
-	size_t GetArrayStartAddress(bool base = false)
-	{
-		return GetAddress((void *)0x1655950, base);
-	}
-	size_t GetInitialize(bool base = false)
-	{
-		return GetAddress(Initialize, base);
-	}
-	size_t GetDispose(bool base = false)
-	{
-		return GetAddress(Dispose, base);
-	}
-	size_t GetInitializeForNewMap(bool base = false)
-	{
-		return GetAddress(InitializeForNewMap, base);
-	}
-	size_t GetDisposeFromOldMap(bool base = false)
-	{
-		return GetAddress(DisposeFromOldMap, base);
-	}
-	size_t GetPrepareToSwitchStructureBsp(bool base = false)
-	{
-		return GetAddress(PrepareToSwitchStructureBsp, base);
-	}
-	size_t GetReconnectToStructureBsp(bool base = false)
-	{
-		return GetAddress(ReconnectToStructureBsp, base);
-	}
-	size_t GetDisconnectFromStructureBsp(bool base = false)
-	{
-		return GetAddress(DisconnectFromStructureBsp, base);
-	}
-	size_t GetSwitchStructureBsp(bool base = false)
-	{
-		return GetAddress(SwitchStructureBsp, base);
-	}
-	size_t GetUnknown9(bool base = false)
-	{
-		return GetAddress(unknown9, base);
-	}
-	size_t GetUnknown10(bool base = false)
-	{
-		return GetAddress(unknown10, base);
-	}
-	size_t GetInitializeForNewStructureBsp(bool base = false)
-	{
-		return GetAddress(InitializeForNewStructureBsp, base);
-	}
-	size_t GetDisposeFromOldnonBspZoneSet(bool base = false)
-	{
-		return GetAddress(DisposeFromOldnonBspZoneSet, base);
-	}
-};
 
 struct s_initial_network_values
 {
