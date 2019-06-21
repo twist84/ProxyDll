@@ -908,6 +908,11 @@ struct e_game_system
 		return (!base ? 0x1655950 : 0x1655950 - 0x400000) + (sizeof(s_game_system_definition) * value) + (sizeof(uint32_t) * member);
 	}
 
+	void ReplaceMember(int member, void *func)
+	{
+		Pointer(e_game_system(e_game_system::_levels).GetMember(member)).Write(uint32_t(func));
+	}
+
 	const char *GetName()
 	{
 		const char *names[] {
