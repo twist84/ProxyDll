@@ -4,6 +4,7 @@
 #include "../memory/local_types.hpp"
 
 #include <d3d9.h>
+#include <dxgi.h>
 
 
 auto g_clip_plane = GetStructure<clip_plane<float>>(0x0191068C);
@@ -22,6 +23,12 @@ auto g_DisplayPreferencesNew = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD960);
 auto g_adapter = *(int*)0x050DD9C4;
 auto g_IDirect3DDevice9_2 = GetStructure<IDirect3DDevice9*>(0x0524B6AC);
 
+void PrintGPU()
+{
+	D3DADAPTER_IDENTIFIER9 id = {};
+	(*g_IDirect3D9Ex)->GetAdapterIdentifier(g_adapter, 0, &id);
+	printf_s("Current GPU: %s\n", id.Description);
+}
 
 //auto g_DisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x4341420);
 //auto g_NewDisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x4341458);
