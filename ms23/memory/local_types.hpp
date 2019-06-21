@@ -1970,8 +1970,6 @@ struct s_game_options : s_game_options_base
 	// the game must iterate over scenarios until a match is found, if no match is found the game crashes
 	s_game_options *SetScenarioPath(const char *val)
 	{
-		printf_s("loading %s...\n", val);
-
 		memset(ScenarioPath, 0, 260);
 		strncpy(ScenarioPath, val, 260);
 
@@ -2012,6 +2010,7 @@ struct s_game_options : s_game_options_base
 			GameVariant_SetTimeLimit(ConfigManager.GetInt("ForceLoad", "TimeLimit"));
 			GameVariant_SetRespawnTime(ConfigManager.GetInt("ForceLoad", "RespawnTime"));
 		}
+		printf_s("Scenario(%s, %s).Launch()\n", ScenarioType.GetName(), ScenarioPath);
 
 		auto v1 = this == 0;
 		if (this)
@@ -2023,6 +2022,7 @@ struct s_game_options : s_game_options_base
 		*(uint8_t *)0x23917F1 = v1;
 		*(uint8_t *)0x23917F0 = true;
 
+		// substitute timeGetTime() with GetTickCount64()
 		auto result = (int)GetTickCount64();
 		if (!this && !is_force_loaded)
 		{
@@ -2033,20 +2033,25 @@ struct s_game_options : s_game_options_base
 		}
 		return result;
 	}
-} game_options;
+};
 static_assert(sizeof(s_game_options) == 0x24B48u, "game_options wrong size");
 
 auto g_game_options = GetStructure<s_game_options>(0x2391800);
 
 // only needs the last part `scenario_path` I.E. s3d_tutorial
 // the game must iterate over scenarios until a match is found, if no match is found the game crashes
-void LaunchScenario(const char *scenario_path = "levels\\solo\\s3d_tutorial\\s3d_tutorial", int scenario_type = 1, int game_type = 0, bool team_game = false, uint8_t time_limit = 0, uint8_t respawn_time = 0)
+void LaunchScenario(
+	const char *scenario_path = "levels\\solo\\s3d_tutorial\\s3d_tutorial", 
+	int scenario_type = 1, 
+	int game_type = 0, 
+	bool team_game = false, 
+	uint8_t time_limit = 0, 
+	uint8_t respawn_time = 0
+)
 {
 	// replace tutorial scenario_type and scenario_path with new ones
 	*(const char **)0x7B5E8C = scenario_path;
 	*(int *)0x7B5E97 = scenario_type;
-
-	printf_s("Launching Scenario(%s, %s)\n", e_scenario_type(scenario_type).GetName(), scenario_path);
 
 	// execute ssl_hq_start_tutorial_level
 	((void(__cdecl *)())0x7B5E40)();
@@ -5467,7 +5472,7 @@ struct s_cache_path
 		}
 		s_cache_file_path *Print()
 		{
-			printf_s("%s\n", Path.c_str());
+			printf_s("CacheFilePath(%s)\n", Path.c_str());
 
 			return this;
 		}
