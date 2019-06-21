@@ -22,11 +22,16 @@ auto g_DisplayPreferencesNew = GetStructure<D3DPRESENT_PARAMETERS>(0x050DD960);
 auto g_adapter = *(int*)0x050DD9C4;
 auto g_IDirect3DDevice9_2 = GetStructure<IDirect3DDevice9*>(0x0524B6AC);
 
+D3DADAPTER_IDENTIFIER9 g_Identifier;
+D3DADAPTER_IDENTIFIER9 *GetAdapterIdentifier()
+{
+	memset(&g_Identifier, 0, sizeof(D3DADAPTER_IDENTIFIER9));
+	(*g_IDirect3D9Ex)->GetAdapterIdentifier(g_adapter, 0, &g_Identifier);
+	return &g_Identifier;
+}
 void PrintGPU()
 {
-	D3DADAPTER_IDENTIFIER9 id = {};
-	(*g_IDirect3D9Ex)->GetAdapterIdentifier(g_adapter, 0, &id);
-	printf_s("Current GPU: %s\n", id.Description);
+	printf_s("GPU: %s\n", GetAdapterIdentifier()->Description);
 }
 
 //auto g_DisplayPreferences = GetStructure<D3DPRESENT_PARAMETERS>(0x4341420);
