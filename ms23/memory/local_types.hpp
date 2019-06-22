@@ -907,6 +907,46 @@ struct e_game_system
 	{
 		return (!base ? 0x1655950 : 0x1655950 - 0x400000) + (sizeof(s_game_system_definition) * value) + (sizeof(uint32_t) * member);
 	}
+	int MemberGetRef(int member, bool base = false)
+	{
+		return *(size_t *)GetMember(member);
+	}
+	bool MemberHasRef(int member, bool base = false)
+	{
+		return MemberGetRef(member);
+	}
+	bool MemberRefIsGood(int member, bool base = false)
+	{
+		return MemberHasRef(member) && *(uint8_t *)(*(size_t *)GetMember(member)) != 0xC3;
+	}
+	bool MemberRefIsHook(int member, bool base = false)
+	{
+		return MemberHasRef(member) && MemberGetRef(member) > 0x069B1FFF; // eldorado end address
+	}
+	bool AnyMemberHasRef()
+	{
+		bool result = false;
+		for (size_t i = 0; i < e_game_system_member::k_number_of_game_system_members; i++)
+			if (MemberHasRef(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsGood()
+	{
+		bool result = false;
+		for (size_t i = 0; i < e_game_system_member::k_number_of_game_system_members; i++)
+			if (MemberHasRef(i) && MemberRefIsGood(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsHook()
+	{
+		bool result = false;
+		for (size_t i = 0; i < e_game_system_member::k_number_of_game_system_members; i++)
+			if (MemberHasRef(i) && MemberRefIsGood(i) && MemberRefIsHook(i))
+				result = true;
+		return result;
+	}
 
 	void ReplaceMember(int member, void *func)
 	{

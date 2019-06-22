@@ -5,18 +5,20 @@
 
 #include "filo.hpp"
 
-void PrintGameSystems(int game_system = -1, bool print_null = false)
+void PrintGameSystems(int game_system = -1, bool print_noref = false, bool print_badref = false, bool print_hooks = true)
 {
 	for (int i = 0; i < e_game_system::k_number_of_game_systems; i++)
 	{
 		if (game_system == -1 || game_system == i)
 		{
-			printf_s("%s\n", e_game_system(i).GetName());
+			auto system = e_game_system(i);
+			if ((print_noref || system.AnyMemberHasRef()) && (print_badref || system.AnyMemberRefIsGood()) && (print_hooks && system.AnyMemberRefIsHook()))
+				printf_s("%s\n", system.GetName());
 			for (size_t j = 0; j < e_game_system_member::k_number_of_game_system_members; j++)
 			{
-				auto member = e_game_system(i).GetMember(j);
-				if (print_null || *(size_t *)member)
-					printf_s("[0x%08X, 0x%08X]: %s\n", member, *(size_t *)member, e_game_system_member(j).GetName());
+				auto state = !system.MemberHasRef(j) ? "NonRef" : system.MemberRefIsGood(j) ? system.MemberRefIsHook(j) ? "IsHook" : "IsGood" : "IsNull";
+				if ((print_noref || system.MemberHasRef(j)) && (print_badref || system.MemberRefIsGood(j)) && (print_hooks && system.MemberRefIsHook(j)))
+					printf_s("[0x%08X, 0x%08X, %s]: %s\n", system.GetMember(j), system.MemberGetRef(j), state, e_game_system_member(j).GetName());
 			}
 		}
 	}
