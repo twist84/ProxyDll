@@ -35,6 +35,7 @@
     <ClInclude Include="classes\misc.hpp" />
     <ClInclude Include="classes\networking.hpp" />
     <ClInclude Include="classes\physics.hpp" />
+    <ClInclude Include="classes\players.hpp" />
     <ClInclude Include="classes\player_profile.hpp" />
     <ClInclude Include="classes\preferences.hpp" />
     <ClInclude Include="classes\print.hpp" />

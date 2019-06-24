@@ -76,6 +76,9 @@
     <ClInclude Include="classes\game_systems.hpp">
       <Filter>classes</Filter>
     </ClInclude>
+    <ClInclude Include="classes\players.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="memory">

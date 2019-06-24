@@ -325,24 +325,26 @@ static const auto sub_52BA30 = (wchar_t *(*)(wchar_t *DstBuf, wchar_t *Format, .
 
 void print_vftable(uint32_t *a1)
 {
-	vftable v;
-	v.address = *a1;
-
-	if (*a1 >= 0x165FC44 && *a1 <= 0x16A7814)
-		printf_s("%s\n", v.GetName());
+	for (auto vftable : g_vftables)
+	{
+		if (vftable.Address == *a1)
+		{
+			printf_s("%s::`vftable'\n", vftable.Name.c_str());
+		}
+	}
 }
 
 void print_vftable(uint32_t *a1, string_id a2, bool with_addr = false)
 {
-	vftable v;
-	v.address = *a1;
-
-	if (*a1 >= 0x165FC44 && *a1 <= 0x16A7814)
+	for (auto vftable : g_vftables)
 	{
-		if (with_addr)
-			printf_s("%s, 0x%X, %s, 0x%X\n", v.GetName(), v.address, a2.GetName(), a2.value);
-		else
-			printf_s("%s, %s\n", v.GetName(), a2.GetName());
+		if (vftable.Address == *a1)
+		{
+			if (with_addr)
+				printf_s("%s::`vftable', 0x%X, %s, 0x%X\n", vftable.Name.c_str(), vftable.Address, a2.GetName(), a2.value);
+			else
+				printf_s("%s::`vftable', %s\n", vftable.Name.c_str(), a2.GetName());
+		}
 	}
 }
 

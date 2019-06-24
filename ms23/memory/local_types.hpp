@@ -1299,488 +1299,314 @@ struct e_network_game_start_mode
 	}
 };
 
-struct vftable
+struct s_vftable
 {
-	uint32_t address;
+	size_t Address;
+	int Count;
+	std::string Name;
 
-	const char *GetName()
+	s_vftable(size_t address, int count, std::string name)
 	{
-		switch (address)
-		{
-		case 0x165FC44:
-			return "c_draw_string::`vftable'";
-		case 0x165FCB0:
-			return "c_font_cache_base::`vftable'";
-		case 0x165FCCC:
-			return "c_font_cache_mt_safe::`vftable'";
-		case 0x165FCE8:
-			return "c_null_font_cache::`vftable'";
-		case 0x166DB68:
-			return "c_gui_selected_item::`vftable'";
-		case 0x166DB94:
-			return "c_gui_saved_screenshot_selected_item::`vftable'";
-		case 0x166DBC4:
-			return "c_screenshots_loader_optional_cache_callback::`vftable'";
-		case 0x1697104:
-			return "c_simple_font_draw_string::`vftable'";
-		case 0x1699240:
-			return "c_simple_font_cache::`vftable'";
-		case 0x1699FD4:
-			return "c_message::`vftable'";
-		case 0x1699FE4:
-			return "c_controller_input_message::`vftable'";
-		case 0x1699FF4:
-			return "c_xenon_message::`vftable'";
-		case 0x169A004:
-			return "c_load_screen_message::`vftable'";
-		case 0x169A018:
-			return "c_screen_custom_message::`vftable'";
-		case 0x169A028:
-			return "c_load_alert_screen_message::`vftable'";
-		case 0x169A03C:
-			return "c_load_dialog_screen_message::`vftable'";
-		case 0x169A050:
-			return "c_load_in_progress_screen_message::`vftable'";
-		case 0x169A064:
-			return "c_load_in_progress_mini_screen_message::`vftable'";
-		case 0x169A078:
-			return "c_dialog_result_message::`vftable'";
-		case 0x169A088:
-			return "c_load_spartan_milestone_screen_message::`vftable'";
-		case 0x169A09C:
-			return "c_load_spartan_rank_screen_message::`vftable'";
-		case 0x169A144:
-			return "c_chud_draw_string::`vftable'";
-		case 0x169A8C4:
-			return "c_game_tag_parser::`vftable'";
-		case 0x169A8D4:
-			return "c_simple_game_tag_parser::`vftable'";
-		case 0x169A8E4:
-			return "c_magic_string_game_tag_parser::`vftable'";
-		case 0x169A9AC:
-			return "c_gui_screen_terminal::`vftable'";
-		case 0x169AD9C:
-			return "c_gui_screen_widget::`vftable'";
-		case 0x169AE7C:
-			return "c_gui_screen_codeless_widget::`vftable'";
-		case 0x169AF9C:
-			return "c_gui_screen_scoreboard::`vftable'";
-		case 0x169B07C:
-			return "c_scoreboard_load_screen_message::`vftable'";
-		case 0x169B094:
-			return "c_gui_scoreboard_data::`vftable'";
-		case 0x169B148:
-			return "c_user_interface_allocation::`vftable'";
-		case 0x169B1E4:
-			return "c_load_boot_betrayer_screen_message::`vftable'";
-		case 0x169B1FC:
-			return "c_gui_screen_boot_betrayer::`vftable'";
-		case 0x169B344:
-			return "c_gui_widget::`vftable'";
-		case 0x169B3DC:
-			return "c_sized_user_interface_text<1024>::`vftable'";
-		case 0x169B3F4:
-			return "c_gui_sized_text_widget<1024>::`vftable'";
-		case 0x169B4A4:
-			return "c_sized_user_interface_text<256>::`vftable'";
-		case 0x169B4BC:
-			return "c_gui_sized_text_widget<256>::`vftable'";
-		case 0x169B56C:
-			return "c_sized_user_interface_text<48>::`vftable'";
-		case 0x169B584:
-			return "c_gui_sized_text_widget<48>::`vftable'";
-		case 0x169B6A0:
-			return "c_load_game_camera_list_screen_message::`vftable'";
-		case 0x169B6B4:
-			return "c_observer_camera_list_screen::`vftable'";
-		case 0x169B794:
-			return "c_camera_list_datasource::`vftable'";
-		case 0x169CAC8:
-			return "c_user_interface_text::`vftable'";
-		case 0x169CCAC:
-			return "c_gui_carnage_report_loading_screen::`vftable'";
-		case 0x169CD8C:
-			return "c_load_carnage_report_loading_screen_message::`vftable'";
-		case 0x169CDA4:
-			return "c_gui_screen_carnage_report::`vftable'";
-		case 0x169CE84:
-			return "c_metagame_tally_datasource::`vftable'";
-		case 0x169D2C8:
-			return "c_load_pregame_selection_screen_message::`vftable'";
-		case 0x169D2DC:
-			return "c_load_pregame_players_selection_screen_message::`vftable'";
-		case 0x169D334:
-			return "c_gui_custom_bitmap_widget::`vftable'";
-		case 0x169D65C:
-			return "c_http_stored_buffer_downloader<4096>::`vftable'";
-		case 0x169DA04:
-			return "c_gui_data::`vftable'";
-		case 0x169DA74:
-			return "c_gui_data_array::`vftable'";
-		case 0x169DAE4:
-			return "c_gui_data_array_test::`vftable'";
-		case 0x169DB54:
-			return "c_gui_ordered_data::`vftable'";
-		case 0x169DBCC:
-			return "c_gui_tag_datasource::`vftable'";
-		case 0x169DDD4:
-			return "c_gui_alert_screen_widget::`vftable'";
-		case 0x169DEF4:
-			return "c_gui_dialog_screen_widget::`vftable'";
-		case 0x169DFD4:
-			return "c_dialog_screen_widget_dialog_items_datasource::`vftable'";
-		case 0x169E23C:
-			return "c_gui_map_selected_item::`vftable'";
-		case 0x169E26C:
-			return "c_gui_map_category_datasource::`vftable'";
-		case 0x169E2E4:
-			return "c_gui_map_subitem_selectable_item_datasource::`vftable'";
-		case 0x169E3F4:
-			return "c_gui_difficulty_selected_item::`vftable'";
-		case 0x169E424:
-			return "c_gui_difficulty_category_datasource::`vftable'";
-		case 0x169E4DC:
-			return "c_gui_game_variant_selected_item::`vftable'";
-		case 0x169E50C:
-			return "c_gui_game_variant_category_datasource::`vftable'";
-		case 0x169E584:
-			return "c_gui_game_variant_subitem_selectable_item_datasource::`vftable'";
-		case 0x169E6A4:
-			return "c_gui_saved_film_selected_item::`vftable'";
-		case 0x169E6D4:
-			return "c_gui_saved_film_category_datasource::`vftable'";
-		case 0x169E74C:
-			return "c_gui_saved_film_subitem_datasource::`vftable'";
-		case 0x169E8AC:
-			return "c_game_info_datasource::`vftable'";
-		case 0x169E93C:
-			return "c_gui_game_info_screen::`vftable'";
-		case 0x169EA1C:
-			return "c_gui_game_browser::`vftable'";
-		case 0x169EB0C:
-			return "c_available_games_info_datasource::`vftable'";
-		case 0x169EC2C:
-			return "c_load_start_menu_pane_screen_message::`vftable'";
-		case 0x169EC44:
-			return "c_start_menu_screen_widget::`vftable'";
-		case 0x169ED24:
-			return "c_load_start_menu_screen_message::`vftable'";
-		case 0x169ED3C:
-			return "c_start_menu_screen_widget_sidebar_items_datasource::`vftable'";
-		case 0x169EDF4:
-			return "c_gui_data_proxy::`vftable'";
-		case 0x169EE6C:
-			return "c_sandbox_budget_summary_screen_widget::`vftable'";
-		case 0x169EF4C:
-			return "c_sandbox_object_menu_screen_widget::`vftable'";
-		case 0x169F02C:
-			return "c_gui_placeable_object_datasource::`vftable'";
-		case 0x169F0A4:
-			return "c_gui_budget_range_datasource::`vftable'";
-		case 0x169F11C:
-			return "c_load_object_creation_screen_message::`vftable'";
-		case 0x169F130:
-			return "c_load_object_property_panel_screen_message::`vftable'";
-		case 0x169F144:
-			return "c_load_budget_screen_message::`vftable'";
-		case 0x169F15C:
-			return "c_sandbox_budget_items_datasource::`vftable'";
-		case 0x169F214:
-			return "c_sandbox_object_properties_screen_widget::`vftable'";
-		case 0x169F2F4:
-			return "c_gui_property_value_datasource::`vftable'";
-		case 0x169F36C:
-			return "c_sandbox_object_properties_items_datasource::`vftable'";
-		case 0x169F424:
-			return "c_saved_film_control_pad::`vftable'";
-		case 0x169F59C:
-			return "c_saved_film_take_screenshot::`vftable'";
-		case 0x169F7A4:
-			return "c_saved_film_snippet_screen::`vftable'";
-		case 0x169F8C4:
-			return "c_error_dialog_screen_widget::`vftable'";
-		case 0x169F9A4:
-			return "c_error_dialog_ok_screen_widget::`vftable'";
-		case 0x169FACC:
-			return "c_gui_screen_alpha_motd::`vftable'";
-		case 0x169FBAC:
-			return "c_load_alpha_motd_screen_message::`vftable'";
-		case 0x169FC10:
-			return "c_http_stored_buffer_downloader<4665>::`vftable'";
-		case 0x169FC1C:
-			return "c_main_menu_screen_widget::`vftable'";
-		case 0x169FCFC:
-			return "c_load_campaign_select_difficulty_screen_message::`vftable'";
-		case 0x169FD7C:
-			return "c_start_menu_game_campaign::`vftable'";
-		case 0x169FF1C:
-			return "c_start_menu_game_multiplayer::`vftable'";
-		case 0x16A008C:
-			return "c_start_menu_game_editor::`vftable'";
-		case 0x16A0174:
-			return "c_gui_gametype_category_datasource::`vftable'";
-		case 0x16A01E8:
-			return "c_load_legal_screen_message::`vftable'";
-		case 0x16A02C4:
-			return "c_start_menu_game_saved_film::`vftable'";
-		case 0x16A03E8:
-			return "c_http_stored_buffer_downloader<2721>::`vftable'";
-		case 0x16A03F0:
-			return "c_http_stored_buffer_downloader<61440>::`vftable'";
-		case 0x16A03FC:
-			return "c_start_menu_headquarters::`vftable'";
-		case 0x16A056C:
-			return "c_gui_start_menu_hq_service_record_pane::`vftable'";
-		case 0x16A0654:
-			return "c_gui_start_menu_hq_service_record::`vftable'";
-		case 0x16A073C:
-			return "c_gui_start_menu_hq_service_record_insignia_datasource::`vftable'";
-		case 0x16A0844:
-			return "c_gui_start_menu_hq_service_record_file_share::`vftable'";
-		case 0x16A0928:
-			return "c_load_file_share_choose_category_screen_message::`vftable'";
-		case 0x16A093C:
-			return "c_load_file_share_choose_item_screen_message::`vftable'";
-		case 0x16A0950:
-			return "c_load_file_share_item_selected_screen_message::`vftable'";
-		case 0x16A0964:
-			return "c_load_transfers_item_selected_screen_message::`vftable'";
-		case 0x16A097C:
-			return "c_gui_file_share_slots_datasource::`vftable'";
-		case 0x16A0ACC:
-			return "c_gui_start_menu_hq_service_record_file_share_choose_category::`vftable'";
-		case 0x16A0BEC:
-			return "c_gui_start_menu_hq_service_record_file_share_choose_item::`vftable'";
-		case 0x16A0CCC:
-			return "c_gui_content_item_datasource::`vftable'";
-		case 0x16A0E3C:
-			return "c_gui_start_menu_hq_service_record_file_share_item_selected::`vftable'";
-		case 0x16A0F1C:
-			return "c_load_screenshots_file_share_previewer_screen_message::`vftable'";
-		case 0x16A0F34:
-			return "c_gui_file_share_selected_item_datasource::`vftable'";
-		case 0x16A10B4:
-			return "c_gui_start_menu_hq_screenshots::`vftable'";
-		case 0x16A1198:
-			return "c_load_screenshots_viewer_screen_message::`vftable'";
-		case 0x16A11AC:
-			return "c_load_hq_screenshots_options_screen_message::`vftable'";
-		case 0x16A11C4:
-			return "c_player_screenshots_datasource::`vftable'";
-		case 0x16A133C:
-			return "c_gui_start_menu_hq_screenshots_options::`vftable'";
-		case 0x16A14F4:
-			return "c_screenshots_screen_widget_base::`vftable'";
-		case 0x16A15DC:
-			return "c_screenshots_viewer_screen_widget::`vftable'";
-		case 0x16A16C4:
-			return "c_http_stored_buffer_downloader<317440>::`vftable'";
-		case 0x16A16CC:
-			return "c_screenshots_file_share_previewer_screen_widget::`vftable'";
-		case 0x16A1824:
-			return "c_gui_start_menu_hq_transfers::`vftable'";
-		case 0x16A190C:
-			return "c_active_transfers_datasource::`vftable'";
-		case 0x16A19C4:
-			return "c_gui_start_menu_hq_transfers_item_selected::`vftable'";
-		case 0x16A1AA4:
-			return "c_gui_transfers_selected_item_datasource::`vftable'";
-		case 0x16A1B5C:
-			return "c_start_menu_settings::`vftable'";
-		case 0x16A1C84:
-			return "c_start_menu_settings_controls::`vftable'";
-		case 0x16A1D6C:
-			return "c_settings_controls_sidebar_items_datasource::`vftable'";
-		case 0x16A1E94:
-			return "c_start_menu_settings_controls_button::`vftable'";
-		case 0x16A1FBC:
-			return "c_start_menu_settings_controls_thumbstick::`vftable'";
-		case 0x16A20E4:
-			return "c_start_menu_settings_appearance::`vftable'";
-		case 0x16A22CC:
-			return "c_start_menu_settings_appearance_model::`vftable'";
-		case 0x16A23B4:
-			return "c_model_customization_selections_datasource::`vftable'";
-		case 0x16A242C:
-			return "c_settings_appearance_model_sidebar_items_datasource::`vftable'";
-		case 0x16A2554:
-			return "c_start_menu_settings_appearance_colors::`vftable'";
-		case 0x16A263C:
-			return "c_color_swatch_focus_list_item_widget::`vftable'";
-		case 0x16A27B4:
-			return "c_start_menu_settings_camera::`vftable'";
-		case 0x16A289C:
-			return "c_settings_camera_sidebar_items_datasource::`vftable'";
-		case 0x16A298C:
-			return "c_start_menu_settings_display::`vftable'";
-		case 0x16A2A74:
-			return "c_settings_display_sidebar_items_datasource::`vftable'";
-		case 0x16A2B64:
-			return "c_start_menu_settings_film_autosave::`vftable'";
-		case 0x16A2C4C:
-			return "c_settings_film_autosave_sidebar_items_datasource::`vftable'";
-		case 0x16A2D4C:
-			return "c_gui_screen_in_progress::`vftable'";
-		case 0x16A2E6C:
-			return "c_gui_spartan_milestone::`vftable'";
-		case 0x16A2F8C:
-			return "c_gui_spartan_rank::`vftable'";
-		case 0x16A30B4:
-			return "c_gui_screen_campaign_select_difficulty::`vftable'";
-		case 0x16A31DC:
-			return "c_gui_screen_campaign_select_level::`vftable'";
-		case 0x16A32BC:
-			return "c_gui_level_selected_item::`vftable'";
-		case 0x16A32EC:
-			return "c_gui_survival_level_datasource::`vftable'";
-		case 0x16A3434:
-			return "c_gui_screen_campaign_select_scoring::`vftable'";
-		case 0x16A35DC:
-			return "c_gui_screen_campaign_select_skulls::`vftable'";
-		case 0x16A36BC:
-			return "c_gui_primary_skulls_data::`vftable'";
-		case 0x16A3734:
-			return "c_gui_secondary_skulls_data::`vftable'";
-		case 0x16A37F0:
-			return "c_gui_screen_pregame_lobby_campaign::`vftable'";
-		case 0x16A38F4:
-			return "c_load_campaign_select_level_screen_message::`vftable'";
-		case 0x16A39DC:
-			return "c_gui_screen_pregame_lobby_survival::`vftable'";
-		case 0x16A3B24:
-			return "c_gui_screen_pregame_lobby_multiplayer::`vftable'";
-		case 0x16A3CCC:
-			return "c_http_stored_buffer_downloader<2465>::`vftable'";
-		case 0x16A3CD4:
-			return "c_http_stored_buffer_downloader<102400>::`vftable'";
-		case 0x16A3CDC:
-			return "c_gui_screen_pregame_lobby_matchmaking::`vftable'";
-		case 0x16A3EF4:
-			return "c_gui_screen_pregame_lobby_mapeditor::`vftable'";
-		case 0x16A4064:
-			return "c_gui_screen_pregame_lobby_theater::`vftable'";
-		case 0x16A4234:
-			return "c_gui_screen_pregame_switch_lobby::`vftable'";
-		case 0x16A435C:
-			return "c_gui_screen_pregame_selection::`vftable'";
-		case 0x16A453C:
-			return "c_gui_screen_matchmaking_advanced_options::`vftable'";
-		case 0x16A470C:
-			return "c_gui_screen_postgame_lobby::`vftable'";
-		case 0x16A4870:
-			return "c_load_player_select_screen_message::`vftable'";
-		case 0x16A4884:
-			return "c_gui_player_select_screen_widget::`vftable'";
-		case 0x16A4964:
-			return "c_player_select_actions_datasource::`vftable'";
-		case 0x16A49DC:
-			return "c_player_select_medals_datasource::`vftable'";
-		case 0x16A4D2C:
-			return "c_gui_screen_maximum_party_size::`vftable'";
-		case 0x16A4E4C:
-			return "c_load_game_details_screen_message::`vftable'";
-		case 0x16A4E64:
-			return "c_gui_game_details::`vftable'";
-		case 0x16A4F44:
-			return "c_specific_game_info_datasource::`vftable'";
-		case 0x16A5004:
-			return "c_load_game_options_screen_message::`vftable'";
-		case 0x16A501C:
-			return "c_gui_screen_game_options::`vftable'";
-		case 0x16A50FC:
-			return "c_game_options_parameter_datasource::`vftable'";
-		case 0x16A5174:
-			return "c_game_options_category_datasource::`vftable'";
-		case 0x16A52EC:
-			return "c_gui_screen_alpha_legal::`vftable'";
-		case 0x16A540C:
-			return "c_gui_screen_alpha_locked_down::`vftable'";
-		case 0x16A5534:
-			return "c_gui_screen_forge_legal::`vftable'";
-		case 0x16A5654:
-			return "c_gui_screen_matchmaking_searching::`vftable'";
-		case 0x16A591C:
-			return "c_gui_screen_matchmaking_match_found::`vftable'";
-		case 0x16A5E34:
-			return "c_motd_popup_screen_widget::`vftable'";
-		case 0x16A5F6C:
-			return "c_gui_group_widget::`vftable'";
-		case 0x16A600C:
-			return "c_gui_button_key_widget::`vftable'";
-		case 0x16A60EC:
-			return "c_gui_list_widget::`vftable'";
-		case 0x16A61CC:
-			return "c_gui_bitmap_widget::`vftable'";
-		case 0x16A62F4:
-			return "c_gui_list_item_widget::`vftable'";
-		case 0x16A63D4:
-			return "c_gui_text_widget::`vftable'";
-		case 0x16A6564:
-			return "c_gui_model_widget::`vftable'";
-		case 0x16A6684:
-			return "c_gui_game_results_data::`vftable'";
-		case 0x16A66FC:
-			return "c_gui_game_results_team_data::`vftable'";
-		case 0x16A6774:
-			return "c_gui_top_medals_data::`vftable'";
-		case 0x16A685C:
-			return "c_gui_campaign_results_data::`vftable'";
-		case 0x16A6910:
-			return "c_html_comment_game_tag_parser::`vftable'";
-		case 0x16A6920:
-			return "c_html_line_break_game_tag_parser::`vftable'";
-		case 0x16A6930:
-			return "c_html_paragraph_game_tag_parser::`vftable'";
-		case 0x16A6940:
-			return "c_html_paragraph_close_game_tag_parser::`vftable'";
-		case 0x16A6950:
-			return "c_html_div_game_tag_parser::`vftable'";
-		case 0x16A6960:
-			return "c_html_div_close_game_tag_parser::`vftable'";
-		case 0x16A6970:
-			return "c_html_font_game_tag_parser::`vftable'";
-		case 0x16A6980:
-			return "c_html_font_close_game_tag_parser::`vftable'";
-		case 0x16A6990:
-			return "c_color_game_tag_parser::`vftable'";
-		case 0x16A69A0:
-			return "c_color_close_game_tag_parser::`vftable'";
-		case 0x16A6BE0:
-			return "c_start_menu_custom_message::`vftable'";
-		case 0x16A6BF4:
-			return "c_start_menu_pane_screen_widget::`vftable'";
-		case 0x16A6D9C:
-			return "c_gui_level_category_datasource::`vftable'";
-		case 0x16A6E14:
-			return "c_gui_level_subitem_selectable_item_datasource::`vftable'";
-		case 0x16A6ECC:
-			return "c_gui_screen_campaign_settings::`vftable'";
-		case 0x16A6FF4:
-			return "c_gui_screen_pregame_lobby::`vftable'";
-		case 0x16A7384:
-			return "c_gui_network_mode_selected_item::`vftable'";
-		case 0x16A73B4:
-			return "c_gui_network_mode_category_datasource::`vftable'";
-		case 0x16A742C:
-			return "c_gui_network_mode_subitem_selectable_item_datasource::`vftable'";
-		case 0x16A74E4:
-			return "c_gui_hopper_selected_item::`vftable'";
-		case 0x16A7514:
-			return "c_gui_hopper_category_datasource::`vftable'";
-		case 0x16A758C:
-			return "c_gui_hopper_subitem_selectable_item_datasource::`vftable'";
-		case 0x16A7644:
-			return "c_gui_roster_data::`vftable'";
-		case 0x16A76C4:
-			return "c_gui_active_roster_data::`vftable'";
-		case 0x16A7744:
-			return "c_gui_static_roster_data::`vftable'";
-		case 0x16A7814:
-			return "c_gui_roster_list_widget::`vftable'";
-		default:
-			return (static_cast<std::stringstream const&>(std::stringstream() << "0x" << std::hex << address)).str().c_str();
-		}
+		Address = address;
+		Count = count;
+		Name = name;
 	}
+	int GetMemberOffset(int member, bool base = false)
+	{
+		return (!base ? Address : Address - 0x400000) + (sizeof(uint32_t) * member);
+	}
+	int GetMemberReference(int member, bool base = false)
+	{
+		return *(size_t *)GetMemberOffset(member);
+	}
+	bool MemberHasReference(int member, bool base = false)
+	{
+		return GetMemberReference(member);
+	}
+	bool MemberReferenceIsGood(int member, bool base = false)
+	{
+		return MemberHasReference(member) && *(uint8_t *)(*(size_t *)GetMemberOffset(member)) != 0xC3;
+	}
+	bool ReferenceIsHook(int member, bool base = false)
+	{
+		return MemberHasReference(member) && GetMemberReference(member) > 0x069B1FFF; // eldorado end address
+	}
+	bool AnyMemberHasRef()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsGood()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i) && MemberReferenceIsGood(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsHook()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i) && MemberReferenceIsGood(i) && ReferenceIsHook(i))
+				result = true;
+		return result;
+	}
+	void ReplaceMember(int member, void *func)
+	{
+		Pointer(GetMemberOffset(member)).Write(uint32_t(func));
+	}
+
+	template<typename T>
+	T GetMember(int member, bool base = false)
+	{
+		return (T)GetMemberReference(member);
+	}
+};
+
+std::vector<s_vftable> g_vftables
+{
+	{ 0x165FC44, 7, "c_draw_string" },
+	{ 0x165FCB0, 6, "c_font_cache_base" },
+	{ 0x165FCCC, 6, "c_font_cache_mt_safe" },
+	{ 0x165FCE8, 6, "c_null_font_cache" },
+	{ 0x166DB68, 10, "c_gui_selected_item" },
+	{ 0x166DB94, 11, "c_gui_saved_screenshot_selected_item" },
+	{ 0x166DBC4, 3, "c_screenshots_loader_optional_cache_callback" },
+	{ 0x1697104, 7, "c_simple_font_draw_string" },
+	{ 0x1699240, 6, "c_simple_font_cache" },
+	{ 0x1699FD4, 3, "c_message" },
+	{ 0x1699FE4, 3, "c_controller_input_message" },
+	{ 0x1699FF4, 3, "c_xenon_message" },
+	{ 0x169A004, 4, "c_load_screen_message" },
+	{ 0x169A018, 3, "c_screen_custom_message" },
+	{ 0x169A028, 4, "c_load_alert_screen_message" },
+	{ 0x169A03C, 4, "c_load_dialog_screen_message" },
+	{ 0x169A050, 4, "c_load_in_progress_screen_message" },
+	{ 0x169A064, 4, "c_load_in_progress_mini_screen_message" },
+	{ 0x169A078, 3, "c_dialog_result_message" },
+	{ 0x169A088, 4, "c_load_spartan_milestone_screen_message" },
+	{ 0x169A09C, 4, "c_load_spartan_rank_screen_message" },
+	{ 0x169A144, 7, "c_chud_draw_string" },
+	{ 0x169A8C4, 3, "c_game_tag_parser" },
+	{ 0x169A8D4, 3, "c_simple_game_tag_parser" },
+	{ 0x169A8E4, 3, "c_magic_string_game_tag_parser" },
+	{ 0x169A9AC, 55, "c_gui_screen_terminal" },
+	{ 0x169AD9C, 55, "c_gui_screen_widget" },
+	{ 0x169AE7C, 55, "c_gui_screen_codeless_widget" },
+	{ 0x169AF9C, 55, "c_gui_screen_scoreboard" },
+	{ 0x169B07C, 4, "c_scoreboard_load_screen_message" },
+	{ 0x169B094, 28, "c_gui_scoreboard_data" },
+	{ 0x169B148, 2, "c_user_interface_allocation" },
+	{ 0x169B1E4, 4, "c_load_boot_betrayer_screen_message" },
+	{ 0x169B1FC, 55, "c_gui_screen_boot_betrayer" },
+	{ 0x169B344, 37, "c_gui_widget" },
+	{ 0x169B3DC, 4, "c_sized_user_interface_text<1024>" },
+	{ 0x169B3F4, 43, "c_gui_sized_text_widget<1024>" },
+	{ 0x169B4A4, 4, "c_sized_user_interface_text<256>" },
+	{ 0x169B4BC, 43, "c_gui_sized_text_widget<256>" },
+	{ 0x169B56C, 4, "c_sized_user_interface_text<48>" },
+	{ 0x169B584, 43, "c_gui_sized_text_widget<48>" },
+	{ 0x169B6A0, 4, "c_load_game_camera_list_screen_message" },
+	{ 0x169B6B4, 55, "c_observer_camera_list_screen" },
+	{ 0x169B794, 29, "c_camera_list_datasource" },
+	{ 0x169CAC8, 4, "c_user_interface_text" },
+	{ 0x169CCAC, 55, "c_gui_carnage_report_loading_screen" },
+	{ 0x169CD8C, 4, "c_load_carnage_report_loading_screen_message" },
+	{ 0x169CDA4, 55, "c_gui_screen_carnage_report" },
+	{ 0x169CE84, 28, "c_metagame_tally_datasource" },
+	{ 0x169D2C8, 4, "c_load_pregame_selection_screen_message" },
+	{ 0x169D2DC, 4, "c_load_pregame_players_selection_screen_message" },
+	{ 0x169D334, 43, "c_gui_custom_bitmap_widget" },
+	{ 0x169D65C, 1, "c_http_stored_buffer_downloader<4096>" },
+	{ 0x169DA04, 27, "c_gui_data" },
+	{ 0x169DA74, 27, "c_gui_data_array" },
+	{ 0x169DAE4, 27, "c_gui_data_array_test" },
+	{ 0x169DB54, 28, "c_gui_ordered_data" },
+	{ 0x169DBCC, 28, "c_gui_tag_datasource" },
+	{ 0x169DDD4, 55, "c_gui_alert_screen_widget" },
+	{ 0x169DEF4, 55, "c_gui_dialog_screen_widget" },
+	{ 0x169DFD4, 28, "c_dialog_screen_widget_dialog_items_datasource" },
+	{ 0x169E23C, 11, "c_gui_map_selected_item" },
+	{ 0x169E26C, 28, "c_gui_map_category_datasource" },
+	{ 0x169E2E4, 29, "c_gui_map_subitem_selectable_item_datasource" },
+	{ 0x169E3F4, 10, "c_gui_difficulty_selected_item" },
+	{ 0x169E424, 28, "c_gui_difficulty_category_datasource" },
+	{ 0x169E4DC, 11, "c_gui_game_variant_selected_item" },
+	{ 0x169E50C, 28, "c_gui_game_variant_category_datasource" },
+	{ 0x169E584, 29, "c_gui_game_variant_subitem_selectable_item_datasource" },
+	{ 0x169E6A4, 11, "c_gui_saved_film_selected_item" },
+	{ 0x169E6D4, 28, "c_gui_saved_film_category_datasource" },
+	{ 0x169E74C, 28, "c_gui_saved_film_subitem_datasource" },
+	{ 0x169E8AC, 29, "c_game_info_datasource" },
+	{ 0x169E924, 4, "c_load_game_browser_screen_message" },
+	{ 0x169E93C, 55, "c_gui_game_info_screen" },
+	{ 0x169EA1C, 55, "c_gui_game_browser" },
+	{ 0x169EB0C, 29, "c_available_games_info_datasource" },
+	{ 0x169EC2C, 4, "c_load_start_menu_pane_screen_message" },
+	{ 0x169EC44, 55, "c_start_menu_screen_widget" },
+	{ 0x169ED24, 4, "c_load_start_menu_screen_message" },
+	{ 0x169ED3C, 28, "c_start_menu_screen_widget_sidebar_items_datasource" },
+	{ 0x169EDF4, 28, "c_gui_data_proxy" },
+	{ 0x169EE6C, 55, "c_sandbox_budget_summary_screen_widget" },
+	{ 0x169EF4C, 55, "c_sandbox_object_menu_screen_widget" },
+	{ 0x169F02C, 28, "c_gui_placeable_object_datasource" },
+	{ 0x169F0A4, 29, "c_gui_budget_range_datasource" },
+	{ 0x169F11C, 4, "c_load_object_creation_screen_message" },
+	{ 0x169F130, 4, "c_load_object_property_panel_screen_message" },
+	{ 0x169F144, 4, "c_load_budget_screen_message" },
+	{ 0x169F15C, 28, "c_sandbox_budget_items_datasource" },
+	{ 0x169F214, 55, "c_sandbox_object_properties_screen_widget" },
+	{ 0x169F2F4, 28, "c_gui_property_value_datasource" },
+	{ 0x169F36C, 28, "c_sandbox_object_properties_items_datasource" },
+	{ 0x169F424, 55, "c_saved_film_control_pad" },
+	/*
+	{ 0x169F59C, -1, "c_saved_film_take_screenshot" },
+	{ 0x169F7A4, -1, "c_saved_film_snippet_screen" },
+	{ 0x169F8C4, -1, "c_error_dialog_screen_widget" },
+	{ 0x169F9A4, -1, "c_error_dialog_ok_screen_widget" },
+	{ 0x169FACC, -1, "c_gui_screen_alpha_motd" },
+	{ 0x169FBAC, -1, "c_load_alpha_motd_screen_message" },
+	{ 0x169FC10, -1, "c_http_stored_buffer_downloader<4665>" },
+	{ 0x169FC1C, -1, "c_main_menu_screen_widget" },
+	{ 0x169FCFC, -1, "c_load_campaign_select_difficulty_screen_message" },
+	{ 0x169FD7C, -1, "c_start_menu_game_campaign" },
+	{ 0x169FF1C, -1, "c_start_menu_game_multiplayer" },
+	{ 0x16A008C, -1, "c_start_menu_game_editor" },
+	{ 0x16A0174, -1, "c_gui_gametype_category_datasource" },
+	{ 0x16A01E8, -1, "c_load_legal_screen_message" },
+	{ 0x16A02C4, -1, "c_start_menu_game_saved_film" },
+	{ 0x16A03E8, -1, "c_http_stored_buffer_downloader<2721>" },
+	{ 0x16A03F0, -1, "c_http_stored_buffer_downloader<61440>" },
+	{ 0x16A03FC, -1, "c_start_menu_headquarters" },
+	{ 0x16A056C, -1, "c_gui_start_menu_hq_service_record_pane" },
+	{ 0x16A0654, -1, "c_gui_start_menu_hq_service_record" },
+	{ 0x16A073C, -1, "c_gui_start_menu_hq_service_record_insignia_datasource" },
+	{ 0x16A0844, -1, "c_gui_start_menu_hq_service_record_file_share" },
+	{ 0x16A0928, -1, "c_load_file_share_choose_category_screen_message" },
+	{ 0x16A093C, -1, "c_load_file_share_choose_item_screen_message" },
+	{ 0x16A0950, -1, "c_load_file_share_item_selected_screen_message" },
+	{ 0x16A0964, -1, "c_load_transfers_item_selected_screen_message" },
+	{ 0x16A097C, -1, "c_gui_file_share_slots_datasource" },
+	{ 0x16A0ACC, -1, "c_gui_start_menu_hq_service_record_file_share_choose_category" },
+	{ 0x16A0BEC, -1, "c_gui_start_menu_hq_service_record_file_share_choose_item" },
+	{ 0x16A0CCC, -1, "c_gui_content_item_datasource" },
+	{ 0x16A0E3C, -1, "c_gui_start_menu_hq_service_record_file_share_item_selected" },
+	{ 0x16A0F1C, -1, "c_load_screenshots_file_share_previewer_screen_message" },
+	{ 0x16A0F34, -1, "c_gui_file_share_selected_item_datasource" },
+	{ 0x16A10B4, -1, "c_gui_start_menu_hq_screenshots" },
+	{ 0x16A1198, -1, "c_load_screenshots_viewer_screen_message" },
+	{ 0x16A11AC, -1, "c_load_hq_screenshots_options_screen_message" },
+	{ 0x16A11C4, -1, "c_player_screenshots_datasource" },
+	{ 0x16A133C, -1, "c_gui_start_menu_hq_screenshots_options" },
+	{ 0x16A14F4, -1, "c_screenshots_screen_widget_base" },
+	{ 0x16A15DC, -1, "c_screenshots_viewer_screen_widget" },
+	{ 0x16A16C4, -1, "c_http_stored_buffer_downloader<317440>" },
+	{ 0x16A16CC, -1, "c_screenshots_file_share_previewer_screen_widget" },
+	{ 0x16A1824, -1, "c_gui_start_menu_hq_transfers" },
+	{ 0x16A190C, -1, "c_active_transfers_datasource" },
+	{ 0x16A19C4, -1, "c_gui_start_menu_hq_transfers_item_selected" },
+	{ 0x16A1AA4, -1, "c_gui_transfers_selected_item_datasource" },
+	{ 0x16A1B5C, -1, "c_start_menu_settings" },
+	{ 0x16A1C84, -1, "c_start_menu_settings_controls" },
+	{ 0x16A1D6C, -1, "c_settings_controls_sidebar_items_datasource" },
+	{ 0x16A1E94, -1, "c_start_menu_settings_controls_button" },
+	{ 0x16A1FBC, -1, "c_start_menu_settings_controls_thumbstick" },
+	{ 0x16A20E4, -1, "c_start_menu_settings_appearance" },
+	{ 0x16A22CC, -1, "c_start_menu_settings_appearance_model" },
+	{ 0x16A23B4, -1, "c_model_customization_selections_datasource" },
+	{ 0x16A242C, -1, "c_settings_appearance_model_sidebar_items_datasource" },
+	{ 0x16A2554, -1, "c_start_menu_settings_appearance_colors" },
+	{ 0x16A263C, -1, "c_color_swatch_focus_list_item_widget" },
+	{ 0x16A27B4, -1, "c_start_menu_settings_camera" },
+	{ 0x16A289C, -1, "c_settings_camera_sidebar_items_datasource" },
+	{ 0x16A298C, -1, "c_start_menu_settings_display" },
+	{ 0x16A2A74, -1, "c_settings_display_sidebar_items_datasource" },
+	{ 0x16A2B64, -1, "c_start_menu_settings_film_autosave" },
+	{ 0x16A2C4C, -1, "c_settings_film_autosave_sidebar_items_datasource" },
+	{ 0x16A2D4C, -1, "c_gui_screen_in_progress" },
+	{ 0x16A2E6C, -1, "c_gui_spartan_milestone" },
+	{ 0x16A2F8C, -1, "c_gui_spartan_rank" },
+	{ 0x16A30B4, -1, "c_gui_screen_campaign_select_difficulty" },
+	{ 0x16A31DC, -1, "c_gui_screen_campaign_select_level" },
+	{ 0x16A32BC, -1, "c_gui_level_selected_item" },
+	{ 0x16A32EC, -1, "c_gui_survival_level_datasource" },
+	{ 0x16A3434, -1, "c_gui_screen_campaign_select_scoring" },
+	{ 0x16A35DC, -1, "c_gui_screen_campaign_select_skulls" },
+	{ 0x16A36BC, -1, "c_gui_primary_skulls_data" },
+	{ 0x16A3734, -1, "c_gui_secondary_skulls_data" },
+	{ 0x16A37F0, -1, "c_gui_screen_pregame_lobby_campaign" },
+	{ 0x16A38F4, -1, "c_load_campaign_select_level_screen_message" },
+	{ 0x16A39DC, -1, "c_gui_screen_pregame_lobby_survival" },
+	{ 0x16A3B24, -1, "c_gui_screen_pregame_lobby_multiplayer" },
+	{ 0x16A3CCC, -1, "c_http_stored_buffer_downloader<2465>" },
+	{ 0x16A3CD4, -1, "c_http_stored_buffer_downloader<102400>" },
+	{ 0x16A3CDC, -1, "c_gui_screen_pregame_lobby_matchmaking" },
+	{ 0x16A3EF4, -1, "c_gui_screen_pregame_lobby_mapeditor" },
+	{ 0x16A4064, -1, "c_gui_screen_pregame_lobby_theater" },
+	{ 0x16A4234, -1, "c_gui_screen_pregame_switch_lobby" },
+	{ 0x16A435C, -1, "c_gui_screen_pregame_selection" },
+	{ 0x16A453C, -1, "c_gui_screen_matchmaking_advanced_options" },
+	{ 0x16A470C, -1, "c_gui_screen_postgame_lobby" },
+	{ 0x16A4870, -1, "c_load_player_select_screen_message" },
+	{ 0x16A4884, -1, "c_gui_player_select_screen_widget" },
+	{ 0x16A4964, -1, "c_player_select_actions_datasource" },
+	{ 0x16A49DC, -1, "c_player_select_medals_datasource" },
+	{ 0x16A4D2C, -1, "c_gui_screen_maximum_party_size" },
+	{ 0x16A4E4C, -1, "c_load_game_details_screen_message" },
+	{ 0x16A4E64, -1, "c_gui_game_details" },
+	{ 0x16A4F44, -1, "c_specific_game_info_datasource" },
+	{ 0x16A5004, -1, "c_load_game_options_screen_message" },
+	{ 0x16A501C, -1, "c_gui_screen_game_options" },
+	{ 0x16A50FC, -1, "c_game_options_parameter_datasource" },
+	{ 0x16A5174, -1, "c_game_options_category_datasource" },
+	{ 0x16A52EC, -1, "c_gui_screen_alpha_legal" },
+	{ 0x16A540C, -1, "c_gui_screen_alpha_locked_down" },
+	{ 0x16A5534, -1, "c_gui_screen_forge_legal" },
+	{ 0x16A5654, -1, "c_gui_screen_matchmaking_searching" },
+	{ 0x16A591C, -1, "c_gui_screen_matchmaking_match_found" },
+	{ 0x16A5E34, -1, "c_motd_popup_screen_widget" },
+	{ 0x16A5F6C, -1, "c_gui_group_widget" },
+	{ 0x16A600C, -1, "c_gui_button_key_widget" },
+	{ 0x16A60EC, -1, "c_gui_list_widget" },
+	{ 0x16A61CC, -1, "c_gui_bitmap_widget" },
+	{ 0x16A62F4, -1, "c_gui_list_item_widget" },
+	{ 0x16A63D4, -1, "c_gui_text_widget" },
+	{ 0x16A6564, -1, "c_gui_model_widget" },
+	{ 0x16A6684, -1, "c_gui_game_results_data" },
+	{ 0x16A66FC, -1, "c_gui_game_results_team_data" },
+	{ 0x16A6774, -1, "c_gui_top_medals_data" },
+	{ 0x16A685C, -1, "c_gui_campaign_results_data" },
+	{ 0x16A6910, -1, "c_html_comment_game_tag_parser" },
+	{ 0x16A6920, -1, "c_html_line_break_game_tag_parser" },
+	{ 0x16A6930, -1, "c_html_paragraph_game_tag_parser" },
+	{ 0x16A6940, -1, "c_html_paragraph_close_game_tag_parser" },
+	{ 0x16A6950, -1, "c_html_div_game_tag_parser" },
+	{ 0x16A6960, -1, "c_html_div_close_game_tag_parser" },
+	{ 0x16A6970, -1, "c_html_font_game_tag_parser" },
+	{ 0x16A6980, -1, "c_html_font_close_game_tag_parser" },
+	{ 0x16A6990, -1, "c_color_game_tag_parser" },
+	{ 0x16A69A0, -1, "c_color_close_game_tag_parser" },
+	{ 0x16A6BE0, -1, "c_start_menu_custom_message" },
+	{ 0x16A6BF4, -1, "c_start_menu_pane_screen_widget" },
+	{ 0x16A6D9C, -1, "c_gui_level_category_datasource" },
+	{ 0x16A6E14, -1, "c_gui_level_subitem_selectable_item_datasource" },
+	{ 0x16A6ECC, -1, "c_gui_screen_campaign_settings" },
+	{ 0x16A6FF4, -1, "c_gui_screen_pregame_lobby" },
+	{ 0x16A7384, -1, "c_gui_network_mode_selected_item" },
+	{ 0x16A73B4, -1, "c_gui_network_mode_category_datasource" },
+	{ 0x16A742C, -1, "c_gui_network_mode_subitem_selectable_item_datasource" },
+	{ 0x16A74E4, -1, "c_gui_hopper_selected_item" },
+	{ 0x16A7514, -1, "c_gui_hopper_category_datasource" },
+	{ 0x16A758C, -1, "c_gui_hopper_subitem_selectable_item_datasource" },
+	{ 0x16A7644, -1, "c_gui_roster_data" },
+	{ 0x16A76C4, -1, "c_gui_active_roster_data" },
+	{ 0x16A7744, -1, "c_gui_static_roster_data" },
+	{ 0x16A7814, -1, "c_gui_roster_list_widget" }
+	*/
 };
 
 struct e_session_composition

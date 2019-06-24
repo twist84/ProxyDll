@@ -853,6 +853,19 @@ struct s_simulation_globals_type_collection
 	void *simulation_global_and_entity_vftable_array[32];
 	uint32_t simulation_event_count;
 	void *simulation_event_vftable_array[64];
+
+	int set_global_and_entity(int index, void *simulation_entity_definition)
+	{
+		this->simulation_global_and_entity_vftable_array[index] = simulation_entity_definition;
+
+		return index;
+	}
+	int set_event_data(int index, void *simulation_event_definition)
+	{
+		this->simulation_event_vftable_array[index] = simulation_event_definition;
+
+		return index;
+	}
 };
 
 struct c_simulation_entity_definition
@@ -1162,81 +1175,71 @@ auto simulation_player_editor_request_event_definition = GetStructure<c_simulati
 auto simulation_projectile_supercombine_request_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_supercombine_request_event_definition*/>(0x16403F0);
 auto simulation_object_refresh_event_definitionftable = GetStructure<c_simulation_event_definition/*c_simulation_object_refresh_event_definition*/>(0x163F7D8);
 
-int simulation_global_and_entity_data_set(s_simulation_globals_type_collection *simulation_globals_type_collection, int index, void *simulation_entity_definition)
+int *simulation_definitions_table_initialize_hook(s_simulation_globals_type_collection *a1, int *simulation_global_and_entity_count, int *simulation_event_count)
 {
-	simulation_globals_type_collection->simulation_global_and_entity_vftable_array[index] = simulation_entity_definition;
-	return index;
-}
-int simulation_event_data_set(s_simulation_globals_type_collection *simulation_globals_type_collection, int index, void *simulation_event_definition)
-{
-	simulation_globals_type_collection->simulation_event_vftable_array[index] = simulation_event_definition;
-	return index;
-}
-int *simulation_definitions_table_initialize_hook(s_simulation_globals_type_collection *simulation_globals_type_collection, int *simulation_global_and_entity_count, int *simulation_event_count)
-{
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 0, simulation_slayer_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 1, simulation_ctf_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 2, simulation_assault_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 3, simulation_oddball_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 4, simulation_king_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 5, simulation_territories_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 6, simulation_juggernaut_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 7, simulation_sandbox_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 8, simulation_infection_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 9, simulation_vip_engine_globals_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 10, simulation_game_engine_player_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 11, simulation_game_statborg_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 12, simulation_breakable_surface_group_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 13, simulation_map_variant_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 14, simulation_unit_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 15, simulation_item_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 16, simulation_generic_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 17, simulation_generic_garbage_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 18, simulation_vehicle_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 19, simulation_projectile_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 20, simulation_weapon_entity_definition);
-	simulation_global_and_entity_data_set(simulation_globals_type_collection, 21, simulation_device_entity_definition);
+	a1->set_global_and_entity(0, simulation_slayer_engine_globals_definition);
+	a1->set_global_and_entity(1, simulation_ctf_engine_globals_definition);
+	a1->set_global_and_entity(2, simulation_assault_engine_globals_definition);
+	a1->set_global_and_entity(3, simulation_oddball_engine_globals_definition);
+	a1->set_global_and_entity(4, simulation_king_engine_globals_definition);
+	a1->set_global_and_entity(5, simulation_territories_engine_globals_definition);
+	a1->set_global_and_entity(6, simulation_juggernaut_engine_globals_definition);
+	a1->set_global_and_entity(7, simulation_sandbox_engine_globals_definition);
+	a1->set_global_and_entity(8, simulation_infection_engine_globals_definition);
+	a1->set_global_and_entity(9, simulation_vip_engine_globals_definition);
+	a1->set_global_and_entity(10, simulation_game_engine_player_entity_definition);
+	a1->set_global_and_entity(11, simulation_game_statborg_entity_definition);
+	a1->set_global_and_entity(12, simulation_breakable_surface_group_entity_definition);
+	a1->set_global_and_entity(13, simulation_map_variant_entity_definition);
+	a1->set_global_and_entity(14, simulation_unit_entity_definition);
+	a1->set_global_and_entity(15, simulation_item_entity_definition);
+	a1->set_global_and_entity(16, simulation_generic_entity_definition);
+	a1->set_global_and_entity(17, simulation_generic_garbage_entity_definition);
+	a1->set_global_and_entity(18, simulation_vehicle_entity_definition);
+	a1->set_global_and_entity(19, simulation_projectile_entity_definition);
+	a1->set_global_and_entity(20, simulation_weapon_entity_definition);
+	a1->set_global_and_entity(21, simulation_device_entity_definition);
 
 
-	simulation_event_data_set(simulation_globals_type_collection, 0, simulation_damage_aftermath_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 1, simulation_damage_section_response_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 2, simulation_breakable_surface_damage_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 3, simulation_projectile_attached_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 4, simulation_projectile_detonate_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 5, simulation_projectile_impact_effect_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 6, simulation_projectile_object_impact_effect_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 7, simulation_effect_on_pos_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 8, simulation_game_engine_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 9, simulation_unit_board_vehicle_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 10, simulation_unit_pickup_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 11, simulation_weapon_effect_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 12, simulation_weapon_empty_click_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 13, simulation_hit_marker_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 14, simulation_unit_exit_vehicle_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 15, simulation_unit_assassinate_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 16, simulation_player_taunt_request_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 17, simulation_weapon_fire_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 18, simulation_unit_equipment_use_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 19, simulation_weapon_reload_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 20, simulation_unit_throw_initiate_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 21, simulation_unit_melee_initiate_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 22, simulation_weapon_pickup_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 23, simulation_weapon_put_away_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 24, simulation_weapon_drop_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 25, simulation_vehicle_flip_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 26, simulation_vehicle_trick_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 27, simulation_device_touch_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 28, simulation_unit_throw_release_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 29, simulation_unit_melee_damage_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 30, simulation_unit_melee_clang_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 31, simulation_unit_enter_vehicle_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 32, simulation_game_engine_request_boot_player_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 33, simulation_player_respawn_request_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 34, simulation_player_force_base_respawn_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 35, simulation_unit_equipment_pickup_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 36, simulation_projectile_supercombine_request_event_definition);
-	simulation_event_data_set(simulation_globals_type_collection, 37, simulation_object_refresh_event_definitionftable);
-	simulation_event_data_set(simulation_globals_type_collection, 38, simulation_player_editor_request_event_definition);
+	a1->set_event_data(0, simulation_damage_aftermath_event_definition);
+	a1->set_event_data(1, simulation_damage_section_response_event_definition);
+	a1->set_event_data(2, simulation_breakable_surface_damage_event_definition);
+	a1->set_event_data(3, simulation_projectile_attached_event_definition);
+	a1->set_event_data(4, simulation_projectile_detonate_event_definition);
+	a1->set_event_data(5, simulation_projectile_impact_effect_event_definition);
+	a1->set_event_data(6, simulation_projectile_object_impact_effect_event_definition);
+	a1->set_event_data(7, simulation_effect_on_pos_event_definition);
+	a1->set_event_data(8, simulation_game_engine_event_definition);
+	a1->set_event_data(9, simulation_unit_board_vehicle_event_definition);
+	a1->set_event_data(10, simulation_unit_pickup_event_definition);
+	a1->set_event_data(11, simulation_weapon_effect_event_definition);
+	a1->set_event_data(12, simulation_weapon_empty_click_event_definition);
+	a1->set_event_data(13, simulation_hit_marker_event_definition);
+	a1->set_event_data(14, simulation_unit_exit_vehicle_event_definition);
+	a1->set_event_data(15, simulation_unit_assassinate_event_definition);
+	a1->set_event_data(16, simulation_player_taunt_request_event_definition);
+	a1->set_event_data(17, simulation_weapon_fire_event_definition);
+	a1->set_event_data(18, simulation_unit_equipment_use_event_definition);
+	a1->set_event_data(19, simulation_weapon_reload_event_definition);
+	a1->set_event_data(20, simulation_unit_throw_initiate_event_definition);
+	a1->set_event_data(21, simulation_unit_melee_initiate_event_definition);
+	a1->set_event_data(22, simulation_weapon_pickup_event_definition);
+	a1->set_event_data(23, simulation_weapon_put_away_event_definition);
+	a1->set_event_data(24, simulation_weapon_drop_event_definition);
+	a1->set_event_data(25, simulation_vehicle_flip_event_definition);
+	a1->set_event_data(26, simulation_vehicle_trick_event_definition);
+	a1->set_event_data(27, simulation_device_touch_event_definition);
+	a1->set_event_data(28, simulation_unit_throw_release_event_definition);
+	a1->set_event_data(29, simulation_unit_melee_damage_event_definition);
+	a1->set_event_data(30, simulation_unit_melee_clang_event_definition);
+	a1->set_event_data(31, simulation_unit_enter_vehicle_event_definition);
+	a1->set_event_data(32, simulation_game_engine_request_boot_player_event_definition);
+	a1->set_event_data(33, simulation_player_respawn_request_event_definition);
+	a1->set_event_data(34, simulation_player_force_base_respawn_event_definition);
+	a1->set_event_data(35, simulation_unit_equipment_pickup_event_definition);
+	a1->set_event_data(36, simulation_projectile_supercombine_request_event_definition);
+	a1->set_event_data(37, simulation_object_refresh_event_definitionftable);
+	a1->set_event_data(38, simulation_player_editor_request_event_definition);
 
 	*simulation_global_and_entity_count = 22;
 	*simulation_event_count = 39;
