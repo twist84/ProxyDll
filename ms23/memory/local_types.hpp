@@ -1361,7 +1361,7 @@ struct s_vftable
 	}
 	void PrintMembers()
 	{
-		printf_s("%s::`vftable', %d\n", Name.c_str(), Count);
+		printf_s("%s::`vftable', %02d\n", Name.c_str(), Count);
 		for (int i = 0; i < Count; i++)
 		{
 			if (MemberHasReference(i))
@@ -1369,23 +1369,23 @@ struct s_vftable
 				if (MemberReferenceIsGood(i))
 				{
 					if (MemberReferenceIsHook(i))
-						printf_s("\thook_%08X\n", GetMemberReference(i));
+						printf_s("\t%02d, hook_%08X\n", i, GetMemberReference(i));
 					else
 						switch (GetMemberReference(i))
 						{
 						case 0xBED54F:
-							printf_s("\t__purecall\n");
+							printf_s("\t%02d, __purecall\n", i);
 							break;
 						default:
-							printf_s("\tsub_%08X\n", GetMemberReference(i));
+							printf_s("\t%02d, sub_%08X\n", i, GetMemberReference(i));
 							break;
 						}
 				}
 				else
-					printf_s("\tbad_reference%02d\n", i);
+					printf_s("\t%02d, bad_reference\n", i);
 			}
 			else
-				printf_s("\tno_reference%02d\n", i);
+				printf_s("\t%02d, no_reference\n", i);
 		}
 	}
 
