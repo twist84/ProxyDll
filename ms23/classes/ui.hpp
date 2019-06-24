@@ -112,38 +112,39 @@ uint32_t *__fastcall c_magic_string_game_tag_parser_hook(uint32_t *thisptr, uint
 	return c_magic_string_game_tag_parser(thisptr, magic_string_game_tag, a3, a4);
 }
 
-//.text:00AD52F0 ; char __thiscall c_gui_data::vftable01::player_select_actions(c_gui_game_variant_category_datasource *this, int a2)
-//.text:00B23870 ; int __thiscall c_gui_network_mode_selected_item::create_category(c_gui_game_variant_category_datasource *this, string_id network_mode_name, string_id network_mode_description, int line_pos, int a5, char a6)
-//.text:00B23D70 ; char __thiscall c_gui_network_mode_category_datasource::vftable01::player_select_actions(c_gui_game_variant_category_datasource *this, int a2)
-
-// this crashes if the vftable member is changed, even if I given member points to the exact same memory address
-void __fastcall c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook(void *thisptr, void *unused, uint8_t *a2)
+void __fastcall c_gui_network_mode_category_datasource_vftable01_hook(void *thisptr, void *unused, uint8_t *a2)
 {
 	auto c_gui_network_mode_selected_item_create_category = (int(__thiscall *)(void *, int, int, int, int, char))0xB23870;
-
-	bool xbox_live_private_enabled = false;
-	if (VftableGetMember<char(__thiscall *)(void *, uint8_t *)>((DWORD_PTR*)0x169DA04, 1)(thisptr, a2))
+	if (g_vftables.at(0x169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
 	{
-		if (xbox_live_private_enabled)
-			c_gui_network_mode_selected_item_create_category(thisptr, 0x103B3, 0x103B4, 0, 5, 1);								 // network_mode_xbox_live_private, network_mode_xbox_live_private_description
-		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B5, 0x103B6, xbox_live_private_enabled ? 1 : 0, 5, 1);	 // network_mode_system_link,		network_mode_system_link_description
-		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B7, 0x103B8, xbox_live_private_enabled ? 2 : 1, 5, 0);	 // network_mode_offline,			network_mode_offline_description
+		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B3, 0x103B4, 0, 5, 1);	// network_mode_xbox_live_private, description
+		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B5, 0x103B6, 1, 5, 1);	// network_mode_system_link, description
+		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B7, 0x103B8, 2, 5, 0);	// network_mode_offline, description
 	}
 }
 
-// the above hook replaces the following ED patches
-/*
-		// Remove Xbox Live from the network menu
-		Patch::NopFill(Pointer::Base(0x723D85), 0x17);
-		Pointer::Base(0x723DA1).Write<uint8_t>(0);
-		Pointer::Base(0x723DB8).Write<uint8_t>(1);
-*/
-// I'd like the add these as a replacement hook like the above one
-/*
-		Patch::NopFill(Pointer::Base(0x723DFF), 0x3);
-		Pointer::Base(0x723E07).Write<uint8_t>(0);
-		Pointer::Base(0x723E1C).Write<uint8_t>(0);
-*/
+void __fastcall c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook(void *thisptr, void *unused, uint8_t *a2, int a3)
+{
+	auto c_gui_network_mode_selected_item_create_subitem = (int(__thiscall *)(void *, int, int, int a4, int a5))0xB23970;
+	if (g_vftables.at(0x169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
+	{
+		if (a3)
+		{
+			if (a3 == 1)
+			{
+				c_gui_network_mode_selected_item_create_subitem(thisptr, 0x103C1, 0x103C2, 1, 3);	// network_mode_system_link_advertise, description
+				c_gui_network_mode_selected_item_create_subitem(thisptr, 0x103C3, 0x103C4, 1, 4);	// network_mode_system_link_browse, description
+			}
+		}
+		else
+		{
+			c_gui_network_mode_selected_item_create_subitem(thisptr, 0x103B9, 0x103BA, 0, 0);		// network_mode_xbox_live_advertise_anyone, description
+			if (!((bool(__cdecl *)())0xA84120)())
+				c_gui_network_mode_selected_item_create_subitem(thisptr, 0x103BB, 0x103BC, 0, 1);	// network_mode_xbox_live_advertise_friends, description
+			c_gui_network_mode_selected_item_create_subitem(thisptr, 0x103BD, 0x103BE, 0, 2);		// network_mode_xbox_live_advertise_invite_only, description
+		}
+	}
+}
 
 const wchar_t *get_loading_text_hook()
 {
@@ -288,8 +289,6 @@ inline void AddUiHooks(const char *name)
 
 		//HookManager.AddHook({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
 
-		//HookManager.AddVftHook(0x16A73B4, &c_gui_network_mode_category_datasource_vftable01_player_select_actions_hook, 1, "c_gui_network_mode_category_datasource::vftable::player_select_actions");
-
 		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
 		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
 		HookManager.AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
@@ -309,10 +308,21 @@ void unblock_campaign_lobby_ui_patch()
 	Patch(0x7004DF, { 0xEB }).Apply();
 }
 
+bool c_gui_network_mode_xbl_enabled = true;
+void network_menu_patch()
+{
+	if (c_gui_network_mode_xbl_enabled)
+	{
+		g_vftables.at(0x16A73B4).ReplaceMember(1, &c_gui_network_mode_category_datasource_vftable01_hook);
+		g_vftables.at(0x16A742C).ReplaceMember(28, &c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook);
+	}
+}
+
 inline void AddUiPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
 		PatchManager.AddPatch(&unblock_campaign_lobby_ui_patch, "unblock_campaign_lobby_ui");
+		PatchManager.AddPatch(&network_menu_patch, "network_menu");
 	}
 }

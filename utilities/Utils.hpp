@@ -435,14 +435,6 @@ struct ConMan : BaseMan
 	}
 } ConfigManager;
 
-template<typename T>
-T VftableGetMember(DWORD_PTR *dwVtable, int member)
-{
-	DWORD_PTR memAdr = (*(DWORD_PTR**)dwVtable)[member];
-	printf_s("Getting 0x%X at vft_%X[%d]\n", memAdr, *dwVtable, member);
-	return (T)(memAdr);
-}
-
 struct HookMan
 {
 	struct HookInfo
