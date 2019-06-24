@@ -9,11 +9,12 @@ void PrintGameSystems(int game_system = -1, bool print_noref = true, bool print_
 {
 	for (int i = 0; i < e_game_system::k_number_of_game_systems; i++)
 	{
+		auto system = e_game_system(i);
 		if (game_system == -1 || game_system == i)
 		{
-			auto system = e_game_system(i);
 			if ((print_noref || system.AnyMemberHasRef()) && (print_badref || system.AnyMemberRefIsGood()) && (print_hooks || !system.AnyMemberRefIsHook()))
 				printf_s("%s\n", system.GetName());
+
 			for (size_t j = 0; j < e_game_system_member::k_number_of_game_system_members; j++)
 			{
 				auto state = !system.MemberHasRef(j) ? "NonRef" : system.MemberRefIsGood(j) ? system.MemberRefIsHook(j) ? "IsHook" : "IsGood" : "IsNull";
