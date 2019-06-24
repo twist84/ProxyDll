@@ -1321,13 +1321,13 @@ struct s_vftable
 	}
 	bool MemberHasReference(int member, bool base = false)
 	{
-		return GetMemberReference(member);
+		return GetMemberReference(member) != 0;
 	}
 	bool MemberReferenceIsGood(int member, bool base = false)
 	{
 		return MemberHasReference(member) && *(uint8_t *)(*(size_t *)GetMemberOffset(member)) != 0xC3;
 	}
-	bool ReferenceIsHook(int member, bool base = false)
+	bool MemberReferenceIsHook(int member, bool base = false)
 	{
 		return MemberHasReference(member) && GetMemberReference(member) > 0x069B1FFF; // eldorado end address
 	}
@@ -1351,13 +1351,42 @@ struct s_vftable
 	{
 		bool result = false;
 		for (int i = 0; i < Count; i++)
-			if (MemberHasReference(i) && MemberReferenceIsGood(i) && ReferenceIsHook(i))
+			if (MemberHasReference(i) && MemberReferenceIsGood(i) && MemberReferenceIsHook(i))
 				result = true;
 		return result;
 	}
 	void ReplaceMember(int member, void *func)
 	{
 		Pointer(GetMemberOffset(member)).Write(uint32_t(func));
+	}
+	void PrintMembers()
+	{
+		printf_s("%s::`vftable', %d\n", Name.c_str(), Count);
+		for (int i = 0; i < Count; i++)
+		{
+			if (MemberHasReference(i))
+			{
+				if (MemberReferenceIsGood(i))
+				{
+					if (MemberReferenceIsHook(i))
+						printf_s("\thook_%08X\n", GetMemberReference(i));
+					else
+						switch (GetMemberReference(i))
+						{
+						case 0xBED54F:
+							printf_s("\t__purecall\n");
+							break;
+						default:
+							printf_s("\tsub_%08X\n", GetMemberReference(i));
+							break;
+						}
+				}
+				else
+					printf_s("\tbad_reference%02d\n", i);
+			}
+			else
+				printf_s("\tno_reference%02d\n", i);
+		}
 	}
 
 	template<typename T>
@@ -1482,6 +1511,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A03E8, -1, "c_http_stored_buffer_downloader<2721>" },
 	{ 0x16A03F0, -1, "c_http_stored_buffer_downloader<61440>" },
 	{ 0x16A03FC, -1, "c_start_menu_headquarters" },
+	*/
+	/*
 	{ 0x16A056C, -1, "c_gui_start_menu_hq_service_record_pane" },
 	{ 0x16A0654, -1, "c_gui_start_menu_hq_service_record" },
 	{ 0x16A073C, -1, "c_gui_start_menu_hq_service_record_insignia_datasource" },
@@ -1500,6 +1531,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A10B4, -1, "c_gui_start_menu_hq_screenshots" },
 	{ 0x16A1198, -1, "c_load_screenshots_viewer_screen_message" },
 	{ 0x16A11AC, -1, "c_load_hq_screenshots_options_screen_message" },
+	*/
+	/*
 	{ 0x16A11C4, -1, "c_player_screenshots_datasource" },
 	{ 0x16A133C, -1, "c_gui_start_menu_hq_screenshots_options" },
 	{ 0x16A14F4, -1, "c_screenshots_screen_widget_base" },
@@ -1518,6 +1551,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A20E4, -1, "c_start_menu_settings_appearance" },
 	{ 0x16A22CC, -1, "c_start_menu_settings_appearance_model" },
 	{ 0x16A23B4, -1, "c_model_customization_selections_datasource" },
+	*/
+	/*
 	{ 0x16A242C, -1, "c_settings_appearance_model_sidebar_items_datasource" },
 	{ 0x16A2554, -1, "c_start_menu_settings_appearance_colors" },
 	{ 0x16A263C, -1, "c_color_swatch_focus_list_item_widget" },
@@ -1536,6 +1571,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A32EC, -1, "c_gui_survival_level_datasource" },
 	{ 0x16A3434, -1, "c_gui_screen_campaign_select_scoring" },
 	{ 0x16A35DC, -1, "c_gui_screen_campaign_select_skulls" },
+	*/
+	/*
 	{ 0x16A36BC, -1, "c_gui_primary_skulls_data" },
 	{ 0x16A3734, -1, "c_gui_secondary_skulls_data" },
 	{ 0x16A37F0, -1, "c_gui_screen_pregame_lobby_campaign" },
@@ -1554,6 +1591,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A4870, -1, "c_load_player_select_screen_message" },
 	{ 0x16A4884, -1, "c_gui_player_select_screen_widget" },
 	{ 0x16A4964, -1, "c_player_select_actions_datasource" },
+	*/
+	/*
 	{ 0x16A49DC, -1, "c_player_select_medals_datasource" },
 	{ 0x16A4D2C, -1, "c_gui_screen_maximum_party_size" },
 	{ 0x16A4E4C, -1, "c_load_game_details_screen_message" },
@@ -1572,6 +1611,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A5F6C, -1, "c_gui_group_widget" },
 	{ 0x16A600C, -1, "c_gui_button_key_widget" },
 	{ 0x16A60EC, -1, "c_gui_list_widget" },
+	*/
+	/*
 	{ 0x16A61CC, -1, "c_gui_bitmap_widget" },
 	{ 0x16A62F4, -1, "c_gui_list_item_widget" },
 	{ 0x16A63D4, -1, "c_gui_text_widget" },
@@ -1590,6 +1631,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A6980, -1, "c_html_font_close_game_tag_parser" },
 	{ 0x16A6990, -1, "c_color_game_tag_parser" },
 	{ 0x16A69A0, -1, "c_color_close_game_tag_parser" },
+	*/
+	/*
 	{ 0x16A6BE0, -1, "c_start_menu_custom_message" },
 	{ 0x16A6BF4, -1, "c_start_menu_pane_screen_widget" },
 	{ 0x16A6D9C, -1, "c_gui_level_category_datasource" },
@@ -1606,6 +1649,8 @@ std::vector<s_vftable> g_vftables
 	{ 0x16A76C4, -1, "c_gui_active_roster_data" },
 	{ 0x16A7744, -1, "c_gui_static_roster_data" },
 	{ 0x16A7814, -1, "c_gui_roster_list_widget" }
+
+
 	*/
 };
 

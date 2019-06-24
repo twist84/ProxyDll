@@ -341,7 +341,7 @@ void print_vftable(uint32_t *a1, string_id a2, bool with_addr = false)
 		if (vftable.Address == *a1)
 		{
 			if (with_addr)
-				printf_s("%s::`vftable', 0x%X, %s, 0x%X\n", vftable.Name.c_str(), vftable.Address, a2.GetName(), a2.value);
+				printf_s("%s::`vftable', 0x%08X, %s, 0x%X\n", vftable.Name.c_str(), vftable.Address, a2.GetName(), a2.value);
 			else
 				printf_s("%s::`vftable', %s\n", vftable.Name.c_str(), a2.GetName());
 		}
