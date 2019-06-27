@@ -624,3 +624,104 @@ struct ProxMan
 		return FreeLibrary(Dll);
 	}
 } ProxyManager;
+
+int g_end_address = 0xFFFFFFFF;
+struct s_vftable
+{
+	size_t Address;
+	int Count;
+	std::string Name;
+
+	s_vftable(size_t address, int count, std::string name)
+	{
+		Address = address;
+		Count = count;
+		Name = name;
+	}
+	void UpdateEndAddress(int end_address)
+	{
+		g_end_address = end_address;
+	}
+	int GetMemberOffset(int member, bool base = false)
+	{
+		return (!base ? Address : Address - 0x400000) + (sizeof(uint32_t) * member);
+	}
+	int GetMemberReference(int member, bool base = false)
+	{
+		return *(size_t *)GetMemberOffset(member);
+	}
+	bool MemberHasReference(int member, bool base = false)
+	{
+		return GetMemberReference(member) != 0;
+	}
+	bool MemberReferenceIsGood(int member, bool base = false)
+	{
+		return MemberHasReference(member) && *(uint8_t *)GetMemberReference(member) != 0xC3;
+	}
+	bool MemberReferenceIsHook(int member, bool base = false)
+	{
+		return MemberHasReference(member) && GetMemberReference(member) > g_end_address;
+	}
+	bool AnyMemberHasRef()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsGood()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i) && MemberReferenceIsGood(i))
+				result = true;
+		return result;
+	}
+	bool AnyMemberRefIsHook()
+	{
+		bool result = false;
+		for (int i = 0; i < Count; i++)
+			if (MemberHasReference(i) && MemberReferenceIsGood(i) && MemberReferenceIsHook(i))
+				result = true;
+		return result;
+	}
+	void ReplaceMember(int member, void *func)
+	{
+		Pointer(GetMemberOffset(member)).Write(uint32_t(func));
+	}
+	template<typename T>
+	T GetMember(int member, bool base = false)
+	{
+		return (T)GetMemberReference(member);
+	}
+	void PrintMembers()
+	{
+		printf_s("%s::`vftable', %02d\n", Name.c_str(), Count);
+		for (int i = 0; i < Count; i++)
+		{
+			if (MemberHasReference(i))
+			{
+				if (MemberReferenceIsGood(i))
+				{
+					if (MemberReferenceIsHook(i))
+						printf_s("\t%02d, hook_%08X\n", i, GetMemberReference(i));
+					else
+						switch (GetMemberReference(i))
+						{
+						case 0xBED54F:
+							printf_s("\t%02d, __purecall\n", i);
+							break;
+						default:
+							printf_s("\t%02d, sub_%08X\n", i, GetMemberReference(i));
+							break;
+						}
+				}
+				else
+					printf_s("\t%02d, bad_reference\n", i);
+			}
+			else
+				printf_s("\t%02d, no_reference\n", i);
+		}
+	}
+};
