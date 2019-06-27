@@ -1635,7 +1635,10 @@ struct
 		{ 0x16A7644, 30, "c_gui_roster_data" },
 		{ 0x16A76C4, 30, "c_gui_active_roster_data" },
 		{ 0x16A7744, 30, "c_gui_static_roster_data" },
-		{ 0x16A7814, 38, "c_gui_roster_list_widget" }
+		{ 0x16A7814, 38, "c_gui_roster_list_widget" },
+/*
+		{ 0x16D6860, 6, "net::REMOTE_BINLOGGER"}
+*/
 	};
 	
 	s_vftable at(int address)

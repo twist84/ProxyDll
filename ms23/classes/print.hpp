@@ -244,6 +244,20 @@ char *format(char *DstBuf, const char *Format, ...)
 
 //===========================================================================
 
+template<size_t SizeInBytes>
+wchar_t *vsnwprintf_s(wchar_t *DstBuf, wchar_t *Format, ...)
+{
+	va_list ArgList;
+	va_start(ArgList, Format);
+	sub_4EDC90_hook(DstBuf, SizeInBytes, Format, ArgList);
+
+	char str[32]; sprintf_s(str, "vsnwprintf_s<%d>", SizeInBytes); hook_print(str, DstBuf);
+	//printf_s("%s: %S\n", str, DstBuf);
+	return DstBuf;
+}
+
+//===========================================================================
+
 int sprintf_s_hook(char *DstBuf, size_t SizeInBytes, const char *Format, ...)
 {
 	va_list ArgList;
@@ -366,6 +380,9 @@ inline void AddPrintHooks(const char *name)
 		HookManager.AddHook({ 0x329D0 }, &format<1024>, "format<1024>");
 		HookManager.AddHook({ 0x329F0 }, &format<1536>, "format<1536>");
 		HookManager.AddHook({ 0x26D2B0 }, &format<3976>, "format<3976>");
+
+		HookManager.AddHook({ 0x12BA30 }, &vsnwprintf_s<256>, "vsnwprintf_s<256>");
+		HookManager.AddHook({ 0x2E5520 }, &vsnwprintf_s<1024>, "vsnwprintf_s<1024>");
 
 		HookManager.AddHook({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
 		HookManager.AddHook({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10");
