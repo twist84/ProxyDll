@@ -11,8 +11,8 @@
 
 struct
 {
-	gamemode GameMode = { "Save Data" };
-	lobby LobbyData = { "Save Data (Lobby Specific)" };
+	s_save_data_all SaveDataAll = { "Save Data (All)" };
+	s_save_data SaveData = { "Save Data" };
 
 	stringid LobbyType = { 0x341, "LobbyType StringId" };
 	//uint32 LastMapidAndCampaignid;
@@ -137,23 +137,23 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 	}
 }
 
-s_saved_game_data *preferences_get_gamemode_data()
+s_saved_game_data *preferences_get_all_save_data()
 {
-	file_read_from_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
-	return preferences.GameMode.get();
+	file_read_from_path(save_data_data_array[6].Path, save_data_data_array[6].Size, save_data_data_array[6].Buffer);
+	return preferences.SaveDataAll.get();
 }
 
-void preferences_set_gamemode_data(s_saved_game_data *a1)
+void preferences_set_all_save_data(s_saved_game_data *a1)
 {
-	preferences.GameMode.set(a1);
-	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
+	preferences.SaveDataAll.set(a1);
+	file_write_to_path(save_data_data_array[6].Path, save_data_data_array[6].Size, save_data_data_array[6].Buffer);
 }
 
-void preferences_set_lobby_data(s_lobby_data *a1)
+void preferences_set_save_data(s_lobby_data *a1)
 {
-	preferences.LobbyData.set(a1);
-	file_write_to_path(save_data[6].Path, save_data[6].Size, save_data[6].Buffer);
-	file_write_to_path(save_data[a1->LobbyType.value].Path, save_data[a1->LobbyType.value].Size, save_data[a1->LobbyType.value].Buffer);
+	preferences.SaveData.set(a1);
+	file_write_to_path(save_data_data_array[6].Path, save_data_data_array[6].Size, save_data_data_array[6].Buffer);
+	file_write_to_path(save_data_data_array[a1->LobbyType.value].Path, save_data_data_array[a1->LobbyType.value].Size, save_data_data_array[a1->LobbyType.value].Buffer);
 }
 
 e_game_language preferences_get_language()
@@ -449,9 +449,9 @@ inline void AddPreferencesHooks(const char *name)
 		HookManager.AddHook({ 0x10C030 }, &preferences_get_screen_resolution, "preferences_get_screen_resolution");
 		HookManager.AddHook({ 0x10E1C0 }, &preferences_set_screen_resolution, "preferences_set_screen_resolution");
 		HookManager.AddHook({ 0x6228D0 }, &display_preferences_update_back_buffer_hook, "display_preferences_update_back_buffer");
-		HookManager.AddHook({ 0x10B560 }, &preferences_get_gamemode_data, "preferences_get_gamemode_data");
-		HookManager.AddHook({ 0x10D8E0 }, &preferences_set_gamemode_data, "preferences_set_gamemode_data");
-		HookManager.AddHook({ 0x10EBA0 }, &preferences_set_lobby_data, "preferences_set_lobby_data");
+		HookManager.AddHook({ 0x10B560 }, &preferences_get_all_save_data, "preferences_get_all_save_data");
+		HookManager.AddHook({ 0x10D8E0 }, &preferences_set_all_save_data, "preferences_set_all_save_data");
+		HookManager.AddHook({ 0x10EBA0 }, &preferences_set_save_data, "preferences_set_save_data");
 		//HookManager.AddHook({ 0x10B5E0 }, &preferences_get_last_mapid_and_campaignid, "preferences_get_last_mapid_and_campaignid");
 		HookManager.AddHook({ 0x10B790 }, &preferences_get_language, "preferences_get_language");
 		HookManager.AddHook({ 0x10D980 }, &preferences_set_language, "preferences_set_language");

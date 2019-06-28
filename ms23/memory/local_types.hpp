@@ -2036,12 +2036,6 @@ struct game_globals
 static_assert(sizeof(game_globals) == 0x25208u, "game_globals wrong size");
 //static_assert(sizeof(game_globals) == 0x1A908, "game_globals wrong size");
 
-struct s_lobby_data
-{
-	e_lobby_type LobbyType;
-	uint8_t *Data;
-};
-
 struct s_saved_game_data
 {
 	struct s_campaign_data
@@ -2092,7 +2086,7 @@ struct s_saved_game_data
 		uint8_t MapVariant[0xE090];
 		uint8_t unknownE098[0x210];
 	};
-	struct s_theater_data
+	struct s_savedfilm_data
 	{
 		uint8_t unknown0;
 		uint8_t unknown1;
@@ -2117,59 +2111,64 @@ struct s_saved_game_data
 		uint8_t unknown24E78[8];
 	};
 
-	s_campaign_data CampaignData;
-	s_campaign_data SurvivalData;
-	s_matchmaking_data MatchmakingData;
-	s_multiplayer_data MultiplayerData;
-	s_mapeditor_data MapeditorData;
-	s_theater_data TheaterData;
+	s_campaign_data Campaign;
+	s_campaign_data Survival;
+	s_matchmaking_data Matchmaking;
+	s_multiplayer_data Multiplayer;
+	s_mapeditor_data Mapeditor;
+	s_savedfilm_data SavedFilm;
+} SavedGame;
 
-} GamemodeData;
-
-struct s_save_data
+struct s_save_data_entry
 {
 	const wchar_t *Path;
 	DWORD Size;
 	LPVOID Buffer;
 };
 
-std::vector<s_save_data> save_data = {
-	{ L"mods\\saves\\lobby\\campaign.dat", sizeof(GamemodeData.CampaignData), &GamemodeData.CampaignData },
-	{ L"mods\\saves\\lobby\\matchmaking.dat", sizeof(GamemodeData.MatchmakingData), &GamemodeData.MatchmakingData },
-	{ L"mods\\saves\\lobby\\multiplayer.dat", sizeof(GamemodeData.MultiplayerData), &GamemodeData.MultiplayerData },
-	{ L"mods\\saves\\lobby\\mapeditor.dat", sizeof(GamemodeData.MapeditorData), &GamemodeData.MapeditorData },
-	{ L"mods\\saves\\lobby\\theater.dat", sizeof(GamemodeData.TheaterData), &GamemodeData.TheaterData },
-	{ L"mods\\saves\\lobby\\survival.dat", sizeof(GamemodeData.SurvivalData), &GamemodeData.SurvivalData },
-	{ L"mods\\saves\\lobbies.dat", sizeof(GamemodeData), &GamemodeData }
+std::vector<s_save_data_entry> save_data_data_array = {
+	{ L"bin\\saves\\campaign_data.dat", sizeof(s_saved_game_data::s_campaign_data), &SavedGame.Campaign },
+	{ L"bin\\saves\\matchmaking_data.dat", sizeof(s_saved_game_data::s_matchmaking_data), &SavedGame.Matchmaking },
+	{ L"bin\\saves\\multiplayer_data.dat", sizeof(s_saved_game_data::s_multiplayer_data), &SavedGame.Multiplayer },
+	{ L"bin\\saves\\mapeditor_data.dat", sizeof(s_saved_game_data::s_mapeditor_data), &SavedGame.Mapeditor },
+	{ L"bin\\saves\\savedfilm_data.dat", sizeof(s_saved_game_data::s_savedfilm_data), &SavedGame.SavedFilm },
+	{ L"bin\\saves\\survival_data.dat", sizeof(s_saved_game_data::s_campaign_data), &SavedGame.Survival },
+	{ L"bin\\saves\\all_data.dat", sizeof(s_saved_game_data), &SavedGame }
 };
 
-struct lobby
+struct s_lobby_data
+{
+	e_lobby_type LobbyType;
+	uint8_t *Data;
+};
+
+struct s_save_data
 {
 	const char *name;
 	s_lobby_data *get(s_lobby_data *a1)
 	{
-		memmove(&a1->Data, save_data[a1->LobbyType.value].Buffer, save_data[a1->LobbyType.value].Size);
+		memmove(&a1->Data, save_data_data_array[a1->LobbyType.value].Buffer, save_data_data_array[a1->LobbyType.value].Size);
 		return a1;
 	}
 	void set(s_lobby_data *a1)
 	{
 		printf_s("Saving %s: %s\n", name, a1->LobbyType.GetName());
-		memmove(save_data[a1->LobbyType.value].Buffer, &a1->Data, save_data[a1->LobbyType.value].Size);
+		memmove(save_data_data_array[a1->LobbyType.value].Buffer, &a1->Data, save_data_data_array[a1->LobbyType.value].Size);
 	}
 };
 
-struct gamemode
+struct s_save_data_all
 {
 	const char *name;
 	s_saved_game_data *get()
 	{
-		memmove(&GamemodeData, save_data[6].Buffer, save_data[6].Size);
-		return &GamemodeData;
+		memmove(&SavedGame, save_data_data_array[6].Buffer, save_data_data_array[6].Size);
+		return &SavedGame;
 	}
 	void set(s_saved_game_data *a1)
 	{
 		printf_s("Saving %s\n", name);
-		memmove(save_data[6].Buffer, &a1, save_data[6].Size);
+		memmove(save_data_data_array[6].Buffer, &a1, save_data_data_array[6].Size);
 	}
 };
 
