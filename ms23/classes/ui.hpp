@@ -115,7 +115,7 @@ uint32_t *__fastcall c_magic_string_game_tag_parser_hook(uint32_t *thisptr, uint
 void __fastcall c_gui_network_mode_category_datasource_vftable01_hook(void *thisptr, void *unused, uint8_t *a2)
 {
 	auto c_gui_network_mode_selected_item_create_category = (int(__thiscall *)(void *, int, int, int, int, char))0xB23870;
-	if (g_vftables.at(0x169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
+	if (g_vftables.at(0x0169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
 	{
 		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B3, 0x103B4, 0, 5, 1);	// network_mode_xbox_live_private, description
 		c_gui_network_mode_selected_item_create_category(thisptr, 0x103B5, 0x103B6, 1, 5, 1);	// network_mode_system_link, description
@@ -126,7 +126,7 @@ void __fastcall c_gui_network_mode_category_datasource_vftable01_hook(void *this
 void __fastcall c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook(void *thisptr, void *unused, uint8_t *a2, int a3)
 {
 	auto c_gui_network_mode_selected_item_create_subitem = (int(__thiscall *)(void *, int, int, int a4, int a5))0xB23970;
-	if (g_vftables.at(0x169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
+	if (g_vftables.at(0x0169DA04).GetMember<char(__thiscall *)(void *, uint8_t *)>(1)(thisptr, a2))
 	{
 		if (a3)
 		{
@@ -254,12 +254,60 @@ int __cdecl render_to_texture_hook(int a1, int a2, int a3)
 	return ((int(__cdecl*)(int, int, int))0x835DA0)(a1, a2, a3);
 }
 
+struct s_ssl_hq
+{
+	int chat_send_clan(wchar_t *source)
+	{
+		return printf_s("#clan_%S\n", source);
+	}
+	int chat_send_game_all(wchar_t *source)
+	{
+		return printf_s("#game_%S\n", source);
+	}
+	int chat_send_gameteam(wchar_t *source)
+	{
+		return printf_s("#gameteam_%S\n", source);
+	}
+	int chat_send_general(wchar_t *source)
+	{
+		return printf_s("#general_%S\n", source);
+	}
+	int chat_send_party(wchar_t *source)
+	{
+		return printf_s("#party_%S\n", source);
+	}
+	int chat_send_private(wchar_t *source)
+	{
+		return printf_s("#private_%S\n", source);
+	}
+} ssl_hq;
+
+// use this as a console for commands maybe?
+// TODO: figure out why the box is hidden until you open settings, probably due to ElDewrito
+
+void __cdecl ssl_hq__chat_send_clan_hook(wchar_t *source)
+{
+	ssl_hq.chat_send_clan(source);
+}
+void __cdecl ssl_hq__chat_send_game_all_hook(wchar_t *source)
+{
+	ssl_hq.chat_send_game_all(source);
+}
+void __cdecl ssl_hq__chat_send_gameteam_hook(wchar_t *source)
+{
+	ssl_hq.chat_send_gameteam(source);
+}
 void __cdecl ssl_hq__chat_send_general_hook(wchar_t *source)
 {
-	// use this as a console for commands maybe?
-	// TODO: figure out why the box is hidden until you open settings, probably due to ElDewrito
-
-	wprintf_s(L"#general_%s\n", source);
+	ssl_hq.chat_send_general(source);
+}
+void __cdecl ssl_hq__chat_send_party_hook(wchar_t *source)
+{
+	ssl_hq.chat_send_party(source);
+}
+void __cdecl ssl_hq__chat_send_private_hook(wchar_t *source)
+{
+	ssl_hq.chat_send_private(source);
 }
 
 inline void AddUiHooks(const char *name)
@@ -299,7 +347,12 @@ inline void AddUiHooks(const char *name)
 
 		HookManager.AddHook(render_to_texture_offsets, &render_to_texture_hook, "render_to_texture", HookFlags::IsCall);
 
+		HookManager.AddHook({ 0x42ED40 }, &ssl_hq__chat_send_clan_hook, "ssl_hq::chat_send_clan");
+		HookManager.AddHook({ 0x42F0A0 }, &ssl_hq__chat_send_game_all_hook, "ssl_hq::chat_send_game_all");
+		HookManager.AddHook({ 0x42F470 }, &ssl_hq__chat_send_gameteam_hook, "ssl_hq::chat_send_gameteam");
 		HookManager.AddHook({ 0x42F880 }, &ssl_hq__chat_send_general_hook, "ssl_hq::chat_send_general");
+		HookManager.AddHook({ 0x42FBD0 }, &ssl_hq__chat_send_party_hook, "ssl_hq::chat_send_party");
+		HookManager.AddHook({ 0x42FFA0 }, &ssl_hq__chat_send_private_hook, "ssl_hq::chat_send_private");
 	}
 }
 
@@ -313,8 +366,8 @@ void network_menu_patch()
 {
 	if (c_gui_network_mode_xbl_enabled)
 	{
-		g_vftables.at(0x16A73B4).ReplaceMember(1, &c_gui_network_mode_category_datasource_vftable01_hook);
-		g_vftables.at(0x16A742C).ReplaceMember(28, &c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook);
+		g_vftables.at(0x016A73B4).ReplaceMember(1, &c_gui_network_mode_category_datasource_vftable01_hook);
+		g_vftables.at(0x016A742C).ReplaceMember(28, &c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook);
 	}
 }
 

@@ -152,7 +152,6 @@ void preferences_set_all_save_data(s_saved_game_data *a1)
 void preferences_set_save_data(s_lobby_data *a1)
 {
 	preferences.SaveData.set(a1);
-	file_write_to_path(save_data_data_array[6].Path, save_data_data_array[6].Size, save_data_data_array[6].Buffer);
 	file_write_to_path(save_data_data_array[a1->LobbyType.value].Path, save_data_data_array[a1->LobbyType.value].Size, save_data_data_array[a1->LobbyType.value].Buffer);
 }
 

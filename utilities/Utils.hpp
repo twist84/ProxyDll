@@ -341,6 +341,18 @@ struct BaseMan
 	{
 		return Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim);
 	}
+	const wchar_t *GetWString(const char *lpAppName, const char *lpKeyName)
+	{
+		const size_t ArraySize = 256;
+		char *iniVal = new char[ArraySize];
+		GetPrivateProfileStringA(lpAppName, lpKeyName, "", iniVal, ArraySize, iniFilename);
+
+		return Utils::String::WidenString(iniVal).c_str();
+	}
+	void SetWString(const char *lpAppName, const char *lpKeyName, const wchar_t *lpValue = L"")
+	{
+		WritePrivateProfileStringA(lpAppName, lpKeyName, Utils::String::ThinString(lpValue).c_str(), iniFilename);
+	}
 
 	int GetInt(const char *lpAppName, const char *lpKeyName)
 	{
@@ -697,7 +709,8 @@ struct s_vftable
 	}
 	void PrintMembers()
 	{
-		printf_s("%s::`vftable', %02d\n", Name.c_str(), Count);
+		//printf_s("%s::`vftable', member count: %d\n", Utils::String::SplitString(Name, ':')[0].c_str(), Count);
+		printf_s("class %s {\n", Name.c_str());
 		for (int i = 0; i < Count; i++)
 		{
 			if (MemberHasReference(i))
@@ -705,23 +718,24 @@ struct s_vftable
 				if (MemberReferenceIsGood(i))
 				{
 					if (MemberReferenceIsHook(i))
-						printf_s("\t%02d, hook_%08X\n", i, GetMemberReference(i));
+						printf_s("\thook_%08X;\t// %02d\n", GetMemberReference(i), i);
 					else
 						switch (GetMemberReference(i))
 						{
 						case 0xBED54F:
-							printf_s("\t%02d, __purecall\n", i);
+							printf_s("\t__purecall;\t// %02d\n", i);
 							break;
 						default:
-							printf_s("\t%02d, sub_%08X\n", i, GetMemberReference(i));
+							printf_s("\tsub_%08X;\t// %02d\n", GetMemberReference(i), i);
 							break;
 						}
 				}
 				else
-					printf_s("\t%02d, bad_reference\n", i);
+					printf_s("\tnull_%08X;\t// %02d\n", GetMemberReference(i), i);
 			}
 			else
-				printf_s("\t%02d, no_reference\n", i);
+				printf_s("\tno_reference;\t// %02d\n", i);
 		}
+		printf_s("};\n\n");
 	}
 };

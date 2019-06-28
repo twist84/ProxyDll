@@ -9,15 +9,15 @@ void hook_print(const char *hook, const char *DstBuf)
 }
 void hook_print(const char *hook, const wchar_t *DstBuf)
 {
-	//wprintf_s(L"%s: %s\n", hook, DstBuf);
+	//printf_s("%s: %S\n", hook, DstBuf);
 }
 void hook_wcsn(const char *hook, const wchar_t *dst, const wchar_t *src, size_t size)
 {
-	//wprintf_s(L"%s: src=%p, dst=%p, size=0x\nstring=%s\n", hook, src, size, src);
+	//printf_s("%s: src=0x%p, dst=0x%p, size=0x%X\nstring=%S\n", hook, (void *)src, (void *)dst, size, src);
 }
 void hook_str(const char *hook, const char *dst, const char *src, size_t size)
 {
-	//printf_s("%s: src=%p, dst=%p, size=0x\nstring=%s\n", hook, src, size, src);
+	//printf_s("%s: src=0x%p, dst=0x%p, size=0x%X\nstring=%s\n", hook, (void *)src, (void *)dst, size, src);
 }
 
 //===========================================================================
@@ -170,7 +170,7 @@ unsigned int get_wchar_count_hook(wchar_t *a1, unsigned int a2)
 		++result;
 	}
 
-	//wprintf_s(L"get_wchar_count: %ls, %d\n", a1, result);
+	//printf_s("get_wchar_count: %S, %d\n", a1, result);
 	return result;
 }
 
@@ -223,7 +223,7 @@ wchar_t *wprintf_12288_hook(wchar_t *DstBuf, const wchar_t *Format, ...)
 	auto wchar_count = get_wchar_count_hook(DstBuf, 0x3000u);
 	sub_4EDC90_hook(&DstBuf[wchar_count], 0x3000 - wchar_count, Format, ArgList);
 
-	wprintf_s(L"%s\n", DstBuf); // LOADING %d%
+	printf_s("%S\n", DstBuf); // LOADING %d%
 	hook_print("wprintf_12288", DstBuf);
 	return DstBuf;
 }
