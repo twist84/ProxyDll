@@ -6,5 +6,6 @@
   <ItemGroup>
     <ClInclude Include="d3dx9_43.hpp" />
     <ClInclude Include="binkw32.hpp" />
+    <ClInclude Include="haloreach.hpp" />
   </ItemGroup>
 </Project>
