@@ -1251,15 +1251,15 @@ s_simulation_globals_type_collection *__cdecl simulation_globals_type_collection
 	return g_simulation_globals_type_collection;
 }
 
-inline void AddGameEngineHooks(const char *name)
+inline void SubmitGameEngineHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.AddHook({ 0x715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
+		//HookManager.Submit({ 0x715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
 	}
 }
 
-inline void AddGameEnginePatches(const char *name)
+inline void SubmitGameEnginePatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

@@ -24,17 +24,17 @@ char __cdecl simulation_event_generate_internal_hook(e_simulation_event simulati
 	return simulation_event_generate_internal(simulation_event, a2, a3, player_handle, a5, a6);
 }
 
-inline void AddSimulationHooks(const char *name)
+inline void SubmitSimulationHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
 		// these crash the game if hooked, unsure currently as to why that is
-		//AddHook(c_simulation_event_handler_send_event_offsets, &c_simulation_event_handler_send_event_hook, "c_simulation_event_handler_send_event");
-		//AddHook(simulation_event_generate_internal_offsets, &simulation_event_generate_internal_hook, "simulation_event_generate_internal");
+		//Submit(c_simulation_event_handler_send_event_offsets, &c_simulation_event_handler_send_event_hook, "c_simulation_event_handler_send_event");
+		//Submit(simulation_event_generate_internal_offsets, &simulation_event_generate_internal_hook, "simulation_event_generate_internal");
 	}
 }
 
-inline void AddSimulationPatches(const char *name)
+inline void SubmitSimulationPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

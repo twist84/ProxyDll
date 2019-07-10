@@ -476,7 +476,7 @@ struct HookMan
 			}
 		}
 	};
-	struct VftHookInfo
+	struct VtblHookInfo
 	{
 		const char *name;
 		size_t table_addr;
@@ -484,7 +484,7 @@ struct HookMan
 		void *dest_func;
 		HookFlags flags;
 
-		VftHookInfo(size_t _offset, void *_dest_func, int _member, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
+		VtblHookInfo(size_t _offset, void *_dest_func, int _member, const char *_name = "untitled", HookFlags _flags = HookFlags::None)
 		{
 			name = _name;
 			table_addr = _offset;
@@ -504,21 +504,21 @@ struct HookMan
 	};
 
 	std::vector<HookInfo> hooks;
-	std::vector<VftHookInfo> vfthooks;
+	std::vector<VtblHookInfo> vtbl_hooks;
 
-	inline void AddHook(std::vector<size_t> offsets, void *dest_func, const char *name = "untitled", HookFlags flags = HookFlags::None)
+	inline void Submit(std::vector<size_t> offsets, void *dest_func, const char *name = "untitled", HookFlags flags = HookFlags::None)
 	{
 		hooks.push_back(HookInfo(offsets, dest_func, name, flags));
 	}
-	inline void AddVftHook(size_t offset, void *dest_func, int member, const char *name = "untitled", HookFlags flags = HookFlags::None)
+	inline void SubmitVtbl(size_t offset, void *dest_func, int member, const char *name = "untitled", HookFlags flags = HookFlags::None)
 	{
-		vfthooks.push_back(VftHookInfo(offset, dest_func, member, name, flags));
+		vtbl_hooks.push_back(VtblHookInfo(offset, dest_func, member, name, flags));
 	}
-	inline void ApplyHooks()
+	inline void Apply()
 	{
 		for (auto hook : hooks)
 			hook.Apply();
-		for (auto hook : vfthooks)
+		for (auto hook : vtbl_hooks)
 			hook.Apply();
 	}
 } HookManager;
@@ -545,11 +545,11 @@ struct PatchMan
 
 	std::vector<PatchInfo> patches;
 
-	inline void AddPatch(void *dest_func, const char *name = "untitled")
+	inline void Submit(void *dest_func, const char *name = "untitled")
 	{
 		patches.push_back(PatchInfo(dest_func, name));
 	}
-	inline void ApplyPatches()
+	inline void Apply()
 	{
 		for (auto patch : patches)
 			patch.Apply();

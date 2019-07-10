@@ -4,7 +4,7 @@
 
 #include "../memory/local_types.hpp"
 
-inline void AddTagsHooks(const char *name)
+inline void SubmitTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
@@ -20,10 +20,10 @@ void enable_tag_edits_patch()
 	Patch::NopFill(Pointer::Base(0x83AFC), 2);
 }
 
-inline void AddTagsPatches(const char *name)
+inline void SubmitTagsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&enable_tag_edits_patch, "enable_tag_edits");
+		PatchManager.Submit(&enable_tag_edits_patch, "enable_tag_edits");
 	}
 }

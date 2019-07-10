@@ -25,7 +25,7 @@ void PrintGameSystems(int game_system = -1, bool print_noref = true, bool print_
 	}
 }
 
-inline void AddGameSystemsHooks(const char *name)
+inline void SubmitGameSystemsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
@@ -61,10 +61,10 @@ void levels_game_system()
 	e_game_system(e_game_system::_levels).ReplaceMember(e_game_system_member::_dispose_from_old_map, &levels_dispose_from_old_map);
 }
 
-void AddGameSystemsPatches(const char *name)
+void SubmitGameSystemsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&levels_game_system, "levels_game_system");
+		PatchManager.Submit(&levels_game_system, "levels_game_system");
 	}
 }

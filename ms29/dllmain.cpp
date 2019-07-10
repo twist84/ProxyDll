@@ -94,17 +94,17 @@ int MainThread()
 	g_use_default_system_ui_language = ConfigManager.GetBool("Language", "UseSystemDefault");
 	g_new_system_ui_language = ConfigManager.GetLanguage("Language", "Selected");
 
-	AddCameraHooks("Camera");
-	AddCameraPatches("Camera");
-	AddTagsHooks("Tags");
-	AddTagsPatches("Tags");
-	AddUiHooks("Ui");
-	AddUiPatches("Ui");
+	SubmitCameraHooks("Camera");
+	SubmitCameraPatches("Camera");
+	SubmitTagsHooks("Tags");
+	SubmitTagsPatches("Tags");
+	SubmitUiHooks("Ui");
+	SubmitUiPatches("Ui");
 
 	if (CanHook(ConfigManager.GetBool("Delays", "PrintHookDelay"), ConfigManager.GetFloat("Delays", "HookDelay"), ConfigManager.GetInt("Delays", "HookDelayIncrement")))
 	{
-		HookManager.ApplyHooks();
-		PatchManager.ApplyPatches();
+		HookManager.Apply();
+		PatchManager.Apply();
 
 		Loaded = true;
 	}

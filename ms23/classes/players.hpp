@@ -23,15 +23,15 @@ uint8_t *__cdecl player_datum_get_active_armor_loadout_customization_hook(uint8_
 	return (uint8_t *)((player_datum + 0x738) + (0x20 * *(uint32_t *)(player_datum + 0x4C)));
 }
 
-inline void AddPlayersHooks(const char *name)
+inline void SubmitPlayersHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x136020 }, &player_datum_get_active_armor_loadout_customization_hook, "player_datum_get_active_armor_loadout_customization");
+		HookManager.Submit({ 0x136020 }, &player_datum_get_active_armor_loadout_customization_hook, "player_datum_get_active_armor_loadout_customization");
 	}
 }
 
-inline void AddPlayersPatches(const char *name)
+inline void SubmitPlayersPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

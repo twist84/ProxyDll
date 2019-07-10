@@ -111,27 +111,27 @@ int __cdecl GameOptions__LoadIntoGlobalGameOptions_hook(s_game_options *game_opt
 	return game_options->LoadIntoGlobalGameOptions(is_force_loaded);
 }
 
-inline void AddLevelHooks(const char *name)
+inline void SubmitLevelHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x130440 }, &CustomLevelLoadHook, "CustomLevelLoad");
-		HookManager.AddHook({ 0x1322D0 }, &game_options_get_hook, "game_options_get");
+		HookManager.Submit({ 0x130440 }, &CustomLevelLoadHook, "CustomLevelLoad");
+		HookManager.Submit({ 0x1322D0 }, &game_options_get_hook, "game_options_get");
 
-		//HookManager.AddHook({ 0x218A10 }, &nullsub_618A10_hook, "nullsub_618A10");
-		//HookManager.AddHook({ 0x218A20 }, &nullsub_618A20_hook, "nullsub_618A20");
-		//HookManager.AddHook({ 0x218A30 }, &nullsub_618A30_hook, "nullsub_618A30");
-		//HookManager.AddHook({ 0x218A50 }, &nullsub_618A50_hook, "nullsub_618A50"); // crashes, most likely wrong args
+		//HookManager.Submit({ 0x218A10 }, &nullsub_618A10_hook, "nullsub_618A10");
+		//HookManager.Submit({ 0x218A20 }, &nullsub_618A20_hook, "nullsub_618A20");
+		//HookManager.Submit({ 0x218A30 }, &nullsub_618A30_hook, "nullsub_618A30");
+		//HookManager.Submit({ 0x218A50 }, &nullsub_618A50_hook, "nullsub_618A50"); // crashes, most likely wrong args
 
-		HookManager.AddHook({ 0x14CAB0 }, &campaign_levels_try_and_get_by_map_id_hook, "campaign_levels_try_and_get_by_map_id");
-		HookManager.AddHook({ 0x14CB00 }, &multiplayer_levels_try_and_get_by_map_id_hook, "multiplayer_levels_try_and_get_by_map_id");
-		HookManager.AddHook({ 0x14BCA0 }, &levels_get_default_map_id_hook, "levels_get_default_map_id");
+		HookManager.Submit({ 0x14CAB0 }, &campaign_levels_try_and_get_by_map_id_hook, "campaign_levels_try_and_get_by_map_id");
+		HookManager.Submit({ 0x14CB00 }, &multiplayer_levels_try_and_get_by_map_id_hook, "multiplayer_levels_try_and_get_by_map_id");
+		HookManager.Submit({ 0x14BCA0 }, &levels_get_default_map_id_hook, "levels_get_default_map_id");
 
-		HookManager.AddHook({ 0x166E70 }, &GameOptions__LoadIntoGlobalGameOptions_hook, "GameOptions::LoadIntoGlobalGameOptions");
+		HookManager.Submit({ 0x166E70 }, &GameOptions__LoadIntoGlobalGameOptions_hook, "GameOptions::LoadIntoGlobalGameOptions");
 	}
 }
 
-inline void AddLevelPatches(const char *name)
+inline void SubmitLevelPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

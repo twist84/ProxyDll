@@ -61,13 +61,13 @@ const char *game_get_region_hook(e_game_language game_language, bool foreign)
 
 void draw_watermark_hook() {}
 
-inline void AddUiHooks(const char *name)
+inline void SubmitUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0xC2C30 }, &get_loading_text_hook, "get_loading_text");
-		HookManager.AddHook({ 0xB0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		HookManager.AddHook({ 0xB0CE0 }, &game_get_region_hook, "game_get_region");
+		HookManager.Submit({ 0xC2C30 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.Submit({ 0xB0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
+		HookManager.Submit({ 0xB0CE0 }, &game_get_region_hook, "game_get_region");
 	}
 }
 
@@ -77,10 +77,10 @@ void language_patch()
 	Patch(0x2B923A, { (uint8_t)e_game_language(g_new_system_ui_language).value }).Apply(g_use_default_system_ui_language);
 }
 
-inline void AddUiPatches(const char *name)
+inline void SubmitUiPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&language_patch, "language");
+		PatchManager.Submit(&language_patch, "language");
 	}
 }

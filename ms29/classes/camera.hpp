@@ -13,15 +13,15 @@ char __cdecl sub_553660_hook(uint8_t *a1)
 	return result;
 }
 
-inline void AddCameraHooks(const char *name)
+inline void SubmitCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x14690A }, &sub_553660_hook, "camera_definition_validate", HookFlags::IsCall);
+		HookManager.Submit({ 0x14690A }, &sub_553660_hook, "camera_definition_validate", HookFlags::IsCall);
 	}
 }
 
-inline void AddCameraPatches(const char *name)
+inline void SubmitCameraPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

@@ -1781,6 +1781,7 @@ namespace Blam
 
 		bool Load(const std::string &path);
 		char *GetString(const uint32_t stringID);
+		void PrintStrings();
 	};
 
 	StringIDCache StringIDCache::Instance;
@@ -1802,7 +1803,7 @@ namespace Blam
 	bool StringIDCache::Load(const std::string &path)
 	{
 		std::ifstream stream;
-		stream.open(path, std::ios::binary);
+		stream.open(path + "string_ids.dat", std::ios::binary);
 
 		if (!stream.good())
 			return false;
@@ -1855,6 +1856,12 @@ namespace Blam
 			index -= setMin;
 
 		return Strings[index + setOffsets[set]];
+	}
+
+	void StringIDCache::PrintStrings()
+	{
+		for (size_t i = 0; i < 0xFFFF; i++)
+			printf_s("[0x%04X, %s]\n", i, GetString(i));
 	}
 }
 #pragma warning( pop )

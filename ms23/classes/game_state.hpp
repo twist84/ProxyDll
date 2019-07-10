@@ -113,23 +113,23 @@ bool __cdecl campaign_save_exists_hook(int)
 }
 
 
-inline void AddGameStateHooks(const char *name)
+inline void SubmitGameStateHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.AddHook({ GetGameStateDefinitionPointer(e_game_state::_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
+		//HookManager.Submit({ GetGameStateDefinitionPointer(e_game_state::_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
-		HookManager.AddHook({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
-		HookManager.AddHook({ 0x1266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
-		HookManager.AddHook({ 0x1270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
-		HookManager.AddHook({ 0x25DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
-		HookManager.AddHook({ 0x109020 }, &hash_verification_hook, "hash_verification");
-		HookManager.AddHook({ 0x1254A0 }, &campaign_save_exists_hook, "campaign_save_exists");
+		HookManager.Submit({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
+		HookManager.Submit({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
+		HookManager.Submit({ 0x1266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
+		HookManager.Submit({ 0x1270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
+		HookManager.Submit({ 0x25DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
+		HookManager.Submit({ 0x109020 }, &hash_verification_hook, "hash_verification");
+		HookManager.Submit({ 0x1254A0 }, &campaign_save_exists_hook, "campaign_save_exists");
 	}
 }
 
-void AddGameStatePatches(const char *name)
+void SubmitGameStatePatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

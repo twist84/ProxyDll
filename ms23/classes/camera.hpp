@@ -31,13 +31,13 @@ uint8_t *__cdecl director_globals_set_director_mode_hook(int local_player_index,
 	return result;
 }
 
-inline void AddCameraHooks(const char *name)
+inline void SubmitCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
+		HookManager.Submit({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x19228B, 0x192399 }, &director_globals_set_director_mode_hook, "director_globals_set_director_mode", HookFlags::IsCall);
+		HookManager.Submit({ 0x19228B, 0x192399 }, &director_globals_set_director_mode_hook, "director_globals_set_director_mode", HookFlags::IsCall);
 	}
 }
 
@@ -46,10 +46,10 @@ void observer_camera_mode_patch()
 	observer_camera_mode_update(3);
 }
 
-inline void AddCameraPatches(const char *name)
+inline void SubmitCameraPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&observer_camera_mode_patch, "observer_camera_mode");
+		PatchManager.Submit(&observer_camera_mode_patch, "observer_camera_mode");
 	}
 }

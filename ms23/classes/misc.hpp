@@ -281,59 +281,59 @@ signed int __stdcall vector_dtor_iterator_hook(char *data_ptr, unsigned int size
 	return 1;
 }
 
-inline void AddMiscHooks(const char *name)
+inline void SubmitMiscHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x2796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
-		HookManager.AddHook({ 0x1314B0 }, &game_in_progress_hook, "game_in_progress");
-		HookManager.AddHook({ 0x131A60 }, &game_is_campaign_hook, "game_is_campaign");
-		HookManager.AddHook({ 0x131C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
-		HookManager.AddHook({ 0x131D10 }, &game_is_theater_hook, "game_is_theater");
-		HookManager.AddHook({ 0x131D50 }, &game_is_playtest_hook, "game_is_playtest");
-		HookManager.AddHook({ 0x131E20 }, &game_is_survival_hook, "game_is_survival");
-		HookManager.AddHook({ 0x131E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
+		HookManager.Submit({ 0x2796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
+		HookManager.Submit({ 0x1314B0 }, &game_in_progress_hook, "game_in_progress");
+		HookManager.Submit({ 0x131A60 }, &game_is_campaign_hook, "game_is_campaign");
+		HookManager.Submit({ 0x131C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
+		HookManager.Submit({ 0x131D10 }, &game_is_theater_hook, "game_is_theater");
+		HookManager.Submit({ 0x131D50 }, &game_is_playtest_hook, "game_is_playtest");
+		HookManager.Submit({ 0x131E20 }, &game_is_survival_hook, "game_is_survival");
+		HookManager.Submit({ 0x131E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
 
-		HookManager.AddHook({ 0x1670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
+		HookManager.Submit({ 0x1670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
 
-		HookManager.AddHook({ 0x131FF0 }, &prepare_game_level_hook, "prepare_game_level");
-		HookManager.AddHook({ 0x132050 }, &game_level_prepare_hook, "game_level_prepare");
+		HookManager.Submit({ 0x131FF0 }, &prepare_game_level_hook, "prepare_game_level");
+		HookManager.Submit({ 0x132050 }, &game_level_prepare_hook, "game_level_prepare");
 
-		HookManager.AddHook({ 0x132B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
-		HookManager.AddHook({ 0x132EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
+		HookManager.Submit({ 0x132B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
+		HookManager.Submit({ 0x132EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
 
-		HookManager.AddHook({ 0x20AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
-		HookManager.AddHook({ 0x20AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
+		HookManager.Submit({ 0x20AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
+		HookManager.Submit({ 0x20AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
 
 
-		HookManager.AddHook({ 0x2E130 }, &sub_42E130_hook, "sub_42E130");
+		HookManager.Submit({ 0x2E130 }, &sub_42E130_hook, "sub_42E130");
 
-		//HookManager.AddHook({ 0x2E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
+		//HookManager.Submit({ 0x2E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
 
-		HookManager.AddHook({ 0x61FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
-		HookManager.AddHook({ 0x61FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
+		HookManager.Submit({ 0x61FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
+		HookManager.Submit({ 0x61FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
 
-		//HookManager.AddHook({ 0x622169, 0x10BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
+		//HookManager.Submit({ 0x622169, 0x10BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
 
-		//HookManager.AddHook({ 0x1056D0 }, &GameClientShutdownHook, "GameClientShutdown");
-		//HookManager.AddHook({ 0x200A20 }, &sub_600A20_hook, "sub_600A20");
+		//HookManager.Submit({ 0x1056D0 }, &GameClientShutdownHook, "GameClientShutdown");
+		//HookManager.Submit({ 0x200A20 }, &sub_600A20_hook, "sub_600A20");
 
-		HookManager.AddHook({ 0x130FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
+		HookManager.Submit({ 0x130FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x3C966 }, &game_set_initial_network_values_hook, "game_set_initial_network_values", HookFlags::IsCall);
+		HookManager.Submit({ 0x3C966 }, &game_set_initial_network_values_hook, "game_set_initial_network_values", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x149B70 }, &peer_property_get_string_hook, "peer_property_get_string");
+		HookManager.Submit({ 0x149B70 }, &peer_property_get_string_hook, "peer_property_get_string");
 
-		HookManager.AddHook({ 0x7232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
+		HookManager.Submit({ 0x7232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x7232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
+		HookManager.Submit({ 0x7232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x942D3, 0x9432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
+		HookManager.Submit({ 0x942D3, 0x9432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
 
-		//HookManager.AddHook({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
+		//HookManager.Submit({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
 
-		//HookManager.AddHook({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
-		//HookManager.AddHook({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
+		//HookManager.Submit({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
+		//HookManager.Submit({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
 	}
 }
 
@@ -381,14 +381,14 @@ bool gameshield_initialize_patch()
 	return true;
 }
 
-void AddMiscPatches(const char *name)
+void SubmitMiscPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&lod_increase_patch, "lod_increase");
-		PatchManager.AddPatch(&match_beginning_countdown_patch, "match_beginning_countdown");
-		//PatchManager.AddPatch(&unknown_float30_to_float60_patch, "unknown_float30_to_float60"); // this float is what's actually used in get_time_from_frame_count, but we hook it just incase
+		PatchManager.Submit(&lod_increase_patch, "lod_increase");
+		PatchManager.Submit(&match_beginning_countdown_patch, "match_beginning_countdown");
+		//PatchManager.Submit(&unknown_float30_to_float60_patch, "unknown_float30_to_float60"); // this float is what's actually used in get_time_from_frame_count, but we hook it just incase
 
-		PatchManager.AddPatch(&gamestart_status_error_check_patch, "gamestart_status_error_check");
+		PatchManager.Submit(&gamestart_status_error_check_patch, "gamestart_status_error_check");
 	}
 }

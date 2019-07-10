@@ -310,49 +310,49 @@ void __cdecl ssl_hq__chat_send_private_hook(wchar_t *source)
 	ssl_hq.chat_send_private(source);
 }
 
-inline void AddUiHooks(const char *name)
+inline void SubmitUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.AddHook({ 0x6B8AE0 }, &UI_Widget_FindChildText_hook, "UI_Widget_FindChildText");
-		//HookManager.AddHook({ 0x6B8A40 }, &UI_Widget_FindChildBitmap_hook, "UI_Widget_FindChildBitmap");
-		//HookManager.AddHook({ 0x6B8AC0 }, &UI_Widget_FindChildField2_hook, "UI_Widget_FindChildField2");
-		//HookManager.AddHook({ 0x6B8A60 }, &UI_Widget_FindChildField3_hook, "UI_Widget_FindChildField3");
-		//HookManager.AddHook({ 0x6B8A80 }, &UI_Widget_FindChildField5_hook, "UI_Widget_FindChildField5");
-		//HookManager.AddHook({ 0x6B8AA0 }, &UI_Widget_FindChildData_hook, "UI_Widget_FindChildData");
+		//HookManager.Submit({ 0x6B8AE0 }, &UI_Widget_FindChildText_hook, "UI_Widget_FindChildText");
+		//HookManager.Submit({ 0x6B8A40 }, &UI_Widget_FindChildBitmap_hook, "UI_Widget_FindChildBitmap");
+		//HookManager.Submit({ 0x6B8AC0 }, &UI_Widget_FindChildField2_hook, "UI_Widget_FindChildField2");
+		//HookManager.Submit({ 0x6B8A60 }, &UI_Widget_FindChildField3_hook, "UI_Widget_FindChildField3");
+		//HookManager.Submit({ 0x6B8A80 }, &UI_Widget_FindChildField5_hook, "UI_Widget_FindChildField5");
+		//HookManager.Submit({ 0x6B8AA0 }, &UI_Widget_FindChildData_hook, "UI_Widget_FindChildData");
 
-		//HookManager.AddHook({ 0x6B2830 }, &UI_ScreenWidget_Close_hook, "UI_ScreenWidget_Close");
+		//HookManager.Submit({ 0x6B2830 }, &UI_ScreenWidget_Close_hook, "UI_ScreenWidget_Close");
 
-		//HookManager.AddHook({ 0x6B872A }, &sub_AB9360_hook, "sub_AB9360", HookFlags::IsCall);
+		//HookManager.Submit({ 0x6B872A }, &sub_AB9360_hook, "sub_AB9360", HookFlags::IsCall);
 
-		//HookManager.AddHook({ 0x6BCF40 }, &c_user_interface_text__sub_ABCF40_hook, "c_user_interface_text::sub_ABCF40");
+		//HookManager.Submit({ 0x6BCF40 }, &c_user_interface_text__sub_ABCF40_hook, "c_user_interface_text::sub_ABCF40");
 
-		//HookManager.AddHook({ 0x6C3F6F }, &c_gui_widget__vftable24_hook, "c_gui_widget::vftable24", HookFlags::IsCall);
+		//HookManager.Submit({ 0x6C3F6F }, &c_gui_widget__vftable24_hook, "c_gui_widget::vftable24", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x6B4ED0 }, &UI_Alloc_hook, "UI_Alloc");
-		HookManager.AddHook({ 0x6A8F63 }, &interface__gui_screens__start_menu__panes__game_multiplayer_hook, "interface::gui_screens::start_menu::panes::game_multiplayer", HookFlags::IsCall);
+		HookManager.Submit({ 0x6B4ED0 }, &UI_Alloc_hook, "UI_Alloc");
+		HookManager.Submit({ 0x6A8F63 }, &interface__gui_screens__start_menu__panes__game_multiplayer_hook, "interface::gui_screens::start_menu::panes::game_multiplayer", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x70CEA0 }, &c_magic_string_game_tag__current_name_hook, "c_magic_string_game_tag::current_name");
-		HookManager.AddHook({ 0x70CEC0 }, &c_magic_string_game_tag__current_value_hook, "c_magic_string_game_tag::current_value");
+		HookManager.Submit({ 0x70CEA0 }, &c_magic_string_game_tag__current_name_hook, "c_magic_string_game_tag::current_name");
+		HookManager.Submit({ 0x70CEC0 }, &c_magic_string_game_tag__current_value_hook, "c_magic_string_game_tag::current_value");
 
-		//HookManager.AddHook({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
+		//HookManager.Submit({ 0x6E98E4 }, &c_magic_string_game_tag_parser_hook, "c_magic_string_game_tag_parser", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
-		HookManager.AddHook({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		HookManager.AddHook({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
+		HookManager.Submit({ 0x12EBC0 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.Submit({ 0x12FC40 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
+		HookManager.Submit({ 0x12FFD0 }, &game_get_region_hook, "game_get_region");
 		
-		HookManager.AddHook({ 0x12F930 }, &main_game_render_get_loading_type_hook, "main_game_render_get_loading_type");
-		HookManager.AddHook({ 0x620540 }, &debug_print_lobby_percent_loaded_hook, "debug_print_lobby_percent_loaded");
-		HookManager.AddHook({ 0x620530 }, &debug_cache_loading_callback_hook, "debug_cache_loading_callback");
+		HookManager.Submit({ 0x12F930 }, &main_game_render_get_loading_type_hook, "main_game_render_get_loading_type");
+		HookManager.Submit({ 0x620540 }, &debug_print_lobby_percent_loaded_hook, "debug_print_lobby_percent_loaded");
+		HookManager.Submit({ 0x620530 }, &debug_cache_loading_callback_hook, "debug_cache_loading_callback");
 
-		HookManager.AddHook(render_to_texture_offsets, &render_to_texture_hook, "render_to_texture", HookFlags::IsCall);
+		HookManager.Submit(render_to_texture_offsets, &render_to_texture_hook, "render_to_texture", HookFlags::IsCall);
 
-		HookManager.AddHook({ 0x42ED40 }, &ssl_hq__chat_send_clan_hook, "ssl_hq::chat_send_clan");
-		HookManager.AddHook({ 0x42F0A0 }, &ssl_hq__chat_send_game_all_hook, "ssl_hq::chat_send_game_all");
-		HookManager.AddHook({ 0x42F470 }, &ssl_hq__chat_send_gameteam_hook, "ssl_hq::chat_send_gameteam");
-		HookManager.AddHook({ 0x42F880 }, &ssl_hq__chat_send_general_hook, "ssl_hq::chat_send_general");
-		HookManager.AddHook({ 0x42FBD0 }, &ssl_hq__chat_send_party_hook, "ssl_hq::chat_send_party");
-		HookManager.AddHook({ 0x42FFA0 }, &ssl_hq__chat_send_private_hook, "ssl_hq::chat_send_private");
+		HookManager.Submit({ 0x42ED40 }, &ssl_hq__chat_send_clan_hook, "ssl_hq::chat_send_clan");
+		HookManager.Submit({ 0x42F0A0 }, &ssl_hq__chat_send_game_all_hook, "ssl_hq::chat_send_game_all");
+		HookManager.Submit({ 0x42F470 }, &ssl_hq__chat_send_gameteam_hook, "ssl_hq::chat_send_gameteam");
+		HookManager.Submit({ 0x42F880 }, &ssl_hq__chat_send_general_hook, "ssl_hq::chat_send_general");
+		HookManager.Submit({ 0x42FBD0 }, &ssl_hq__chat_send_party_hook, "ssl_hq::chat_send_party");
+		HookManager.Submit({ 0x42FFA0 }, &ssl_hq__chat_send_private_hook, "ssl_hq::chat_send_private");
 	}
 }
 
@@ -371,11 +371,11 @@ void network_menu_patch()
 	}
 }
 
-inline void AddUiPatches(const char *name)
+inline void SubmitUiPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.AddPatch(&unblock_campaign_lobby_ui_patch, "unblock_campaign_lobby_ui");
-		PatchManager.AddPatch(&network_menu_patch, "network_menu");
+		PatchManager.Submit(&unblock_campaign_lobby_ui_patch, "unblock_campaign_lobby_ui");
+		PatchManager.Submit(&network_menu_patch, "network_menu");
 	}
 }

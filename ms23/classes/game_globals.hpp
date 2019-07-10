@@ -89,28 +89,28 @@ uint32_t *active_camera_initialize_after_load_hook()
 	return active_camera_initialize_after_load_internal();
 }
 
-inline void AddGameGlobalsHooks(const char *name)
+inline void SubmitGameGlobalsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x130C70 }, &game_globals_get_campaign_difficulty_get_hook, "game_globals_get_campaign_difficulty");
-		HookManager.AddHook({ 0x130FF0 }, &game_globals_update_end_match_wait_time_hook, "game_globals_update_end_match_wait_time");
-		HookManager.AddHook({ 0x131150 }, &game_globals_get_structure_bsp_index_hook, "game_globals_get_structure_bsp_index");
-		HookManager.AddHook({ 0x132280 }, &game_globals_set_playback_none_hook, "game_globals_set_playback_none");
+		HookManager.Submit({ 0x130C70 }, &game_globals_get_campaign_difficulty_get_hook, "game_globals_get_campaign_difficulty");
+		HookManager.Submit({ 0x130FF0 }, &game_globals_update_end_match_wait_time_hook, "game_globals_update_end_match_wait_time");
+		HookManager.Submit({ 0x131150 }, &game_globals_get_structure_bsp_index_hook, "game_globals_get_structure_bsp_index");
+		HookManager.Submit({ 0x132280 }, &game_globals_set_playback_none_hook, "game_globals_set_playback_none");
 
-		//HookManager.AddHook({ 0x132A80 }, &game_globals_get_playback_hook, "game_globals_get_playback");
-		//HookManager.AddHook({ 0x132AA0 }, &game_globals_set_playback_hook, "game_globals_set_playback");
+		//HookManager.Submit({ 0x132A80 }, &game_globals_get_playback_hook, "game_globals_get_playback");
+		//HookManager.Submit({ 0x132AA0 }, &game_globals_set_playback_hook, "game_globals_set_playback");
 
-		HookManager.AddHook({ 0x132BB0 }, &game_globals_set_cinematic_is_playing_false_hook, "game_globals_set_cinematic_is_playing_false");
-		HookManager.AddHook({ 0x132BD0 }, &game_globals_set_cinematic_is_playing_true_hook, "game_globals_set_cinematic_is_playing_true");
-		HookManager.AddHook({ 0x132B90 }, &game_globals_get_game_progression_hook, "game_globals_get_game_progression");
+		HookManager.Submit({ 0x132BB0 }, &game_globals_set_cinematic_is_playing_false_hook, "game_globals_set_cinematic_is_playing_false");
+		HookManager.Submit({ 0x132BD0 }, &game_globals_set_cinematic_is_playing_true_hook, "game_globals_set_cinematic_is_playing_true");
+		HookManager.Submit({ 0x132B90 }, &game_globals_get_game_progression_hook, "game_globals_get_game_progression");
 
-		//HookManager.AddHook({ 0x1326B0 }, &game_and_map_variant_initialize_after_load_hook, "game_and_map_variant_initialize_after_load");
-		//HookManager.AddHook({ 0x1917D0 }, &active_camera_initialize_after_load_hook, "active_camera_initialize_after_load");
+		//HookManager.Submit({ 0x1326B0 }, &game_and_map_variant_initialize_after_load_hook, "game_and_map_variant_initialize_after_load");
+		//HookManager.Submit({ 0x1917D0 }, &active_camera_initialize_after_load_hook, "active_camera_initialize_after_load");
 	}
 }
 
-inline void AddGameGlobalsPatches(const char *name)
+inline void SubmitGameGlobalsPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

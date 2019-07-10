@@ -22,16 +22,16 @@ inline char __cdecl unit_action_submit_hook(void *object_handle, e_unit_action u
 	return result;
 }
 
-inline void AddUnitHooks(const char *name)
+inline void SubmitUnitHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.AddHook({ 0x769CF0 }, &unit_action_submit_hook, "unit_action_submit");
+		HookManager.Submit({ 0x769CF0 }, &unit_action_submit_hook, "unit_action_submit");
 	}
 }
 
 
-inline void AddUnitPatches(const char *name)
+inline void SubmitUnitPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
