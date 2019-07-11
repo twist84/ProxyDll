@@ -22,17 +22,21 @@ void PreInit()
 	update_debug_loading_type();
 
 	Blam::StringIDCache::Instance.Load(g_maps_path);
+
+	SubmitHooks();
+	SubmitPatches();
 }
 void Init()
 {
-	SubmitHooks();
-	SubmitPatches();
 
-	HookManager.Apply();
-	PatchManager.Apply();
+
+
 }
 void PostInit()
 {
+	HookManager.Apply();
+	PatchManager.Apply();
+
 	PrintGPU();
 	
 	//PrintTagGroupEnum();

@@ -903,13 +903,13 @@ struct e_game_system
 			value = (e)val;
 	}
 
-	int GetMember(int member, bool base = false)
+	uint32_t GetMember(int member, bool base = false)
 	{
 		return (!base ? 0x1655950 : 0x1655950 - 0x400000) + (sizeof(s_game_system_definition) * value) + (sizeof(uint32_t) * member);
 	}
-	int MemberGetRef(int member, bool base = false)
+	uint32_t MemberGetRef(int member, bool base = false)
 	{
-		return *(size_t *)GetMember(member);
+		return *(uint32_t *)GetMember(member);
 	}
 	bool MemberHasRef(int member, bool base = false)
 	{
@@ -2141,7 +2141,7 @@ struct game_globals
 
 	float GetPhysicsRateFromFrameLimit()
 	{
-		auto result = (!this ? 0.5f : (30.0f / GameOptions.FrameLimit));
+		auto result = (!this ? 0.5f : (30.f / GameOptions.FrameLimit));
 
 		//printf_s("FrameLimitScale: %f\n", result);
 
@@ -5529,7 +5529,7 @@ struct s_field_of_view
 		{
 			auto new_val = fov < 90 ? map(fov, 55, 70, 1.15, 1.0) : map(fov, 55, 120, 1.15, 0.7);
 			*weapon_fov = new_val + 
-				fov < 90 ? new_val + 0.0f : 
+				fov < 90 ? new_val : 
 				fov < 100 ? new_val + 0.05f : 
 				fov < 110 ? new_val + 0.15f :
 				fov < 120 ? new_val + 0.25f :
@@ -5595,7 +5595,7 @@ struct s_camera_definition
 
 	s_camera_definition *Print(bool position_and_shift, bool look_and_depth_and_fov, bool forward_and_up_and_direction, bool center_and_zoom_transition_time)
 	{
-		if (Direction.I != 0.0f || Direction.J != 0.0f || Direction.K != 0.0f)
+		if (Direction.I != 0.f || Direction.J != 0.f || Direction.K != 0.f)
 		{
 			if (position_and_shift)
 				printf_s("pos: %.2f %.2f %.2f, pos_shift: %.2f %.2f %.2f\n", Position.I, Position.J, Position.K, PositionShift.I, PositionShift.J, PositionShift.K);

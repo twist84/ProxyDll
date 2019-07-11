@@ -468,11 +468,11 @@ struct HookMan
 		{
 			for (auto offset : offsets)
 			{
-				Hook(offset, dest_func, flags).Apply();
 				if (offsets.size() == 1)
 					printf_s("%s\n", name);
 				else
 					printf_s("%s, 0x%X\n", name, offset + 0x400000);
+				Hook(offset, dest_func, flags).Apply();
 			}
 		}
 	};
@@ -495,11 +495,11 @@ struct HookMan
 
 		void Apply()
 		{
+			printf_s("%s\n", name);
 			DWORD oldProt, newProt;
 			VirtualProtect((void*)table_addr, 0x400, PAGE_EXECUTE_READWRITE, &oldProt);
 			*(DWORD*)(table_addr + (4 * table_member)) = (DWORD)&dest_func;
 			VirtualProtect((void*)table_addr, 0x400, oldProt, &newProt);
-			printf_s("%s\n", name);
 		}
 	};
 
@@ -538,8 +538,8 @@ struct PatchMan
 
 		void Apply()
 		{
-			((void(*)())dest_func)();
 			printf_s("%s\n", name);
+			((void(*)())dest_func)();
 		}
 	};
 
@@ -637,14 +637,14 @@ struct ProxMan
 	}
 } ProxyManager;
 
-int g_end_address = 0xFFFFFFFF;
+uint32_t g_end_address = 0xFFFFFFFF;
 struct s_vftable
 {
-	size_t Address;
+	uint32_t Address;
 	int Count;
 	std::string Name;
 
-	s_vftable(size_t address, int count, std::string name)
+	s_vftable(uint32_t address, int count, std::string name)
 	{
 		Address = address;
 		Count = count;
@@ -654,13 +654,13 @@ struct s_vftable
 	{
 		g_end_address = end_address;
 	}
-	int GetMemberOffset(int member, bool base = false)
+	uint32_t GetMemberOffset(int member, bool base = false)
 	{
 		return (!base ? Address : Address - 0x400000) + (sizeof(uint32_t) * member);
 	}
-	int GetMemberReference(int member, bool base = false)
+	uint32_t GetMemberReference(int member, bool base = false)
 	{
-		return *(size_t *)GetMemberOffset(member);
+		return *(uint32_t *)GetMemberOffset(member);
 	}
 	bool MemberHasReference(int member, bool base = false)
 	{
@@ -694,7 +694,7 @@ struct s_vftable
 	{
 		bool result = false;
 		for (int i = 0; i < Count; i++)
-			if (MemberHasReference(i) && MemberReferenceIsGood(i) && MemberReferenceIsHook(i))
+			if (MemberHasReference(i) && MemberReferenceIsHook(i))
 				result = true;
 		return result;
 	}

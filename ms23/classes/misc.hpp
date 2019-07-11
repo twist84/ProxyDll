@@ -348,7 +348,7 @@ bool lod_increase_patch()
 
 bool unknown_float30_to_float60_patch()
 {
-	SetMemoryAtOffset(0x1615F34, 60.0f);
+	SetMemoryAtOffset(0x1615F34, 60.f);
 
 	return true;
 }

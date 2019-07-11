@@ -366,7 +366,7 @@ void network_menu_patch()
 {
 	if (c_gui_network_mode_xbl_enabled)
 	{
-		g_vftables.at(0x016A73B4).ReplaceMember(1, &c_gui_network_mode_category_datasource_vftable01_hook);
+		g_vftables.at(0x016A73B4).ReplaceMember(01, &c_gui_network_mode_category_datasource_vftable01_hook);
 		g_vftables.at(0x016A742C).ReplaceMember(28, &c_gui_network_mode_subitem_selectable_item_datasource_vftable28_hook);
 	}
 }
