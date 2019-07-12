@@ -114,8 +114,7 @@
     </Link>
     <PostBuildEvent>
       <Command>echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)D3DX9_43.dll
-echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)BINKW32.dll
-echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)haloreach.dll</Command>
+echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)BINKW32.dll</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>echo f|xcopy /Y  $(ProjectDir)info\D3DX9_43.dll $(SolutionDir)D3DX9_43_org.dll
@@ -161,8 +160,7 @@ echo f|xcopy /Y  $(ProjectDir)info\BINKW32.dll $(SolutionDir)BINKW32_org.dll</Co
     </Link>
     <PostBuildEvent>
       <Command>echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)D3DX9_43.dll
-echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)BINKW32.dll
-echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)haloreach.dll</Command>
+echo f|xcopy /Y $(OutDir)$(TargetFileName) $(SolutionDir)BINKW32.dll</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>echo f|xcopy /Y  $(ProjectDir)info\D3DX9_43.dll $(SolutionDir)D3DX9_43_org.dll
@@ -194,7 +192,6 @@ echo f|xcopy /Y  $(ProjectDir)info\BINKW32.dll $(SolutionDir)BINKW32_org.dll</Co
   <ItemGroup>
     <ClInclude Include="binkw32.hpp" />
     <ClInclude Include="d3dx9_43.hpp" />
-    <ClInclude Include="haloreach.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

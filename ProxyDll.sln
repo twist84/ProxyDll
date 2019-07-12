@@ -19,34 +19,20 @@ Global
 		utilities\utilities.vcxitems*{f9d88cf6-9812-475b-91d6-8bf637490f92}*SharedItemsImports = 9
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Debug|x64.ActiveCfg = Debug|x64
-		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Debug|x64.Build.0 = Debug|x64
 		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Debug|x86.ActiveCfg = Debug|Win32
 		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Debug|x86.Build.0 = Debug|Win32
-		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Release|x64.ActiveCfg = Release|x64
-		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Release|x64.Build.0 = Release|x64
 		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Release|x86.ActiveCfg = Release|Win32
 		{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}.Release|x86.Build.0 = Release|Win32
-		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Debug|x64.ActiveCfg = Debug|x64
-		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Debug|x64.Build.0 = Debug|x64
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Debug|x86.ActiveCfg = Debug|Win32
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Debug|x86.Build.0 = Debug|Win32
-		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x64.ActiveCfg = Release|x64
-		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x64.Build.0 = Release|x64
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x86.ActiveCfg = Release|Win32
 		{C1CED326-D764-4B6D-86C0-35D7879488BB}.Release|x86.Build.0 = Release|Win32
-		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x64.ActiveCfg = Debug|x64
-		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x64.Build.0 = Debug|x64
 		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x86.ActiveCfg = Debug|Win32
 		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Debug|x86.Build.0 = Debug|Win32
-		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x64.ActiveCfg = Release|x64
-		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x64.Build.0 = Release|x64
 		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x86.ActiveCfg = Release|Win32
 		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection

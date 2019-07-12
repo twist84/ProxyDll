@@ -175,7 +175,7 @@ bool __cdecl IDirect3DDevice9__SetPixelShader(IDirect3DPixelShader9 *pShader) //
 }
 HRESULT __cdecl sub_A23700(IDirect3DDevice9 *IDirect3DDevice9, int Sampler, int a4) // 00A23700
 {
-	HRESULT result;
+	HRESULT result = {};
 	DWORD Sampler_1 = Sampler;
 	auto IDirect3DDevice9_1 = IDirect3DDevice9;
 	auto IDirect3DDevice9_2 = IDirect3DDevice9;
