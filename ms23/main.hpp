@@ -41,7 +41,7 @@ void PostInit()
 	
 	//PrintTagGroupEnum();
 	//PrintGameSystems(/*e_game_system::_levels*/);
-	//g_vftables.AddEndAddress(0x069B1FFF)->Print();
+	g_vftables.AddEndAddress(0x069B1FFF);//->Print();
 	//Blam::StringIDCache::Instance.PrintStrings();
 }
 

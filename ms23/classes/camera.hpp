@@ -31,6 +31,30 @@ uint8_t *__cdecl director_globals_set_director_mode_hook(int local_player_index,
 	return result;
 }
 
+size_t g_director_vftable = -1;
+size_t g_camera_vftable = -1;
+
+uint8_t *__cdecl director_get_player_hook(int index)
+{
+	auto result = (uint8_t *)thread_local_storage(thread_local_storage::_director_globals).GetDefinition<uint8_t[0x5C0]>(0x160 + (4 * index));
+
+	auto p_director_vftable = (size_t *)result;
+	auto p_camera_vftable = (size_t *)(result + 4);
+
+	if (g_director_vftable != *p_director_vftable)
+	{
+		g_director_vftable = *p_director_vftable;
+		g_vftables.at(g_director_vftable).PrintMembers();
+	}
+	if (g_camera_vftable != *p_camera_vftable)
+	{
+		g_camera_vftable = *p_camera_vftable;
+		g_vftables.at(g_camera_vftable).PrintMembers();
+	}
+
+	return result;
+}
+
 inline void SubmitCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -38,6 +62,7 @@ inline void SubmitCameraHooks(const char *name)
 		HookManager.Submit({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
 
 		HookManager.Submit({ 0x19228B, 0x192399 }, &director_globals_set_director_mode_hook, "director_globals_set_director_mode", HookFlags::IsCall);
+		HookManager.Submit({ 0x191990 }, &director_get_player_hook, "director_get_player");
 	}
 }
 
