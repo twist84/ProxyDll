@@ -7,12 +7,23 @@
 #include "filo.hpp"
 #include "level.hpp"
 
+template<typename T>
+void copy_data(uint8_t *data1, uint8_t *data2, std::vector<size_t> offsets)
+{
+	for (auto offset : offsets)
+		*(T *)(data1 + offset) = *(T *)(data2 + offset);
+}
+
 uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 {
 	auto result = s_tag(index, group)./*Print('matg')->*/GetDefinition<uint8_t>();
 
 	// DO STUFF!
 	//PrintTagGroup(group, index);
+
+	if (group == 'scnr' && index == 0x27C3)
+		if (ConfigManager.GetBool("Misc", "CovenantMaimenu"))
+			copy_data<uint16_t>(&GetStructure<tag_block>(result + 0x424)->address[72 * 0x34], &GetStructure<tag_block>(result + 0x424)->address[73 * 0x34], { 0x24, 0x26 });
 
 	return result;
 }

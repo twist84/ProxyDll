@@ -82,6 +82,11 @@ T *GetStructure(size_t ptr, int itr = 0, int off = 0)
 {
 	return (T *)((ptr + off) + (itr * sizeof(T)));
 }
+template<typename T>
+T *GetStructure(uint8_t *data, int itr = 0, int off = 0)
+{
+	return (T *)((data + off) + (itr * sizeof(T)));
+}
 
 size_t GetAddress(void *addr, bool base = false)
 {
@@ -5984,8 +5989,10 @@ struct thread_local_storage
 	}
 
 	template<typename T>
-	T *GetDefinition(size_t offset = 0)
+	T *GetDefinition(size_t offset = 0, bool data_array = false)
 	{
+		if (data_array)
+			return (T *)(GetMainTls(4 * value)[0](0x44)(offset));
 		return (T *)(GetMainTls(4 * value)[0](offset));
 	}
 };
