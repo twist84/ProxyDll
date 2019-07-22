@@ -22,8 +22,15 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 	//PrintTagGroup(group, index);
 
 	if (group == 'scnr' && index == 0x27C3)
+	{
 		if (ConfigManager.GetBool("Misc", "CovenantMaimenu"))
+		{
+			// hangar script
 			copy_data<uint16_t>(&GetStructure<tag_block>(result + 0x424)->address[72 * 0x34], &GetStructure<tag_block>(result + 0x424)->address[73 * 0x34], { 0x24, 0x26 });
+			// biped palette
+			copy_data<uint32_t>(&GetStructure<tag_block>(result + 0xEC)->address[5 * 0x30], &GetStructure<tag_block>(result + 0xEC)->address[4 * 0x30], { 0xC });
+		}
+	}
 
 	return result;
 }
