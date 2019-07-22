@@ -28,10 +28,8 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 	{
 		if (ConfigManager.GetBool("Misc", "CovenantMaimenu"))
 		{
-			// hangar script
-			Copy<uint16_t>(TagBlock<0x34, 0x424>(result, 72), TagBlock<0x34, 0x424>(result, 73), { 0x24, 0x26 });
-			// biped palette
-			Copy<uint32_t>(TagBlock<0x30, 0x0EC>(result, 05), TagBlock<0x30, 0x0EC>(result, 03), { 0x00, 0x0C });
+			Copy<uint16_t>(TagBlock<0x34, 0x424>(result, 72), TagBlock<0x34, 0x424>(result, 73), { 0x24, 0x26 }); // hangar script			
+			Copy<uint32_t>(TagBlock<0x30, 0x0EC>(result, 05), TagBlock<0x30, 0x0EC>(result, 03), { 0x00, 0x0C }); // biped palette
 		}
 	}
 
