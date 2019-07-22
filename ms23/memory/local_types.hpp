@@ -93,6 +93,13 @@ size_t GetAddress(void *addr, bool base = false)
 	return base ? (size_t)addr - 0x400000 : (size_t)addr;
 }
 
+template<typename T>
+void Copy(uint8_t *data1, uint8_t *data2, std::vector<size_t> offsets)
+{
+	for (auto offset : offsets)
+		*(T *)(data1 + offset) = *(T *)(data2 + offset);
+}
+
 ConMan PreferenceManager;
 const char *PreferenceManagerAppname;
 

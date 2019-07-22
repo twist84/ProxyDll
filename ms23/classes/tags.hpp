@@ -7,12 +7,15 @@
 #include "filo.hpp"
 #include "level.hpp"
 
-template<typename T>
-void copy_data(uint8_t *data1, uint8_t *data2, std::vector<size_t> offsets)
-{
-	for (auto offset : offsets)
-		*(T *)(data1 + offset) = *(T *)(data2 + offset);
-}
+// scenario biped palette
+// _mp_masterchief, 0
+// _mp_elite, 1
+// _odst, 2
+// _marine, 3
+// _mp_masterchief_ui, 4
+// _mp_elite_ui, 5
+// _mp_masterchief_mannequin, 6
+// _mp_elite_mannequin, 7
 
 uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 {
@@ -26,9 +29,9 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 		if (ConfigManager.GetBool("Misc", "CovenantMaimenu"))
 		{
 			// hangar script
-			copy_data<uint16_t>(&GetStructure<tag_block>(result + 0x424)->address[72 * 0x34], &GetStructure<tag_block>(result + 0x424)->address[73 * 0x34], { 0x24, 0x26 });
+			Copy<uint16_t>(TagBlock<0x34, 0x424>(result, 72), TagBlock<0x34, 0x424>(result, 73), { 0x24, 0x26 });
 			// biped palette
-			copy_data<uint32_t>(&GetStructure<tag_block>(result + 0xEC)->address[5 * 0x30], &GetStructure<tag_block>(result + 0xEC)->address[4 * 0x30], { 0xC });
+			Copy<uint32_t>(TagBlock<0x30, 0x0EC>(result, 05), TagBlock<0x30, 0x0EC>(result, 03), { 0x00, 0x0C });
 		}
 	}
 

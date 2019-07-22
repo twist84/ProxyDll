@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dll_proxy", "dll_proxy\dll_proxy.vcxproj", "{9FAFD0F0-63AD-45FD-BF3D-0E0C89812299}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C1CED326-D764-4B6D-86C0-35D7879488BB} = {C1CED326-D764-4B6D-86C0-35D7879488BB}
+		{821DCCE1-D911-4DBD-B4C8-477DF71EDAEF} = {821DCCE1-D911-4DBD-B4C8-477DF71EDAEF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ms23", "ms23\ms23.vcxproj", "{C1CED326-D764-4B6D-86C0-35D7879488BB}"
 EndProject

@@ -12,12 +12,18 @@ struct tag_block
 	uint32_t _bf8;
 };
 
+template<size_t size, size_t offset, typename T>
+T *TagBlock(T *data, size_t index)
+{
+	return (T *)(&GetStructure<tag_block>(data + offset)->address[index * size]);
+}
+
 struct tag_reference
 {
 	uint32_t GroupTag;
 	int32_t : 32;
 	int32_t : 32;
-	int32_t TagIndex;
+	uint32_t TagIndex;
 
 	uint8_t *GetDefinition()
 	{
