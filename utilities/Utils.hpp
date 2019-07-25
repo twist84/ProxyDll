@@ -358,6 +358,13 @@ struct BaseMan
 	{
 		return GetPrivateProfileIntA(lpAppName, lpKeyName, 0, iniFilename);
 	}
+	std::vector<int>GetSplitInt(const char *lpAppName, const char *lpKeyName, char lpDelim)
+	{
+		std::vector<int> result;
+		for (auto part : Utils::String::SplitString(GetString(lpAppName, lpKeyName), lpDelim))
+			result.push_back(std::atoi(part.c_str()));
+		return result;
+	}
 	void SetInt(const char *lpAppName, const char *lpKeyName, int lpValue = 0)
 	{
 		SetString(lpAppName, lpKeyName, std::to_string(lpValue).c_str());

@@ -779,7 +779,7 @@ struct e_session_overlapped_task_type
 	}
 };
 
-struct e_network_mode
+struct e_privacy_mode
 {
 	enum : int
 	{
@@ -2338,8 +2338,96 @@ struct s_camera_definition
 };
 _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 
-//const auto g_tag_index_table_ptr = (uint32_t**)0x22AAFFC;
-//const auto g_tag_table_ptr = (uint8_t***)0x22AAFF8;
-//const auto g_max_tag_count_ptr = (uint32_t*)0x22AB008;
-//uint16_t last_tag = 0xFFFF;
-//uint16_t globals_tag = 0xFFFF;
+struct s_remote_join_data
+{
+	uint8_t Data[0x50];
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+
+	void SetJoinData(char a1, uint32_t sign_in_state, XnkAddr *a5, XnkAddr *a6, XnkAddr *a7)
+	{
+		*(uint32_t *)(Data + 0x10) = ((uint32_t(__cdecl *)())0x403DD0)(); // generate_random_seed;
+		*(uint32_t *)(Data + 0x10) = 1;
+
+		*(XnkAddr *)(Data + 0x1C) = *a5;
+		*(XnkAddr *)(Data + 0x2C) = *a6;
+		*(XnkAddr *)(Data + 0x3C) = *a7;
+
+		*(uint32_t *)(Data + 0x4C) = sign_in_state;
+		*(uint8_t *)(Data + 0x54) = a1;
+	}
+};
+_STATIC_ASSERT(sizeof(s_remote_join_data) == 0x50);
+auto g_remote_join_data = GetStructure<s_remote_join_data>(0x1439B10);
+
+struct s_global_tag_info
+{
+	uint32_t **tag_index_table_ptr = (uint32_t * *)0x42DDCDC;
+	uint8_t ***tag_table_ptr = (uint8_t * **)0x42DDCD8;
+	uint32_t *max_tag_count_ptr = (uint32_t *)0x42DDCE8;
+	uint16_t last_tag_index = 0xFFFF;
+	uint32_t last_tag_group = 'null';
+	uint16_t globals_tag = 0xFFFF;
+} g_tag_info;
+
+struct s_tag
+{
+	enum e_tag_header_offsets
+	{
+		_definition = 0x10,
+		_group_tag = 0x14
+	};
+
+	uint32_t Index;
+	uint32_t Group;
+	std::string GroupString;
+
+	s_tag(uint32_t index, uint32_t group = 'llun')
+	{
+		g_tag_info.last_tag_index = Index = index;
+		g_tag_info.last_tag_group = Group = group;
+	}
+	uint8_t *GetHeader(size_t offset = 0)
+	{
+		if (Index == 0xFFFF || Index >= *g_tag_info.max_tag_count_ptr * 4)
+			return nullptr;
+		if ((*g_tag_info.tag_index_table_ptr)[Index] == -1 || (*g_tag_info.tag_index_table_ptr)[Index] >= *g_tag_info.max_tag_count_ptr * 4)
+			return nullptr;
+		if (!(*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]])
+			return nullptr;
+
+		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]] + offset;
+	}
+	bool HeaderIsValid()
+	{
+		if ((GetHeader() == nullptr) || ((uint32_t)GetHeader() < 0x400000))
+			return false;
+		return true;
+	}
+	uint32_t GetGroupTag()
+	{
+		return HeaderIsValid() ? *(uint32_t *)GetHeader(_group_tag) : Group;
+	}
+	template<typename T>
+	T *GetDefinition()
+	{
+		return (T *)GetHeader(*(uint32_t *)GetHeader(_definition));
+	}
+	void UpdateGroupString()
+	{
+		GroupString = "";
+		for (size_t i = 4; i > 0; ) GroupString += ((char *)GetHeader(_group_tag))[--i];
+	}
+	s_tag *Print(uint32_t group = -1)
+	{
+		UpdateGroupString();
+
+		if (group == -1 || group == GetGroupTag())
+			printf_s("['%s', 0x%04X]\n", GroupString.c_str(), Index);
+
+		return this;
+	}
+};

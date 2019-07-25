@@ -713,7 +713,7 @@ struct e_session_overlapped_task_type
 	}
 };
 
-struct e_network_mode
+struct e_privacy_mode
 {
 	enum : int
 	{
@@ -6001,5 +6001,69 @@ struct thread_local_storage
 		if (data_array)
 			return (T *)(GetMainTls(4 * value)[0](0x44)(offset));
 		return (T *)(GetMainTls(4 * value)[0](offset));
+	}
+};
+
+struct e_biped_palette
+{
+	enum e : int
+	{
+		_mp_masterchief,
+		_mp_elite,
+		_odst,
+		_marine,
+		_mp_masterchief_ui,
+		_mp_elite_ui,
+		_mp_masterchief_mannequin,
+		_mp_elite_mannequin,
+
+		k_number_of_biped_palettes
+	} value;
+
+	e_biped_palette(int val)
+	{
+		if (val >= _mp_masterchief && val < k_number_of_biped_palettes)
+			value = (e)val;
+	}
+
+	const char *GetName()
+	{
+		const char *names[] {
+			"mp_masterchief",
+			"mp_elite",
+			"odst",
+			"marine",
+			"mp_masterchief_ui",
+			"mp_elite_ui",
+			"mp_masterchief_mannequin",
+			"mp_elite_mannequin",
+		};
+		return names[value];
+	}
+};
+
+struct e_hangar
+{
+	enum e : int
+	{
+		_human,
+		_covenant,
+
+		k_number_of_hangars
+	} value;
+
+	e_hangar(int val)
+	{
+		if (val >= _human && val < k_number_of_hangars)
+			value = (e)val;
+	}
+
+	const char *GetName()
+	{
+		const char *names[]{
+			"human",
+			"covenant",
+		};
+		return names[value];
 	}
 };

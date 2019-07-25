@@ -102,10 +102,10 @@ bool __fastcall network_session_parameter_countdown_timer_request_change_hook(vo
 	return network_session_parameter_countdown_timer_request_change(thisPtr, state, value);
 }
 
-char __cdecl change_network_privacy_hook(e_network_mode a1)
+char __cdecl change_network_privacy_hook(e_privacy_mode a1)
 {
 	printf_s("Changing network privacy to %s", a1.GetName());
-	return ((char(__cdecl*)(e_network_mode))0xA7F950)(a1);
+	return ((char(__cdecl*)(e_privacy_mode))0xA7F950)(a1);
 }
 
 const char *__cdecl session_composition_get_string_hook(e_session_composition session_composition)

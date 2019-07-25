@@ -7,15 +7,23 @@
 #include "filo.hpp"
 #include "level.hpp"
 
-// scenario biped palette
-// _mp_masterchief, 0
-// _mp_elite, 1
-// _odst, 2
-// _marine, 3
-// _mp_masterchief_ui, 4
-// _mp_elite_ui, 5
-// _mp_masterchief_mannequin, 6
-// _mp_elite_mannequin, 7
+struct s_mainmenu_scnr_tag
+{
+	bool Compare(uint32_t group, uint32_t index)
+	{
+		return group == 'scnr' && index == 0x27C3;
+	}
+
+	void CallBack(uint8_t *definition)
+	{
+		if (ConfigManager.GetInt("Maimenu.Hangar", "Type") == 1)
+			Copy<uint16_t>(TagBlock<0x34, 0x424>(definition, 72), TagBlock<0x34, 0x424>(definition, 73), { 0x24, 0x26 }); // hangar script
+
+		// biped palette
+		Copy<uint32_t>(TagBlock<0x30, 0x0EC>(definition, e_biped_palette::_mp_masterchief_ui), TagBlock<0x30, 0x0EC>(definition, e_biped_palette(ConfigManager.GetInt("Maimenu.Hangar", "Biped.Human")).value), { 0x00, 0x0C });
+		Copy<uint32_t>(TagBlock<0x30, 0x0EC>(definition, e_biped_palette::_mp_elite_ui), TagBlock<0x30, 0x0EC>(definition, e_biped_palette(ConfigManager.GetInt("Maimenu.Hangar", "Biped.Covenant")).value), { 0x00, 0x0C });
+	}
+} g_mainmenu_scnr_tag;
 
 uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 {
@@ -24,14 +32,8 @@ uint8_t *__cdecl tag_get_definition_hook(uint32_t group, uint32_t index)
 	// DO STUFF!
 	//PrintTagGroup(group, index);
 
-	if (group == 'scnr' && index == 0x27C3)
-	{
-		if (ConfigManager.GetBool("Misc", "CovenantMaimenu"))
-		{
-			Copy<uint16_t>(TagBlock<0x34, 0x424>(result, 72), TagBlock<0x34, 0x424>(result, 73), { 0x24, 0x26 }); // hangar script			
-			Copy<uint32_t>(TagBlock<0x30, 0x0EC>(result, 05), TagBlock<0x30, 0x0EC>(result, 03), { 0x00, 0x0C }); // biped palette
-		}
-	}
+	if (g_mainmenu_scnr_tag.Compare(group, index))
+		g_mainmenu_scnr_tag.CallBack(result);
 
 	return result;
 }
