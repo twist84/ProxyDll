@@ -75,6 +75,75 @@ char __fastcall filo_create_and_open_tags_hook(void *thisptr)
 	return result;
 }
 
+template<typename T>
+char cache_read_hook(T *a1, int a2, LONG tag_offset, DWORD size, LPVOID buffer)
+{
+	printf_s("cache_read: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
+
+	//return ((char(*)(uint8_t *, int, LONG, DWORD, LPVOID))(0x5016D0))(a1, a2, tag_offset, size, buffer);
+	int file_error;
+	if (!file_open(global_tag_cache_filo, 1, &file_error))
+		return 0;
+	if (!file_set_position_hook(global_tag_cache_filo, tag_offset, 0))
+		return 0;
+	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
+}
+
+template<typename T>
+char filo_read_tag_hook(T *a1, LONG tag_offset, DWORD size, LPVOID buffer)
+{
+	printf_s("filo_read_tag: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
+	if (!(g_cache_file->unknown168 & 2))
+		return cache_read_hook(a1, 2, tag_offset, size, buffer);
+
+	int file_error;
+	if (!file_open(global_tag_cache_filo, 1, &file_error))
+		return 0;
+	if (!file_set_position_hook(global_tag_cache_filo, tag_offset, 0))
+		return 0;
+	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
+}
+
+s_cache_file *cache_file_get_hook()
+{
+	auto result = g_cache_file;
+
+	printf_s("cache_file_get: [cache_file->ScenarioPath, %s]\n", result->ScenarioPath);
+	printf_s("cache_file_get: [cache_file->unknown168, %d]\n", result->unknown168);
+
+	return result;
+}
+
+template<typename Ta, typename Tb>
+char sub_5AA7C0_hook(Ta *a1, Tb *a2, char *scenario_path, uint8_t *cache_file)
+{
+	auto result = ((char(*)(Ta *, Tb *, char *, uint8_t *))0x5AA7C0)(a1, a2, scenario_path, cache_file);
+
+	printf_s("sub_5AA7C0: [cache_file->ScenarioPath, %s]\n", g_cache_file->ScenarioPath);
+
+	return result;
+}
+
+template<typename Ta, typename Tb>
+char map_load_tags_hook(Ta *a1, Tb *a2, char *scenario_path)
+{
+	auto result = ((char(*)(Ta *, Tb *, char *))0x502DC0)(a1, a2, scenario_path);
+
+	printf_s("map_load_tags: [scenario_path, %s]\n", scenario_path);
+
+	return result;
+}
+
+template<typename T>
+char sub_502780_hook(T *a1, uint32_t tag_index)
+{
+	auto result = ((char(*)(T *, uint32_t tag_index))0x502780)(a1, tag_index); // crashes here on second run
+
+	printf_s("sub_502780: [tag_index, 0x%04X]\n", tag_index);
+
+	return result;
+}
+
 inline void SubmitTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -85,6 +154,15 @@ inline void SubmitTagsHooks(const char *name)
 
 		HookManager.Submit({ 0x101FC0 }, &maps_path_hook, "maps_path");
 		HookManager.Submit({ 0x102E87 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags", HookFlags::IsCall);
+
+		HookManager.Submit({ 0x102C90 }, &filo_read_tag_hook<uint8_t>, "filo_read_tag");
+		HookManager.Submit({ 0x101F90 }, &cache_file_get_hook, "cache_file_get");
+		HookManager.Submit({ 0x1016D0 }, &cache_read_hook<uint8_t>, "cache_read");
+
+		HookManager.Submit({ 0x102E1E }, &sub_5AA7C0_hook<uint8_t, uint8_t>, "sub_5AA7C0", HookFlags::IsCall);
+		HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook<uint8_t, uint8_t>, "map_load_tags", HookFlags::IsCall);
+
+		HookManager.Submit({ 0x102F03, 0x102F16 }, &sub_502780_hook<uint8_t>, "sub_502780", HookFlags::IsCall);
 	}
 }
 
