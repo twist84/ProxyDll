@@ -38,7 +38,7 @@ void c_stop_watch__start_hook()
 	// add tick functions here
 	((void(*)())0x5547F0)();
 }
-bool __cdecl map_file_validation_hook(s_cache_file *cache_file)
+bool __cdecl map_file_validation_hook(s_cache_file_header *cache_file_header)
 {
 	return true;
 }

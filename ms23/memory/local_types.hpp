@@ -2883,315 +2883,98 @@ auto global_tag_cache_filo = GetStructure<s_file_reference>(0x22AE3A8);
 
 struct s_cache_file_header
 {
-	int32_t head_tag;
-	int32_t version;
-	int32_t file_length;
-	int32_t UnknownC;
-	uint32_t tag_index_address;
-	int32_t memory_buffer_offset;
-	int32_t memory_buffer_size;
+	int32_t HeadTag;								// 'head'
+	int32_t Version;								// 12
+	int32_t FileLength;								// 339984
+	int32_t unknownC;								// 0
+	uint32_t TagIndexAddress;						// 0
+	int32_t MemoryBufferOffset;						// 0
+	int32_t MemoryBufferSize;						// 0
+	char SourceFile[256];							// 0
+	char Build[32];									// 1.106708 cert_ms23
 
-	char source_file[256];
+	enum class e_cache_file_type : short { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
+	char __declspec(align(2)) CacheType;			// campaign
 
-	char build[32];
+	enum class e_cache_file_shared_type : short { none = -1, mainmenu, shared, campaign, k_number_of_cache_file_shared_types };
+	char __declspec(align(2)) SharedType;			// none
 
-	int16_t cache_type;
-	int16_t shared_type;
+	bool unknown140;								// true
+	bool TrackedBuild;								// true
+	bool unknown142;								// false
+	uint8_t unknown143;								// 0
 
-	bool unknown140;
-	bool tracked_build;
-	bool Unknown142;
-	uint8_t unknown143;
+	int32_t unknown144;								// 0
+	int32_t unknown148;								// 0
+	int32_t unknown14C;								// 0
+	int32_t unknown150;								// 0
+	int32_t unknown154;								// 0
 
-	int32_t unknown144;
-	int32_t unknown148;
-	int32_t unknown14C;
-	int32_t unknown150;
-	int32_t unknown154;
+	int32_t StringIDsCount;							// 0
+	int32_t StringIDsBufferSize;					// 0
+	int32_t StringIDsIndicesOffset;					// 0
+	int32_t StringIDsBufferOffset;					// 0
 
-	int32_t string_ids_count;
-	int32_t string_ids_buffer_size;
-	int32_t string_ids_indices_offset;
-	int32_t string_ids_buffer_offset;
+	enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
+	char __declspec(align(4)) ExternalDependencies;	// unk2|unk3|unk4|unk5|unk6
 
-	int32_t external_dependencies;
+	FILETIME DateTime;								// 84 1F 26 07 1C 63 D0 01
+	FILETIME MainMenuDateTime;						// 04 17 79 CC 1B 63 D0 01
+	FILETIME SharedDateTime;						// 1B 93 92 CC 1B 63 D0 01
+	FILETIME CampaignDateTime;						// 1B 93 92 CC 1B 63 D0 01
+	FILETIME unknown18C;							// 1B 93 92 CC 1B 63 D0 01
+	FILETIME unknown194;							// 1B 93 92 CC 1B 63 D0 01
+	FILETIME unknown19C;							// 1B 93 92 CC 1B 63 D0 01
 
-	struct _FILETIME datetime;
-	struct _FILETIME datetime_mainmenu;
-	struct _FILETIME datetime_shared;
-	struct _FILETIME datetime_campaign;
+	char Name[32];									// mainmenu
 
-	char name[32];
+	int32_t unknown1C4;								// 0
 
-	int32_t unknown1AC;
+	char ScenarioPath[256];							// levels\ui\mainmenu\mainmenu
 
-	char scenario_path[256];
+	int32_t MinorVersion;							// -1
 
-	int32_t minor_version;
+	int32_t TagNamesCount;							// 0
+	int32_t TagNamesBufferOffset;					// 0
+	int32_t TagNamesBufferSize;						// 0
+	int32_t TagNamesIndicesOffset;					// 0
 
-	int32_t tag_names_count;
-	int32_t tag_names_buffer_offset;
-	int32_t tag_names_buffer_size;
-	int32_t tag_names_indices_offset;
+	int32_t unknown2DC[7];							// { 13200, 326784, 00 00 00 00, 67 64 03 CF, AE D0 75 DF, 50 E7 5B 75, 6B 4A BB F4 }
 
-	uint32_t checksum;
+	int32_t SHA1_A[5];								// { E8 54 8F C6, D6 CC 92 15, 97 DC F5 EE, B9 3C 01 3C, 00 00 00 00 }
 
-	uint8_t unknown2CC[84];
-	uint8_t content_header[20];
-	const char description[256];
-	int32_t unknown434;
-	int32_t unknown438;
-	uint8_t unknown43C[40];
-	uint8_t unknown464[9000];
-	uint8_t unknown278C[1636];
-	uint32_t scenario_tag_index;
-	uint8_t inknown2DF4[1420];
-	uint32_t unknown3380;
-	uint32_t unknown3384;
-	uint32_t unknown3388;
-	int32_t footer_signature;
-};
+	int32_t SHA1_B[5];								// { F4 17 00 00, 00 00 00 00, 00 00 00 00, FC 7B 19 64, A6 0E 80 17 }
 
+	int32_t SHA1_C[5];								// { B6 C9 33 03, FF 54 BF 54, CE AE 9E F2, F8 F5 F4 9F, E2 44 00 F3 }
 
-struct s_cache_file
-{
-	int32_t HeadTag;
-	int32_t Version;
-	int32_t FileLength;
-	int32_t unknownC;
-	uint32_t TagIndexAddress;
-	int32_t MemoryBufferOffset;
-	int32_t MemoryBufferSize;
-	char SourceFile[256];
-	char Build[32];
-	int16_t CacheType;
-	int16_t SharedType;
-	bool unknown140;
-	bool TrackedBuild;
-	bool unknown142;
-	uint8_t unknown143;
-	FILETIME FileTime;
-	uint8_t unknown14C[28];
-	uint8_t unknown168; // byte_flags, external_dependencies?
-	uint8_t unknown169;
-	uint8_t unknown16A;
-	uint8_t unknown16B;
-	FILETIME unknown16C[6];
-	uint8_t unknown19C[8];
-	char Name[32];
-	int32_t unknown1C4;
-	char ScenarioPath[256];
-	int32_t MinorVersion;
-	uint32_t unknown2CC;
-	uint8_t unknown2D0[40];
-	int32_t SHA1_A[5];
-	int32_t SHA1_B[5];
-	int32_t SHA1_C[5];
-	int32_t RSA[64];
-	uint8_t unknown434[10684];
-	int32_t ScenarioTagIndex;
-	uint8_t unknown2DF4[1432];
-	int32_t FootTag;
+	int32_t RSA[64];								// { 60 13 95 76, B3 99 02 B9, 92 04 46 C5, B5 68 D5 02, 3C 3C 6B 49, 98 93 31 52, DB 88 CB BA, B9 E5 FB 8F, 
+													//   1F BC 16 61, DE 51 1F 05, 95 DD C2 02, 0C 41 6A F2, B6 36 C4 CA, DC E0 40 2A, 84 9E 3C 29, FD F4 A1 02, 
+													//   C1 39 00 F2, 58 6D 63 BE, 9D 8E 40 6D, 67 78 E9 F3, 77 50 CB C8, 08 8E 12 F7, F7 44 08 4F, 7D 1F 4C CE, 
+													//   1E 4C C4 23, 1E 7D 7D B4, F1 3C 58 50, E2 76 34 AA, 14 B5 85 5C, EC 6D BC FC, C8 A4 89 EA, 07 C8 3B 69, 
+													//   26 0C 2C 8A, 72 76 D6 D6, 2D D8 ED 1D, 74 32 E4 C4, B2 BA B8 0A, 39 DC BF 4E, B4 87 7D EC, 03 61 75 72, 
+													//   0A 32 0E 21, C2 65 DB 5F, 04 97 BD C6, 40 EB 4E C7, 3C 26 9A CC, 1F 2A 05 02, EB 03 B7 BD, 9C 0B 24 EA, 
+													//   5C E1 33 84, E1 5E 84 93, 63 EA 59 94, 0D AD 59 62, 8E 2C 0C EB, BA 58 3D 19, 2A 65 E1 FA, BF 56 A9 34, 
+													//   06 C3 61 49, 2C F4 0E 88, 75 F9 8F AC, 23 08 A5 22, 9F 5B 1E 56, 9A FE 00 0C, A4 33 D4 A5, E8 FF F8 A5  }
+
+	int32_t unknown434[11];							// { 0, 0, 0, 0, 13200, 326784, 13200, 0, 13200, 0, -1 }
+
+	uint8_t unknown460[0x298C];						// 0
+
+	int32_t MapId;									// 0
+
+	int32_t ScenarioTagIndex;						// 0x27C3
+
+	uint8_t unknown2DF4[0x598];						// 0
+
+	int32_t FootTag;								// 'foot'
 
 	size_t Size()
 	{
 		return sizeof(*this);
 	}
 };
-static_assert(sizeof(s_cache_file) == 0x3390, "s_cache_file wrong size");
-auto g_cache_file = GetStructure<s_cache_file>(0x22AB018);
-
-class CacheFileHeader
-{
-	typedef int Tag;
-	typedef char StringShort[32];
-	typedef char StringLong[256];
-	struct CacheFileType
-	{
-		enum : short
-		{
-			None = -1,
-			Campaign,
-			Multiplayer,
-			MainMenu,
-			Shared,
-			SharedCampaign,
-			Unknown5,
-			Unknown6
-		};
-	};
-	struct CacheFileSharedType
-	{
-		enum : short
-		{
-			None = -1,
-			MainMenu,
-			Shared,
-			Campaign
-		};
-	};
-	struct CacheFilePartitionType
-	{
-		enum : int
-		{
-			Resources,
-			SoundResources,
-			GlobalTags,
-			SharedTags,
-			Base,
-			MapTags,
-
-			Count
-		};
-	};
-	struct CacheFileSectionType
-	{
-		enum : int
-		{
-			Debug,
-			Resource,
-			Tag,
-			Localization,
-
-			Count
-		};
-	};
-
-	int32_t Magic;
-
-	Tag HeadTag;
-	int32_t Version;
-	int32_t FileLength;
-	int32_t Unknown1;
-	uint32_t TagIndexAddress;
-	int32_t MemoryBufferOffset;
-	int32_t MemoryBufferSize;
-
-	StringLong SourceFile;
-
-	StringShort Build;
-
-	CacheFileType CacheType;
-	CacheFileSharedType SharedType;
-
-	bool Unknown2;
-	bool TrackedBuild;
-	bool Unknown3;
-	uint8_t Unknown4;
-
-	int32_t Unknown5;
-	int32_t Unknown6;
-	int32_t Unknown7;
-	int32_t Unknown8;
-	int32_t Unknown9;
-
-	int32_t StringIDsCount;
-	int32_t StringIDsBufferSize;
-	int32_t StringIDsIndicesOffset;
-	int32_t StringIDsBufferOffset;
-
-	int32_t ExternalDependencies;
-
-	FILETIME DateTime;
-	FILETIME MainMenuDateTime;
-	FILETIME SharedDateTime;
-	FILETIME CampaignDateTime;
-
-	StringShort Name;
-
-	int32_t Unknown13;
-
-	StringLong ScenarioPath;
-
-	int32_t MinorVersion;
-
-	int32_t TagNamesCount;
-	int32_t TagNamesBufferOffset;
-	int32_t TagNamesBufferSize;
-	int32_t TagNamesIndicesOffset;
-
-	uint32_t Checksum;
-
-	int32_t Unknown14;
-	int32_t Unknown15;
-	int32_t Unknown16;
-	int32_t Unknown17;
-	int32_t Unknown18;
-	int32_t Unknown19;
-	int32_t Unknown20;
-	int32_t Unknown21;
-
-	uint32_t BaseAddress;
-
-	int32_t XDKVersion;
-
-	class CacheFilePartition
-	{
-		uint32_t BaseAddress;
-		int32_t Size;
-	} Partitions[CacheFilePartitionType::Count];
-	static_assert(sizeof(CacheFilePartition) == 0x8, "CacheFilePartition wrong size");
-
-	int32_t CountUnknown1;
-
-	int32_t Unknown22;
-	int32_t Unknown23;
-	int32_t Unknown24;
-
-	int32_t SHA1_A[5];
-
-	int32_t SHA1_B[5];
-
-	int32_t SHA1_C[5];
-
-	int32_t RSA[64];
-
-	class CacheFileInterop
-	{
-		uint32_t ResourceBaseAddress;
-
-		int32_t DebugSectionSize;
-
-		uint32_t RuntimeBaseAddress;
-
-		uint32_t UnknownBaseAddress;
-
-		class CacheFileSection
-		{
-			uint32_t VirtualAddress;
-
-			int32_t Size;
-
-			int32_t CacheOffset;
-
-			uint32_t AddressMask;
-
-		} Sections[4];
-		static_assert(sizeof(CacheFileSection) == 0x10, "CacheFileSection wrong size");
-	} Interop;
-	static_assert(sizeof(CacheFileInterop) == 0x50, "CacheFileInterop wrong size");
-
-	int32_t GUID[4];
-
-	int16_t Unknown108;
-
-	int16_t CountUnknown2;
-
-	int32_t Unknown109;
-
-	int32_t CompressionGUID[4];
-
-	uint8_t Elements1[0x2300];
-
-	uint8_t Elements2[0x708];
-
-	uint8_t Unknown114[0x12C];
-
-	uint32_t Unknown115;
-
-	Tag FootTag;
-};
-static_assert(sizeof(CacheFileHeader) == 0x3024, "CacheFileHeader wrong size");
+static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
+auto g_cache_file = GetStructure<s_cache_file_header>(0x22AB018);
 
 struct s_unit_action
 {

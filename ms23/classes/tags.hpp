@@ -93,7 +93,7 @@ template<typename T>
 char filo_read_tag_hook(T *a1, LONG tag_offset, DWORD size, LPVOID buffer)
 {
 	printf_s("filo_read_tag: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
-	if (!(g_cache_file->unknown168 & 2))
+	if (!(g_cache_file->ExternalDependencies & 2))
 		return cache_read_hook(a1, 2, tag_offset, size, buffer);
 
 	int file_error;
@@ -104,12 +104,12 @@ char filo_read_tag_hook(T *a1, LONG tag_offset, DWORD size, LPVOID buffer)
 	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 }
 
-s_cache_file *cache_file_get_hook()
+s_cache_file_header *cache_file_header_get_hook()
 {
 	auto result = g_cache_file;
 
 	printf_s("cache_file_get: [cache_file->ScenarioPath, %s]\n", result->ScenarioPath);
-	printf_s("cache_file_get: [cache_file->unknown168, %d]\n", result->unknown168);
+	printf_s("cache_file_get: [cache_file->ExternalDependencies, %d]\n", result->ExternalDependencies);
 
 	return result;
 }
@@ -155,14 +155,14 @@ inline void SubmitTagsHooks(const char *name)
 		HookManager.Submit({ 0x101FC0 }, &maps_path_hook, "maps_path");
 		HookManager.Submit({ 0x102E87 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x102C90 }, &filo_read_tag_hook<uint8_t>, "filo_read_tag");
-		HookManager.Submit({ 0x101F90 }, &cache_file_get_hook, "cache_file_get");
-		HookManager.Submit({ 0x1016D0 }, &cache_read_hook<uint8_t>, "cache_read");
+		//HookManager.Submit({ 0x102C90 }, &filo_read_tag_hook<uint8_t>, "filo_read_tag");
+		//HookManager.Submit({ 0x101F90 }, &cache_file_header_get_hook, "cache_file_header_get");
+		//HookManager.Submit({ 0x1016D0 }, &cache_read_hook<uint8_t>, "cache_read");
 
-		HookManager.Submit({ 0x102E1E }, &sub_5AA7C0_hook<uint8_t, uint8_t>, "sub_5AA7C0", HookFlags::IsCall);
-		HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook<uint8_t, uint8_t>, "map_load_tags", HookFlags::IsCall);
+		//HookManager.Submit({ 0x102E1E }, &sub_5AA7C0_hook<uint8_t, uint8_t>, "sub_5AA7C0", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook<uint8_t, uint8_t>, "map_load_tags", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x102F03, 0x102F16 }, &sub_502780_hook<uint8_t>, "sub_502780", HookFlags::IsCall);
+		//HookManager.Submit({ 0x102F03, 0x102F16 }, &sub_502780_hook<uint8_t>, "sub_502780", HookFlags::IsCall);
 	}
 }
 
