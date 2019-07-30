@@ -9,9 +9,8 @@
 
 char map_load_tags_hook(char *scenario_path)
 {
-	printf_s("map_load_tags::before: [scenario_path, %s]\n", scenario_path);
+	printf_s("map_load_tags: [scenario_path, %s]\n", scenario_path);
 	auto result = ((char(*)(char *))0x502DC0)(scenario_path);
-	printf_s("map_load_tags::after: [scenario_path, %s]\n", scenario_path);
 
 	return result;
 }
@@ -96,9 +95,8 @@ char filo_create_and_open_tags_hook()
 
 char cache_setup_tag_table_hook()
 {
-	printf_s("cache_setup_tag_table::before: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
+	printf_s("cache_setup_tag_table: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
 	auto result = ((char(*)())0x502B40)();
-	printf_s("cache_setup_tag_table::after: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
 
 	return result;
 }
@@ -127,9 +125,8 @@ char filo_read_tag_hook(LONG tag_offset, DWORD size, LPVOID buffer)
 
 char map_load_new_cache_file_hook(char *scenario_path, s_cache_file_header *cache_file_header)
 {
-	printf_s("map_load_new_cache_file::before: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
+	printf_s("map_load_new_cache_file: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
 	auto result = ((char(*)(char *, s_cache_file_header *))0x5AA7C0)(scenario_path, cache_file_header);
-	printf_s("map_load_new_cache_file::after: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
 
 	// this function can be used to fixup scenarion index to sync with servers???!
 
