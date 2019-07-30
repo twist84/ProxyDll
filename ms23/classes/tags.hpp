@@ -7,6 +7,15 @@
 #include "filo.hpp"
 #include "level.hpp"
 
+char map_load_tags_hook(char *scenario_path)
+{
+	printf_s("map_load_tags::before: [scenario_path, %s]\n", scenario_path);
+	auto result = ((char(*)(char *))0x502DC0)(scenario_path);
+	printf_s("map_load_tags::after: [scenario_path, %s]\n", scenario_path);
+
+	return result;
+}
+
 struct s_mainmenu_scnr_tag
 {
 	bool Compare(uint32_t group, uint32_t index)
@@ -51,32 +60,7 @@ uint32_t __cdecl tag_get_group_tag_hook(uint32_t index)
 	return result;
 }
 
-uint8_t *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size)
-{
-	auto result = &block->address[size * index];
-
-	// DO STUFF!
-	//printf_s("count: %d | block[%d]->size == 0x%X\n", block->count, index, size);
-
-	return result;
-}
-
-const char *maps_path_hook()
-{
-	return g_maps_path.c_str();
-}
-
-char __fastcall filo_create_and_open_tags_hook(void *thisptr)
-{
-	cache_path.Update(ConfigManager.GetBool("Maps", "UseNewCacheStyle"));
-	auto result = ((char(__thiscall *)(void *))0x5028C0)(thisptr);
-	cache_path.tags.Print();
-
-	return result;
-}
-
-template<typename T>
-char cache_read_hook(T *a1, int a2, LONG tag_offset, DWORD size, LPVOID buffer)
+char cache_read_hook(int a2, LONG tag_offset, DWORD size, LPVOID buffer)
 {
 	printf_s("cache_read: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
 
@@ -89,12 +73,49 @@ char cache_read_hook(T *a1, int a2, LONG tag_offset, DWORD size, LPVOID buffer)
 	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 }
 
-template<typename T>
-char filo_read_tag_hook(T *a1, LONG tag_offset, DWORD size, LPVOID buffer)
+const char *maps_path_hook()
+{
+	return g_maps_path.c_str();
+}
+
+char filo_create_and_open_tags_hook()
+{
+	cache_path.Update(ConfigManager.GetBool("Maps", "UseNewCacheStyle"));
+
+	char result = 0;
+	if (g_cache_file_header->ExternalDependencies & 2)
+	{
+		filo_create_hook(global_tag_cache_filo, cache_path.tags.Path.c_str(), 0);
+		int file_error;
+		result = file_open(global_tag_cache_filo, 1, &file_error);
+	}
+
+	cache_path.tags.Print();
+	return result;
+}
+
+char cache_setup_tag_table_hook()
+{
+	printf_s("cache_setup_tag_table::before: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
+	auto result = ((char(*)())0x502B40)();
+	printf_s("cache_setup_tag_table::after: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
+
+	return result;
+}
+
+s_cache_file_header *cache_file_header_get_hook()
+{
+	auto result = g_cache_file_header;
+	printf_s("cache_file_header_get: [cache_file_header->ScenarioPath, %s]\n", result->ScenarioPath);
+
+	return result;
+}
+
+char filo_read_tag_hook(LONG tag_offset, DWORD size, LPVOID buffer)
 {
 	printf_s("filo_read_tag: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
-	if (!(g_cache_file->ExternalDependencies & 2))
-		return cache_read_hook(a1, 2, tag_offset, size, buffer);
+	if (!(g_cache_file_header->ExternalDependencies & 2))
+		return cache_read_hook(2, tag_offset, size, buffer);
 
 	int file_error;
 	if (!file_open(global_tag_cache_filo, 1, &file_error))
@@ -104,42 +125,38 @@ char filo_read_tag_hook(T *a1, LONG tag_offset, DWORD size, LPVOID buffer)
 	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 }
 
-s_cache_file_header *cache_file_header_get_hook()
+char map_load_new_cache_file_hook(char *scenario_path, s_cache_file_header *cache_file_header)
 {
-	auto result = g_cache_file;
+	printf_s("map_load_new_cache_file::before: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
+	auto result = ((char(*)(char *, s_cache_file_header *))0x5AA7C0)(scenario_path, cache_file_header);
+	printf_s("map_load_new_cache_file::after: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
 
-	printf_s("cache_file_get: [cache_file->ScenarioPath, %s]\n", result->ScenarioPath);
-	printf_s("cache_file_get: [cache_file->ExternalDependencies, %d]\n", result->ExternalDependencies);
+	// this function can be used to fixup scenarion index to sync with servers???!
+
+	// cache_file_header replace map_id and scenario_index test, works
+	if (cache_file_header->MapId.value == e_map_id::_zanzibar && cache_file_header->ScenarioTagIndex == 0x4F14)
+	{
+		cache_file_header->MapId.value = e_map_id::_guardian;
+		cache_file_header->ScenarioTagIndex = 0x2E8A;
+	}
 
 	return result;
 }
 
-template<typename Ta, typename Tb>
-char sub_5AA7C0_hook(Ta *a1, Tb *a2, char *scenario_path, uint8_t *cache_file)
+char load_root_tag_hook(uint32_t tag_index)
 {
-	auto result = ((char(*)(Ta *, Tb *, char *, uint8_t *))0x5AA7C0)(a1, a2, scenario_path, cache_file);
-
-	printf_s("sub_5AA7C0: [cache_file->ScenarioPath, %s]\n", g_cache_file->ScenarioPath);
+	printf_s("load_root_tag: [tag_index, 0x%04X]\n", tag_index);
+	auto result = ((char(*)(uint32_t tag_index))0x502780)(tag_index);
 
 	return result;
 }
 
-template<typename Ta, typename Tb>
-char map_load_tags_hook(Ta *a1, Tb *a2, char *scenario_path)
+uint8_t *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size)
 {
-	auto result = ((char(*)(Ta *, Tb *, char *))0x502DC0)(a1, a2, scenario_path);
+	auto result = &block->address[size * index];
 
-	printf_s("map_load_tags: [scenario_path, %s]\n", scenario_path);
-
-	return result;
-}
-
-template<typename T>
-char sub_502780_hook(T *a1, uint32_t tag_index)
-{
-	auto result = ((char(*)(T *, uint32_t tag_index))0x502780)(a1, tag_index); // crashes here on second run
-
-	printf_s("sub_502780: [tag_index, 0x%04X]\n", tag_index);
+	// DO STUFF!
+	//printf_s("count: %d | block[%d]->size == 0x%X\n", block->count, index, size);
 
 	return result;
 }
@@ -148,21 +165,21 @@ inline void SubmitTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
+		HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook, "map_load_tags", HookFlags::IsCall);
+
 		HookManager.Submit({ 0x103370 }, &tag_get_definition_hook, "tag_get_definition");
 		HookManager.Submit({ 0x1033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
-		HookManager.Submit({ 0x15AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
-
+		
+		//HookManager.Submit({ 0x1016D0 }, &cache_read_hook, "cache_read");
+		HookManager.Submit({ 0x101F90 }, &cache_file_header_get_hook, "cache_file_header_get");
 		HookManager.Submit({ 0x101FC0 }, &maps_path_hook, "maps_path");
-		HookManager.Submit({ 0x102E87 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags", HookFlags::IsCall);
+		//HookManager.Submit({ 0x102C90 }, &filo_read_tag_hook, "filo_read_tag");
+		HookManager.Submit({ 0x102E1E }, &map_load_new_cache_file_hook, "map_load_new_cache_file", HookFlags::IsCall);
+		HookManager.Submit({ 0x1028C0 }, &filo_create_and_open_tags_hook, "filo_create_and_open_tags");
+		HookManager.Submit({ 0x102E9B }, &cache_setup_tag_table_hook, "cache_setup_tag_table", HookFlags::IsCall);
+		HookManager.Submit({ 0x102F16 }, &load_root_tag_hook, "load_root_tag", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x102C90 }, &filo_read_tag_hook<uint8_t>, "filo_read_tag");
-		//HookManager.Submit({ 0x101F90 }, &cache_file_header_get_hook, "cache_file_header_get");
-		//HookManager.Submit({ 0x1016D0 }, &cache_read_hook<uint8_t>, "cache_read");
-
-		//HookManager.Submit({ 0x102E1E }, &sub_5AA7C0_hook<uint8_t, uint8_t>, "sub_5AA7C0", HookFlags::IsCall);
-		//HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook<uint8_t, uint8_t>, "map_load_tags", HookFlags::IsCall);
-
-		//HookManager.Submit({ 0x102F03, 0x102F16 }, &sub_502780_hook<uint8_t>, "sub_502780", HookFlags::IsCall);
+		HookManager.Submit({ 0x15AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
 	}
 }
 
