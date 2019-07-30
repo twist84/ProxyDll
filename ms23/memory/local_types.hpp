@@ -4622,6 +4622,7 @@ struct e_map_id
 {
 	enum : int
 	{
+		_null = 0, // mainmenu
 		_mainmenu = 270735729,
 
 		_005 = 3005,
@@ -5155,98 +5156,6 @@ struct e_map_id
 	}
 };
 
-struct s_cache_file_header
-{
-	char HeadTag[4];								// 'head'
-	int32_t Version;								// 12
-	int32_t FileLength;								// 339984
-	int32_t unknownC;								// 0
-	uint32_t TagIndexAddress;						// 0
-	int32_t MemoryBufferOffset;						// 0
-	int32_t MemoryBufferSize;						// 0
-	char SourceFile[256];							// 0
-	char Build[32];									// 1.106708 cert_ms23
-
-	enum class e_cache_file_type : short { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
-	e_cache_file_type CacheType;			// campaign
-
-	enum class e_cache_file_shared_type : short { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
-	e_cache_file_shared_type SharedType;			// none
-
-	bool unknown140;								// true
-	bool TrackedBuild;								// true
-	bool unknown142;								// false
-	uint8_t unknown143;								// 0
-
-	FILETIME DateTime_Unknown;						// 0
-	int32_t unknown14C;								// 0
-	int32_t unknown150;								// 0
-	int32_t unknown154;								// 0
-
-	int32_t StringIDsCount;							// 0
-	int32_t StringIDsBufferSize;					// 0
-	int32_t StringIDsIndicesOffset;					// 0
-	int32_t StringIDsBufferOffset;					// 0
-
-	enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
-	char __declspec(align(4)) ExternalDependencies;	// 62, unk2|unk3|unk4|unk5|unk6
-
-	FILETIME DateTime;								// 84 1F 26 07 1C 63 D0 01
-	FILETIME DateTime_CacheFileShared[6];			// { 04 17 79 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01 }
-
-	char Name[32];									// mainmenu
-
-	int32_t unknown1C4;								// 0
-
-	char ScenarioPath[256];							// levels\ui\mainmenu\mainmenu
-
-	int32_t MinorVersion;							// -1
-
-	int32_t TagNamesCount;							// 0
-	int32_t TagNamesBufferOffset;					// 0
-	int32_t TagNamesBufferSize;						// 0
-	int32_t TagNamesIndicesOffset;					// 0
-
-	int32_t unknown2DC[7];							// { 13200, 326784, 00 00 00 00, 67 64 03 CF, AE D0 75 DF, 50 E7 5B 75, 6B 4A BB F4 }
-
-	int32_t SHA1_A[5];								// { E8 54 8F C6, D6 CC 92 15, 97 DC F5 EE, B9 3C 01 3C, 00 00 00 00 }
-
-	int32_t SHA1_B[5];								// { F4 17 00 00, 00 00 00 00, 00 00 00 00, FC 7B 19 64, A6 0E 80 17 }
-
-	int32_t SHA1_C[5];								// { B6 C9 33 03, FF 54 BF 54, CE AE 9E F2, F8 F5 F4 9F, E2 44 00 F3 }
-
-	int32_t RSA[64];								// { 60 13 95 76, B3 99 02 B9, 92 04 46 C5, B5 68 D5 02, 3C 3C 6B 49, 98 93 31 52, DB 88 CB BA, B9 E5 FB 8F, 
-													//   1F BC 16 61, DE 51 1F 05, 95 DD C2 02, 0C 41 6A F2, B6 36 C4 CA, DC E0 40 2A, 84 9E 3C 29, FD F4 A1 02, 
-													//   C1 39 00 F2, 58 6D 63 BE, 9D 8E 40 6D, 67 78 E9 F3, 77 50 CB C8, 08 8E 12 F7, F7 44 08 4F, 7D 1F 4C CE, 
-													//   1E 4C C4 23, 1E 7D 7D B4, F1 3C 58 50, E2 76 34 AA, 14 B5 85 5C, EC 6D BC FC, C8 A4 89 EA, 07 C8 3B 69, 
-													//   26 0C 2C 8A, 72 76 D6 D6, 2D D8 ED 1D, 74 32 E4 C4, B2 BA B8 0A, 39 DC BF 4E, B4 87 7D EC, 03 61 75 72, 
-													//   0A 32 0E 21, C2 65 DB 5F, 04 97 BD C6, 40 EB 4E C7, 3C 26 9A CC, 1F 2A 05 02, EB 03 B7 BD, 9C 0B 24 EA, 
-													//   5C E1 33 84, E1 5E 84 93, 63 EA 59 94, 0D AD 59 62, 8E 2C 0C EB, BA 58 3D 19, 2A 65 E1 FA, BF 56 A9 34, 
-													//   06 C3 61 49, 2C F4 0E 88, 75 F9 8F AC, 23 08 A5 22, 9F 5B 1E 56, 9A FE 00 0C, A4 33 D4 A5, E8 FF F8 A5  }
-
-	int32_t unknown434[11];							// { 0, 0, 0, 0, 13200, 326784, 13200, 0, 13200, 0, -1 }
-
-	uint8_t unknown460[0x2984];						// 0
-
-	uint32_t TagAddressOffset; 						// 0
-	int32_t TagIndexCount; 							// 0
-
-	e_map_id MapId;									// 0
-
-	int32_t ScenarioTagIndex;						// 0x27C3
-
-	uint8_t unknown2DF4[0x598];						// 0
-
-	char FootTag[4];								// 'foot'
-
-	size_t Size()
-	{
-		return sizeof(*this);
-	}
-};
-static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
-auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
-
 struct e_achievement
 {
 	enum : signed int
@@ -5448,6 +5357,102 @@ struct e_achievement
 		return -1;
 	}
 };
+
+enum class e_cache_file_type : short { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
+enum class e_cache_file_shared_type : short { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
+enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
+struct s_cache_file_header
+{
+	char HeadTag[4];								// 'head'
+	int32_t Version;								// 12
+	int32_t FileLength;								// 339984
+	int32_t unknownC;								// 0
+	uint32_t TagIndexAddress;						// 0
+	int32_t MemoryBufferOffset;						// 0
+	int32_t MemoryBufferSize;						// 0
+	char SourceFile[256];							// 0
+	char Build[32];									// 1.106708 cert_ms23
+
+	e_cache_file_type CacheType;			// campaign
+
+	e_cache_file_shared_type SharedType;			// none
+
+	bool unknown140;								// true
+	bool TrackedBuild;								// true
+	bool unknown142;								// false
+	uint8_t unknown143;								// 0
+
+	FILETIME DateTime_Unknown;						// 0
+	int32_t unknown14C;								// 0
+	int32_t unknown150;								// 0
+	int32_t unknown154;								// 0
+
+	int32_t StringIDsCount;							// 0
+	int32_t StringIDsBufferSize;					// 0
+	int32_t StringIDsIndicesOffset;					// 0
+	int32_t StringIDsBufferOffset;					// 0
+
+	char __declspec(align(4)) ExternalDependencies;	// 62, 00111110, unk2|unk3|unk4|unk5|unk6
+
+	FILETIME DateTime;								// 84 1F 26 07 1C 63 D0 01
+	FILETIME DateTime_CacheFileShared[6];			// { 04 17 79 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01 }
+
+	char Name[32];									// mainmenu
+
+	int32_t unknown1C4;								// 0
+
+	char ScenarioPath[256];							// levels\ui\mainmenu\mainmenu
+
+	int32_t MinorVersion;							// -1
+
+	// used in an unused function
+	int32_t TagNamesCount;							// 0
+	int32_t TagNamesBufferOffset;					// 0
+	int32_t TagNamesBufferSize;						// 0
+	int32_t TagNamesIndicesOffset;					// 0
+
+	int32_t unknown2DC[2];							// { 13200, 326784 }
+
+	// possibly sha1 related
+	int32_t unknown2E4[5];							// { 00 00 00 00, 67 64 03 CF, AE D0 75 DF, 50 E7 5B 75, 6B 4A BB F4 }
+
+	int32_t SHA1_A[5];								// { E8 54 8F C6, D6 CC 92 15, 97 DC F5 EE, B9 3C 01 3C, 00 00 00 00 }
+
+	int32_t SHA1_B[5];								// { F4 17 00 00, 00 00 00 00, 00 00 00 00, FC 7B 19 64, A6 0E 80 17 }
+
+	int32_t SHA1_C[5];								// { B6 C9 33 03, FF 54 BF 54, CE AE 9E F2, F8 F5 F4 9F, E2 44 00 F3 }
+
+	int32_t RSA[64];								// { 60 13 95 76, B3 99 02 B9, 92 04 46 C5, B5 68 D5 02, 3C 3C 6B 49, 98 93 31 52, DB 88 CB BA, B9 E5 FB 8F, 
+													//   1F BC 16 61, DE 51 1F 05, 95 DD C2 02, 0C 41 6A F2, B6 36 C4 CA, DC E0 40 2A, 84 9E 3C 29, FD F4 A1 02, 
+													//   C1 39 00 F2, 58 6D 63 BE, 9D 8E 40 6D, 67 78 E9 F3, 77 50 CB C8, 08 8E 12 F7, F7 44 08 4F, 7D 1F 4C CE, 
+													//   1E 4C C4 23, 1E 7D 7D B4, F1 3C 58 50, E2 76 34 AA, 14 B5 85 5C, EC 6D BC FC, C8 A4 89 EA, 07 C8 3B 69, 
+													//   26 0C 2C 8A, 72 76 D6 D6, 2D D8 ED 1D, 74 32 E4 C4, B2 BA B8 0A, 39 DC BF 4E, B4 87 7D EC, 03 61 75 72, 
+													//   0A 32 0E 21, C2 65 DB 5F, 04 97 BD C6, 40 EB 4E C7, 3C 26 9A CC, 1F 2A 05 02, EB 03 B7 BD, 9C 0B 24 EA, 
+													//   5C E1 33 84, E1 5E 84 93, 63 EA 59 94, 0D AD 59 62, 8E 2C 0C EB, BA 58 3D 19, 2A 65 E1 FA, BF 56 A9 34, 
+													//   06 C3 61 49, 2C F4 0E 88, 75 F9 8F AC, 23 08 A5 22, 9F 5B 1E 56, 9A FE 00 0C, A4 33 D4 A5, E8 FF F8 A5  }
+
+	int32_t unknown434[11];							// { 0, 0, 0, 0, 13200, 326784, 13200, 0, 13200, 0, -1 }
+
+	uint8_t unknown460[0x2984];						// 0
+
+	uint32_t TagAddressOffset; 						// 0
+	int32_t TagIndexCount; 							// 0
+
+	e_map_id MapId;									// 0
+
+	int32_t ScenarioTagIndex;						// 0x27C3
+
+	uint8_t unknown2DF4[0x598];						// 0
+
+	char FootTag[4];								// 'foot'
+
+	size_t Size()
+	{
+		return sizeof(*this);
+	}
+};
+static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
+auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
 
 auto g_default_maps_path = "maps\\";
 std::string g_maps_path = g_default_maps_path;
