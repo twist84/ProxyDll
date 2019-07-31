@@ -73,7 +73,8 @@ namespace cache
 	//	0x502B40, cache::cache_files_windows::setup
 	//	00502C90, cache::cache_files_windows::read_tag
 
-	//	0x502CE0, cache::cache_files_windows::dispose
+	//	0x502CE0, cache::cache_files_windows::dispose_internal
+	//	0x503200, cache::cache_files_windows::dispose
 	//	0x5A97C0, cache::cache_files_windows::do_work_internal
 	//	0x5AA0C0, cache::cache_files_windows::get_handle
 	//	0x5AA1D0, cache::cache_files_windows::get_io_completion_port_completion_key

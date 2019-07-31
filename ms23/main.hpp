@@ -45,6 +45,10 @@ void PostInit()
 	//Blam::StringIDCache::Instance.PrintStrings();
 }
 
+void ExitGame()
+{
+	*(bool *)0x22B473C = true; //g_game_is_exiting
+}
 void LaunchMainmenu()
 {
 	LaunchScenario("levels\\ui\\mainmenu\\mainmenu", e_scenario_type::_mainmenu);
@@ -71,6 +75,8 @@ void HotkeyThread()
 {
 	while (true)
 	{
+		AssignHotkey(VK_ESCAPE, &ExitGame);
+
 		AssignHotkey(VK_F2, &SetAllQualitySettingsLow);
 		AssignHotkey(VK_F3, &SetAllQualitySettingsMedium);
 		AssignHotkey(VK_F4, &SetAllQualitySettingsHigh);
