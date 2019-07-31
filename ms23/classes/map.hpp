@@ -108,9 +108,9 @@ bool __cdecl sub_AC3900_hook(int content_type, e_map_id map_id, char *DstBuf)
 	return strlen(DstBuf) > 0;
 }
 
-bool map_load_hook(int campaign_id, int map_id, char *scenario_path)
+bool map_load_hook(int campaign_id, int map_id, char *scenario_path) // dirty_disk_error(TODO: reimplement this function) if returned value is false
 {
-	if (map_load_tags_hook(scenario_path))
+	if (map_load_tags_hook(scenario_path)) // TODO: fully reimplement this as a hook, not  call hook
 	{
 		auto scenario = tag_get_definition_hook('scnr', *(uint32_t *)0x189CCF8);
 		if ((map_id == -2) || ((uint32_t)(scenario + 4) == campaign_id || campaign_id == -1) && ((uint32_t)(scenario + 8) == map_id || map_id == -1))
