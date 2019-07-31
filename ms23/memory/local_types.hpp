@@ -5358,70 +5358,81 @@ struct e_achievement
 	}
 };
 
-enum class e_cache_file_type : short { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
-enum class e_cache_file_shared_type : short { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
-enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
-enum class e_cache_file_partition_type : int { resources, sound_resources, global_tags, shared_tags, base, map_tags, k_number_of_cache_file_partition_types };
-enum class e_cache_file_section_type : int { debug, resource, tag, localization, k_number_of_cache_file_section_types };
+enum class alignas(2) e_cache_file_type : char { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
+enum class alignas(2) e_cache_file_shared_type : char { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
+//enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
+enum class alignas(4) e_external_dependency : char { none = 0, mainmenu = 1 << 0, shared = 1 << 1, campaign = 1 << 2, unknown3 = 1 << 3, unknown4 = 1 << 4, unknown5 = 1 << 5, unknown6 = 1 << 6 };
+enum class alignas(4) e_cache_file_partition_type : char { resources, sound_resources, global_tags, shared_tags, base, map_tags, k_number_of_cache_file_partition_types };
+enum class alignas(4) e_cache_file_section_type : char { debug, resource, tag, localization, k_number_of_cache_file_section_types };
 struct s_cache_file_header
 {
-	// 'head'
-	char HeadTag[4];
-	// 12
-	int32_t Version;
-	// 339984
-	int32_t FileLength;
+	char HeadTag[4]; // 'head'
+
+	int32_t Version; // 12
+
+	int32_t FileLength; // 339984
+
 	int32_t unknownC; // 0
+
 	uint32_t TagIndexAddress; // 0
 	int32_t MemoryBufferOffset; // 0
 	int32_t MemoryBufferSize; // 0
-	char SourceFile[256]; // 0
-	// 1.106708 cert_ms23
-	char Build[32];
-	// campaign
-	e_cache_file_type CacheType;
-	// none
-	e_cache_file_shared_type SharedType;
-	// true
-	bool unknown140;
-	// true
-	bool TrackedBuild;
-	// false, campaign_insertion related, possibly to enable firefight???!
-	bool unknown142;								
+
+	char SourceFile[256]; // 0, runtime
+
+	char Build[32]; // 1.106708 cert_ms23
+
+	e_cache_file_type CacheType; // campaign
+	e_cache_file_shared_type SharedType; // none
+
+	bool unknown140; // true
+	bool TrackedBuild; // true
+	bool unknown142; // false
 	uint8_t unknown143; // 0
+
 	FILETIME DateTime_Unknown; // 0
+
 	int32_t unknown14C;	// 0
 	int32_t unknown150;	// 0
 	int32_t unknown154;	// 0
+
 	int32_t StringIDsCount; // 0
 	int32_t StringIDsBufferSize; // 0
 	int32_t StringIDsIndicesOffset; // 0
 	int32_t StringIDsBufferOffset; // 0
-	// 62, 00111110, unk2|unk3|unk4|unk5|unk6
-	char __declspec(align(4)) ExternalDependencies;
+
+	char __declspec(align(4)) ExternalDependencies; // 62, 00111110, shared|campaign|unknown3|unknown4|unknown5
+
 	// 84 1F 26 07 1C 63 D0 01
 	FILETIME DateTime;
+
 	// { 04 17 79 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01, 1B 93 92 CC 1B 63 D0 01 }
 	FILETIME DateTime_CacheFileShared[6];
-	// mainmenu
-	char Name[32];
+
+	char Name[32]; // mainmenu
+
 	int32_t unknown1C4; // 0
-	// levels\ui\mainmenu\mainmenu
-	char ScenarioPath[256];							
-	// -1
-	int32_t MinorVersion;
+
+	char ScenarioPath[256];	// levels\ui\mainmenu\mainmenu
+
+	int32_t MinorVersion; // -1
+
 	int32_t TagNamesCount; // 0
 	int32_t TagNamesBufferOffset; // 0
 	int32_t TagNamesBufferSize; // 0
 	int32_t TagNamesIndicesOffset; // 0
+
 	struct s_cache_file_partition
 	{
 		uint32_t BaseAddress; // 13200
 		int32_t Size; // 326784
 	} Partitions[1];
+
 	int32_t UnkownCount; // 0
+
 	// { 67 64 03 CF, AE D0 75 DF, 50 E7 5B 75, 6B 4A BB F4 }
 	uint32_t unknown2E8[4];
+
 	// { E8 54 8F C6, D6 CC 92 15, 97 DC F5 EE, B9 3C 01 3C, 00 00 00 00 }
 	int32_t SHA1_A[5];
 	// { F4 17 00 00, 00 00 00 00, 00 00 00 00, FC 7B 19 64, A6 0E 80 17 }
@@ -5437,6 +5448,7 @@ struct s_cache_file_header
 	//   5C E1 33 84, E1 5E 84 93, 63 EA 59 94, 0D AD 59 62, 8E 2C 0C EB, BA 58 3D 19, 2A 65 E1 FA, BF 56 A9 34, 
 	//   06 C3 61 49, 2C F4 0E 88, 75 F9 8F AC, 23 08 A5 22, 9F 5B 1E 56, 9A FE 00 0C, A4 33 D4 A5, E8 FF F8 A5  }
 	int32_t RSA[64];
+
 	struct s_cache_file_interop
 	{
 		uint32_t ResourceBaseAddress; // 0
@@ -5449,20 +5461,38 @@ struct s_cache_file_header
 			int32_t Size; // 326784, 0, 0, 0
 		} Sections[4];
 	} Interop;
-	uint8_t unknown464[0x2328]; // 0
+
+	UUID GUID;
+
+	short unknown474; // 0
+	short unknown476; // 0
+
+	int32_t unknown478; // 0
+
+	UUID CompressionGUID; // 0
+
+	uint8_t Elements1[0x2300]; // 0
+
 	// requires unknown142 be enabled
 	int32_t CampaignInsertionPoint; // 0
-	struct { uint8_t data[0xB4]; // 0
+	struct s_cache_file_insertion
+	{
+		uint8_t data[0xB4]; // 0
 	} CampaignInsertion[9];
+
 	uint32_t TagAddressOffset; // 0
 	int32_t TagIndexCount; // 0
-	// 0
-	e_map_id MapId; 
-	// 0x27C3
-	int32_t ScenarioTagIndex;
-	uint8_t unknown2DF4[0x598]; // 0
-	// 'foot'
-	char FootTag[4];
+
+	e_map_id MapId; // 0
+	int32_t ScenarioTagIndex; // 0x27C3
+
+	uint8_t Elements2[0x468]; // 0
+
+	uint8_t unknown325C[0x12C]; // 0
+
+	uint32_t unknown3388; // 0
+
+	char FootTag[4]; // 'foot'
 
 	size_t Size()
 	{

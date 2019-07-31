@@ -83,6 +83,9 @@
       <Filter>classes</Filter>
     </ClInclude>
     <ClInclude Include="main.hpp" />
+    <ClInclude Include="classes\cache_files.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="memory">

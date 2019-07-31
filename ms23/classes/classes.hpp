@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "cache_files.hpp"
 #include "camera.hpp"
 #include "cinematic.hpp"
 #include "filo.hpp"
@@ -24,6 +25,7 @@
 
 void SubmitHooks()
 {
+	SubmitCacheFilesHooks("CacheFiles");
 	SubmitCameraHooks("Camera");
 	SubmitFiloHooks("Filo");
 	SubmitGameEngineHooks("GameEngine");
@@ -48,6 +50,7 @@ void SubmitHooks()
 
 void SubmitPatches()
 {
+	SubmitCacheFilesPatches("CacheFiles");
 	SubmitCameraPatches("Camera");
 	SubmitFiloPatches("Filo");
 	SubmitGameEnginePatches("GameEngine");

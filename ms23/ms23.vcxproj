@@ -22,6 +22,7 @@
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="classes\cache_files.hpp" />
     <ClInclude Include="classes\camera.hpp" />
     <ClInclude Include="classes\cinematic.hpp" />
     <ClInclude Include="classes\classes.hpp" />
