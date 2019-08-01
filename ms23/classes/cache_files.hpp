@@ -69,7 +69,7 @@ inline void SubmitCacheFilesPatches(const char *name)
 
 namespace cache
 {
-	//- 004EA5E0, cache::load
+	//-	004EA5E0, cache::load
 	//-	005016D0, cache::cache_files_windows::read
 	//-	00501940, cache::cache_files_windows::get_build
 	//	00501950, cache::cache_files_windows::validate
