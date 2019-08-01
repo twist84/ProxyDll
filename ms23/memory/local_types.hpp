@@ -5502,22 +5502,43 @@ struct s_cache_file_header
 static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
 auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
 
-struct s_cache_file
+struct s_cache
 {
-	struct s_tag_runtime_resource
+	bool initialized;
+
+	uint8_t unknown1[7];
+
+	struct s_cache_file
 	{
-		uint8_t unknown0[0x8];
+		struct s_tag_runtime_resource
+		{
+			uint32_t *FileHandle;
+			uint32_t unknown4;
 
-		s_cache_file_header header;
+			s_cache_file_header Header;
 
-		uint8_t unknown3398[0x8];
-	} runtime_resources[15];
+			uint32_t IoCompletionKey;
+			uint32_t *FileHandle2;
+		} tag_runtime_resources[15];
+		static_assert(sizeof(s_tag_runtime_resource) == 0x33A0, "s_tag_runtime_resource wrong size");
 
-	int32_t runtime_resource_index;
+		int32_t runtime_resource_index;
 
-	uint8_t unknown30664[0x85C];
+		int32_t unknown30664;
+
+		int32_t runtime_resource_count;
+
+		int32_t unknown_type;
+
+		uint8_t unknown30670[8][0x108];
+	} cache_file;
+	static_assert(sizeof(s_cache_file) == 0x30EB0, "s_cache_file wrong size");
+
+	uint8_t part2[0x36E8];
+	uint8_t part3[0x3B8];
 };
-auto g_cache_file = GetStructure<s_cache_file>(0x240B1E8);
+static_assert(sizeof(s_cache) == 0x34958, "s_cache wrong size");
+auto g_cache = GetStructure<s_cache>(0x240B1E0);
 
 auto g_default_maps_path = "maps\\";
 std::string g_maps_path = g_default_maps_path;
