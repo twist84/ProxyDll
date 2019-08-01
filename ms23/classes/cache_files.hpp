@@ -181,7 +181,7 @@ namespace cache
 			return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 		}
 
-		char initialize(char *scenario_path, s_cache_file_header *cache_file)
+		char initialize(char *scenario_path, s_cache_file_header *cache_file_header)
 		{
 			if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 			{
@@ -222,7 +222,7 @@ namespace cache
 			}
 
 			g_cache_file->runtime_resource_index = runtime_resource_index;
-			memmove(cache_file, &g_cache_file->runtime_resources[runtime_resource_index].header, 0x3390u);
+			memmove(cache_file_header, &g_cache_file->runtime_resources[runtime_resource_index].header, 0x3390u);
 			return 1;
 		}
 	}
