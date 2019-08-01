@@ -5502,6 +5502,23 @@ struct s_cache_file_header
 static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
 auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
 
+struct s_cache_file
+{
+	struct s_tag_runtime_resource
+	{
+		uint8_t unknown0[0x8];
+
+		s_cache_file_header header;
+
+		uint8_t unknown3398[0x8];
+	} runtime_resources[15];
+
+	int32_t runtime_resource_index;
+
+	uint8_t unknown30664[0x85C];
+};
+auto g_cache_file = GetStructure<s_cache_file>(0x240B1E8);
+
 auto g_default_maps_path = "maps\\";
 std::string g_maps_path = g_default_maps_path;
 

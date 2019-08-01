@@ -18,6 +18,10 @@ namespace cache
 		char setup();
 		char read_tag(LONG tag_offset, DWORD size, LPVOID buffer);
 		char initialize(char *scenario_path, s_cache_file_header *cache_file_header);
+
+		static auto dispose_from_old_map = (void *(__cdecl *)(LONG cache_file_shared_type))(0x5AB630);
+		static auto initialize_for_new_map = (char(__cdecl *)(int cache_file_index, char *scenario_path))(0x5ABAD0);
+		static auto get_source_file_cache_file_index = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
 	}
 }
 
@@ -177,21 +181,49 @@ namespace cache
 			return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 		}
 
-		char initialize(char *scenario_path, s_cache_file_header *cache_file_header)
+		char initialize(char *scenario_path, s_cache_file_header *cache_file)
 		{
-			printf_s("cache::cache_files_windows::initialize: [game_options->ScenarioPath, %s]\n", cache_file_header->ScenarioPath);
-			auto result = ((char(*)(char *, s_cache_file_header *))0x5AA7C0)(scenario_path, cache_file_header);
-
-			// this function can be used to fixup scenarion index to sync with servers???!
-
-			// cache_file_header replace map_id and scenario_index test, works
-			if (cache_file_header->MapId.value == e_map_id::_zanzibar && cache_file_header->ScenarioTagIndex == 0x4F14)
+			if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 			{
-				cache_file_header->MapId.value = e_map_id::_guardian;
-				cache_file_header->ScenarioTagIndex = 0x2E8A;
+				if (*(byte *)0x240B1E0)
+				{
+					auto runtime_resource_index = cache::cache_files_windows::get_source_file_cache_file_index(scenario_path);
+					if (runtime_resource_index != -1)
+						cache::cache_files_windows::dispose_from_old_map(runtime_resource_index);
+				}
 			}
 
-			return result;
+			if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
+				((char(__cdecl *)(char *, int a2))0x54C330)(scenario_path, 1);
+
+			auto runtime_resource_index = cache::cache_files_windows::get_source_file_cache_file_index(scenario_path);
+			if (*(byte *)0x240B1E0)
+			{
+				if (runtime_resource_index == -1)
+				{
+					runtime_resource_index = 7;
+
+					if (!cache::cache_files_windows::initialize_for_new_map(runtime_resource_index, scenario_path))
+						return 0;
+				}
+			}
+			else if (runtime_resource_index == -1)
+			{
+				return 0;
+			}
+
+			auto ScenarioPath = g_cache_file->runtime_resources[runtime_resource_index].header.ScenarioPath;
+			printf_s("cache::cache_files_windows::initialize: [runtime_resources[%d].header.ScenarioPath, %s]\n", runtime_resource_index, ScenarioPath);
+
+			for (size_t i = 0; i < 15; i++)
+			{
+				auto SourceFile = g_cache_file->runtime_resources[i].header.SourceFile;
+				printf_s("cache::cache_files_windows::initialize: [runtime_resource->cache_files[%d].header.SourceFile, %s]\n", i, SourceFile);
+			}
+
+			g_cache_file->runtime_resource_index = runtime_resource_index;
+			memmove(cache_file, &g_cache_file->runtime_resources[runtime_resource_index].header, 0x3390u);
+			return 1;
 		}
 	}
 }
