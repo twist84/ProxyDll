@@ -5,14 +5,6 @@
 #include "../memory/tag_groups.hpp"
 #include "../memory/local_types.hpp"
 
-char map_load_tags_hook(char *scenario_path)
-{
-	printf_s("map_load_tags: [scenario_path, %s]\n", scenario_path);
-	auto result = ((char(*)(char *))0x502DC0)(scenario_path);
-
-	return result;
-}
-
 struct s_mainmenu_scnr_tag
 {
 	bool Compare(uint32_t group, uint32_t index)
@@ -76,8 +68,6 @@ inline void SubmitTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x0EA5EE }, &map_load_tags_hook, "map_load_tags", HookFlags::IsCall);
-
 		HookManager.Submit({ 0x103370 }, &tag_get_definition_hook, "tag_get_definition");
 		HookManager.Submit({ 0x1033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
 		

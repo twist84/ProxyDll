@@ -108,38 +108,6 @@ bool __cdecl sub_AC3900_hook(int content_type, e_map_id map_id, char *DstBuf)
 	return strlen(DstBuf) > 0;
 }
 
-bool map_load_hook(int campaign_id, int map_id, char *scenario_path) // dirty_disk_error(TODO: reimplement this function) if returned value is false
-{
-	if (map_load_tags_hook(scenario_path)) // TODO: fully reimplement this as a hook, not  call hook
-	{
-		auto scenario = tag_get_definition_hook('scnr', *(uint32_t *)0x189CCF8);
-		if ((map_id == -2) || ((uint32_t)(scenario + 4) == campaign_id || campaign_id == -1) && ((uint32_t)(scenario + 8) == map_id || map_id == -1))
-		{
-			((unsigned int(__cdecl *)())0x4EB6D0)(); // scenario_tags_fixup();
-			((bool(__cdecl *)())0x600750)(); // game_startup(), TODO: fixup engine functions that use hf2p functions
-			printf_s("map_load: scenario_tags_fixup called\n");
-
-			return true;
-		}
-		else
-		{			
-			((void *(__cdecl *)())0x503200)(); // cache_file_dispose();
-			printf_s("map_load: cache_file_dispose called\n");
-
-			*(uint32_t *)0x189CCF8 = -1;
-			**(uint32_t **)0x22AAEB4 = 0;
-			**(uint32_t **)0x22AAEB8 = 0;
-			*(uint32_t *)0x189CD0C = -1;
-			*(uint32_t *)0x22AAEBC = 0;
-
-			return false;
-		}
-	}
-
-	printf_s("map_load: map_load_tags failed\n");
-	return false;
-}
-
 inline void SubmitMapHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
@@ -155,8 +123,6 @@ inline void SubmitMapHooks(const char *name)
 		//HookManager.Submit({ 0x10C965 }, &compute_blf_hash_hook, "compute_blf_hash", HookFlags::IsCall);
 
 		HookManager.Submit({ 0x6C3900 }, &sub_AC3900_hook, "sub_AC3900");
-
-		HookManager.Submit({ 0x0EA5E0 }, &map_load_hook, "map_load");
 	}
 }
 

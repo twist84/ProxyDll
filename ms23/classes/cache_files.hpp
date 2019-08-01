@@ -5,6 +5,7 @@
 #include "../memory/tag_groups.hpp"
 #include "../memory/local_types.hpp"
 #include "filo.hpp"
+#include "tags.hpp"
 
 namespace cache
 {
@@ -17,12 +18,15 @@ namespace cache
 		char open_tags();
 		char setup();
 		char read_tag(LONG tag_offset, DWORD size, LPVOID buffer);
+		char load_tags(char *scenario_path);
 		char initialize(char *scenario_path, s_cache_file_header *cache_file_header);
 
 		static auto dispose_from_old_map = (void *(__cdecl *)(int runtime_resource_index))(0x5AB630);
 		static auto initialize_for_new_map = (char(__cdecl *)(int runtime_resource_index, char *scenario_path))(0x5ABAD0);
 		static auto get_tag_runtime_resource_index_of_source_file = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
 	}
+
+	bool load(int campaign_id, int map_id, char *scenario_path);
 }
 
 inline void SubmitCacheFilesHooks(const char *name)
@@ -31,11 +35,14 @@ inline void SubmitCacheFilesHooks(const char *name)
 	{
 		//HookManager.Submit({ 0x1016D0 }, &cache::cache_files_windows::read, "cache::cache_files_windows::read");
 		HookManager.Submit({ 0x101940 }, &cache::cache_files_windows::get_build, "cache::cache_files_windows::get_build");
-		HookManager.Submit({ 0x102F16 }, &cache::cache_files_windows::load_root_tag, "load_root_tag", HookFlags::IsCall);
+		HookManager.Submit({ 0x102F16 }, &cache::cache_files_windows::load_root_tag, "cache::cache_files_windows::load_root_tag", HookFlags::IsCall);
 		HookManager.Submit({ 0x1028C0 }, &cache::cache_files_windows::open_tags, "cache::cache_files_windows::open_tags");
 		HookManager.Submit({ 0x102E9B }, &cache::cache_files_windows::setup, "cache::cache_files_windows::setup", HookFlags::IsCall);
 		//HookManager.Submit({ 0x102C90 }, &cache::cache_files_windows::read_tag, "cache::cache_files_windows::read_tag");
 		HookManager.Submit({ 0x102E1E }, &cache::cache_files_windows::initialize, "cache::cache_files_windows::initialize", HookFlags::IsCall);
+
+		HookManager.Submit({ 0x0EA5E0 }, &cache::load, "cache::load");
+		HookManager.Submit({ 0x0EA5EE }, &cache::cache_files_windows::load_tags, "cache::cache_files_windows::load_tags", HookFlags::IsCall);
 	}
 }
 
@@ -62,24 +69,30 @@ inline void SubmitCacheFilesPatches(const char *name)
 
 namespace cache
 {
-	//	005016D0, cache::cache_files_windows::read
-	//	00501940, cache::cache_files_windows::get_build
-
+	//-	005016D0, cache::cache_files_windows::read
+	//-	00501940, cache::cache_files_windows::get_build
 	//	00501950, cache::cache_files_windows::validate
 	//	00501B90, cache::cache_files_windows::calculate_load_percentage_jump
 	//	00501BF0, cache::cache_files_windows::calculate_load_percentage
-
-	//	00501F90, cache::cache_files_windows::get
-
+	//-	00501F90, cache::cache_files_windows::get_header
+	//	00501FA0, cache::cache_files_windows::get_rsa
+	//	00501FD0, cache::cache_files_windows::sub_501FD0, used in c_cache_file_tag_resource_runtime_manager::initialize_for_new_map::c_cache_file_page_restorer
+	//	00502210, cache::cache_files_windows::hash_validate
+	//	00502300, cache::cache_files_windows::sub_502300, used in cache::cache_files_windows::do_work_internal as right side of ^ (bitwise or)
 	//	00502500, cache::cache_files_windows::partitions
-
-	//	00502780, cache::cache_files_windows::load_root_tag
-	//	005028C0, cache::cache_files_windows::open_tags
-	//	00502B40, cache::cache_files_windows::setup
-	//	00502C90, cache::cache_files_windows::read_tag
-
-	//	00502CE0, cache::cache_files_windows::dispose_internal
-	//	00503200, cache::cache_files_windows::dispose
+	//	00502500, cache::cache_files_windows::sub_502550, used at the very beginning of cache::cache_files_windows::sub_501FD0
+	//-	00502780, cache::cache_files_windows::load_root_tag
+	//-	005028C0, cache::cache_files_windows::open_tags
+	//-	00502970, cache::cache_files_windows::read_from_tag_list
+	//-	00502B40, cache::cache_files_windows::setup
+	//-	00502C90, cache::cache_files_windows::read_tag
+	//	00502CE0, cache::cache_files_windows::dispose
+	//-	00502DC0, cache::cache_files_windows::load_tags
+	//	005031A0, cache::cache_files_windows::sub_5031A0, used in cache::cache_files_windows::load after hash verification is successful
+	//	00503200, cache::cache_files_windows::release
+	//	00503300, cache::dispose
+	//	00503340, cache::initialize
+	//	00503470, cache::cache_files_windows::sub_503470, used in cache::cache_files_windows::load_root_tag
 	//	005A97C0, cache::cache_files_windows::do_work_internal
 	//	005AA060, cache::cache_files_windows::get_resource_runtime_file_handle
 	//	005AA0C0, cache::cache_files_windows::get_resource_runtime_file_handle_from_scenario_path
@@ -91,9 +104,7 @@ namespace cache
 	//	005AA420, cache::cache_files_windows::get_resource_runtime_file_handle2_from_scenario_path
 	//	005AA560, cache::cache_files_windows::get_interop_debug_section_size_from_scenario_path
 	//	005AA660, cache::cache_files_windows::has_valid_cache_file_index
-
-	//	005AA7C0, cache::cache_files_windows::initialize
-
+	//-	005AA7C0, cache::cache_files_windows::initialize
 	//	005AA8E0, cache::cache_files_windows::get_guid
 	//	005AA910, cache::cache_files_windows::get_guid_from_scenario_path
 	//	005AAB20, cache::cache_files_windows::do_work
@@ -135,11 +146,10 @@ namespace cache
 
 			return result;
 		}
-
-		s_cache_file_header *get()
+		s_cache_file_header *get_header()
 		{
 			auto result = g_cache_file_header;
-			printf_s("cache::cache_files_windows::get: [cache_file_header->ScenarioPath, %s]\n", result->ScenarioPath);
+			printf_s("cache::cache_files_windows::get_header: [cache_file_header->ScenarioPath, %s]\n", result->ScenarioPath);
 
 			return result;
 		}
@@ -188,6 +198,14 @@ namespace cache
 			if (!file_set_position_hook(global_tag_cache_filo, tag_offset, 0))
 				return 0;
 			return file_read_hook(global_tag_cache_filo, size, 0, buffer);
+		}
+
+		char load_tags(char *scenario_path)
+		{
+			printf_s("cache::cache_files_windows::load_tags: [scenario_path, %s]\n", scenario_path);
+			auto result = ((char(*)(char *))0x502DC0)(scenario_path);
+
+			return result;
 		}
 
 		char initialize(char *scenario_path, s_cache_file_header *cache_file_header)
@@ -241,5 +259,37 @@ namespace cache
 			memmove(cache_file_header, &g_cache->cache_file.tag_runtime_resources[runtime_resource_index].Header, 0x3390u);
 			return 1;
 		}
+	}
+
+	bool load(int campaign_id, int map_id, char *scenario_path) // dirty_disk_error(TODO: reimplement this function) if returned value is false
+	{
+		if (cache::cache_files_windows::load_tags(scenario_path)) // TODO: fully reimplement this as a hook, not call hook
+		{
+			auto scenario = tag_get_definition_hook('scnr', *(uint32_t *)0x189CCF8);
+			if ((map_id == -2) || ((uint32_t)(scenario + 4) == campaign_id || campaign_id == -1) && ((uint32_t)(scenario + 8) == map_id || map_id == -1))
+			{
+				((unsigned int(__cdecl *)())0x4EB6D0)(); // scenario_tags_fixup();
+				((bool(__cdecl *)())0x600750)(); // game_startup(), TODO: fixup engine functions that use hf2p functions
+				printf_s("map_load: scenario_tags_fixup called\n");
+
+				return true;
+			}
+			else
+			{
+				((void *(__cdecl *)())0x503200)(); // cache::cache_files_windows::release();
+				printf_s("map_load: cache_file_dispose called\n");
+
+				*(uint32_t *)0x189CCF8 = -1;
+				**(uint32_t * *)0x22AAEB4 = 0;
+				**(uint32_t * *)0x22AAEB8 = 0;
+				*(uint32_t *)0x189CD0C = -1;
+				*(uint32_t *)0x22AAEBC = 0;
+
+				return false;
+			}
+		}
+
+		printf_s("cache::load: map_load_tags failed\n");
+		return false;
 	}
 }
