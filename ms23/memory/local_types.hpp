@@ -100,6 +100,18 @@ void Copy(uint8_t *data1, uint8_t *data2, std::vector<size_t> offsets)
 		*(T *)(data1 + offset) = *(T *)(data2 + offset);
 }
 
+inline void *qmemcpy(void *dst, const void *src, size_t cnt)
+{
+	char *out = (char *)dst;
+	const char *in = (const char *)src;
+	while (cnt > 0)
+	{
+		*out++ = *in++;
+		--cnt;
+	}
+	return dst;
+}
+
 ConMan PreferenceManager;
 const char *PreferenceManagerAppname;
 
@@ -5766,7 +5778,7 @@ _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 struct s_global_tag_info
 {
 	uint32_t **tag_index_table_ptr = (uint32_t**)0x22AAFFC;
-	uint8_t* **tag_table_ptr = (uint8_t***)0x22AAFF8;
+	uint8_t ***tag_table_ptr = (uint8_t***)0x22AAFF8;
 	uint32_t *max_tag_count_ptr = (uint32_t*)0x22AB008;
 	uint16_t last_tag_index = 0xFFFF;
 	uint32_t last_tag_group = 'null';
