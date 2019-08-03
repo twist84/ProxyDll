@@ -75,7 +75,7 @@ void HotkeyThread()
 {
 	while (true)
 	{
-		AssignHotkey(VK_ESCAPE, &ExitGame);
+		AssignHotkey(VK_F1, &ExitGame);
 
 		AssignHotkey(VK_F2, &SetAllQualitySettingsLow);
 		AssignHotkey(VK_F3, &SetAllQualitySettingsMedium);
