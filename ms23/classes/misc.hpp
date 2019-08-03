@@ -348,7 +348,7 @@ bool lod_increase_patch()
 
 bool unknown_float30_to_float60_patch()
 {
-	SetMemoryAtOffset(0x1615F34, 60.f);
+	SetMemory<0x1615F34>(60.f);
 
 	return true;
 }
@@ -357,10 +357,10 @@ bool match_beginning_countdown_patch()
 {
 	unsigned long seconds = 0;
 
-	SetMemoryAtOffset(0x553708, uint8_t(seconds + 0)); // player control
-	SetMemoryAtOffset(0x553738, uint8_t(seconds + 4)); // camera position
-	SetMemoryAtOffset(0x5521D1, uint8_t(seconds + 4)); // ui timer	
-	SetMemoryAtOffset(0x5536F0, uint8_t(seconds == 4 ? 2 : 3)); // Fix team notification
+	SetMemory<0x553708>(uint8_t(seconds + 0)); // player control
+	SetMemory<0x553738>(uint8_t(seconds + 4)); // camera position
+	SetMemory<0x5521D1>(uint8_t(seconds + 4)); // ui timer	
+	SetMemory<0x5536F0>(uint8_t(seconds == 4 ? 2 : 3)); // Fix team notification
 
 	return true;
 }

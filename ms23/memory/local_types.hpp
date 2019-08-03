@@ -69,11 +69,11 @@ std::string GetExecutable()
 
 #pragma warning( push )
 #pragma warning( disable : 4244)
-template <typename T>
-void SetMemoryAtOffset(size_t off, T val)
+template <size_t offset, typename T>
+void SetMemory(T value)
 {
-	if (Pointer(off).Read<T>() != static_cast<T>(val))
-		Pointer(off).Write<T>(val);
+	if (Pointer(offset).Read<T>() != static_cast<T>(value))
+		Pointer(offset).Write<T>(value);
 }
 #pragma warning( pop )
 
@@ -111,6 +111,15 @@ inline void *qmemcpy(void *dst, const void *src, size_t cnt)
 	}
 	return dst;
 }
+
+template<typename T>
+inline void *zeromem(T memory)
+{
+	return memset(memory, 0, sizeof(T));
+}
+
+template<size_t size>
+struct s_base_definition { uint8_t data[size]; };
 
 ConMan PreferenceManager;
 const char *PreferenceManagerAppname;
@@ -5775,15 +5784,20 @@ struct s_camera_definition
 };
 _STATIC_ASSERT(sizeof(s_camera_definition) == 0xEC);
 
-struct s_global_tag_info
+struct s_global_cache_info
 {
-	uint32_t **tag_index_table_ptr = (uint32_t**)0x22AAFFC;
 	uint8_t ***tag_table_ptr = (uint8_t***)0x22AAFF8;
+	uint32_t **tag_index_table_ptr = (uint32_t**)0x22AAFFC;
 	uint32_t *max_tag_count_ptr = (uint32_t*)0x22AB008;
+
+	uint8_t ***resource_table_ptr = (uint8_t***)0x22AB00C;
+	uint32_t **resource_index_table_ptr = (uint32_t**)0x22AB010;
+	uint32_t *max_resource_count_ptr = (uint32_t*)0x22AB014;
+
 	uint16_t last_tag_index = 0xFFFF;
 	uint32_t last_tag_group = 'null';
 	uint16_t globals_tag = 0xFFFF;
-} g_tag_info;
+} g_cache_info;
 
 struct s_tag
 {
@@ -5799,19 +5813,19 @@ struct s_tag
 
 	s_tag(uint32_t index, uint32_t group = 'llun')
 	{
-		g_tag_info.last_tag_index = Index = index;
-		g_tag_info.last_tag_group = Group = group;
+		g_cache_info.last_tag_index = Index = index;
+		g_cache_info.last_tag_group = Group = group;
 	}
 	uint8_t *GetHeader(size_t offset = 0)
 	{
-		if (Index == 0xFFFF || Index >= *g_tag_info.max_tag_count_ptr * 4)
+		if (Index == 0xFFFF || Index >= *g_cache_info.max_tag_count_ptr * 4)
 			return nullptr;
-		if ((*g_tag_info.tag_index_table_ptr)[Index] == -1 || (*g_tag_info.tag_index_table_ptr)[Index] >= *g_tag_info.max_tag_count_ptr * 4)
+		if ((*g_cache_info.tag_index_table_ptr)[Index] == -1 || (*g_cache_info.tag_index_table_ptr)[Index] >= *g_cache_info.max_tag_count_ptr * 4)
 			return nullptr;
-		if (!(*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]])
+		if (!(*g_cache_info.tag_table_ptr)[(*g_cache_info.tag_index_table_ptr)[Index]])
 			return nullptr;
 
-		return (*g_tag_info.tag_table_ptr)[(*g_tag_info.tag_index_table_ptr)[Index]] + offset;
+		return (*g_cache_info.tag_table_ptr)[(*g_cache_info.tag_index_table_ptr)[Index]] + offset;
 	}
 	bool HeaderIsValid()
 	{
@@ -5833,8 +5847,11 @@ struct s_tag
 		GroupString = "";
 		for (size_t i = 4; i > 0; ) GroupString += ((char *)GetHeader(_group_tag))[--i];
 	}
-	s_tag *Print(uint32_t group = -1)
+	s_tag *Print(bool should_print, uint32_t group = -1)
 	{
+		if (!should_print)
+			return this;
+
 		UpdateGroupString();
 
 		if (group == -1 || group == GetGroupTag())

@@ -16,7 +16,7 @@ namespace cache
 		static auto validate = (bool(__cdecl *)(s_cache_file_header * cache_file_header))(0x501950);
 		s_cache_file_header *get_header();
 		static auto partitions = (uint32_t(__thiscall *)(uint32_t *))(0x502500);
-		bool load_root_tag(uint32_t tag_index);
+		char load_root_tag(uint32_t tag_index);
 		bool open_tags();
 		bool setup();
 		bool read_tag(LONG tag_offset, DWORD size, LPVOID buffer);
@@ -158,7 +158,7 @@ namespace cache
 			return result;
 		}
 
-		bool load_root_tag(uint32_t tag_index)
+		char load_root_tag(uint32_t tag_index)
 		{
 			printf_s("cache::cache_files_windows::load_root_tag: [tag_index, 0x%04X]\n", tag_index);
 			auto result = ((char(*)(uint32_t tag_index))0x502780)(tag_index);
@@ -204,17 +204,15 @@ namespace cache
 			return file_read_hook(global_tag_cache_filo, size, 0, buffer);
 		}
 
+		struct s_scenario_definition : s_base_definition<0x824> {};
+		auto g_scenario_definition = GetStructure<s_scenario_definition>(0x22AAEB4);
 		auto g_scenario_tag_index = (uint32_t *)0x189CCF8;
-		auto g_scenario = (uint8_t *)0x22AAEB4;
 
+		struct s_globals_definition : s_base_definition<0x608> {};
+		auto g_globals_definition = GetStructure<s_globals_definition>(0x22AAEB8);
 		auto g_globals_tag_index = (uint32_t *)0x189CCFC;
-		auto g_globals = (uint8_t *)0x22AAEB8;
 
 		auto g_resources_loaded = (bool *)0x22AAFF0;
-
-		auto g_resource_table = (uint8_t ***)0x22AB00C;
-		auto g_resource_index_table = (uint32_t *)0x22AB010;
-		auto g_resource_size = (uint32_t *)0x22AB014;
 
 		static auto main_loop_pregame = (char(__cdecl *)())(0x5063A0);
 		static auto global_memory_map_allocate_data = (uint32_t *(__cdecl *)(int, int, int datum_size, uint32_t flags))(0x51D180);
@@ -222,14 +220,22 @@ namespace cache
 
 		bool load_tags(char *scenario_path)
 		{
+			printf_s("cache::cache_files_windows::load_tags: [scenario_path, %s]\n", scenario_path);
+
+			if (!g_shouldPrint)
+				return ((char(*)(char *))0x502DC0)(scenario_path);
+
 			//void *secure_working_memory = 0;
 			//int secure_working_memory_size = 0;
 			//secure_working_memory_get(0, &secure_working_memory, &secure_working_memory_size);
 			//if (secure_working_memory_size >= 0x38C8 && secure_working_memory)
 			//	memset(secure_working_memory, 0, 0x38C8u);
 
-			uint32_t scenario_tag_index = -1;
-			auto scenario_loaded = 0;
+			int32_t scenario_tag_index = -1;
+			char scenario_loaded = 0;
+
+			int32_t globals_tag_index = -1;
+			char globals_loaded = 0;
 
 			if (cache::cache_files_windows::initialize(scenario_path, g_cache_file_header))
 			{
@@ -238,26 +244,26 @@ namespace cache
 					if (*(bool *)0x189CFD0 && g_cache_file_header->TrackedBuild)
 						((char(__cdecl *)(char *))0x42E390)(g_cache_file_header->Build);
 
-					s_cache_file_header cache_file_header;
-					memmove(&cache_file_header, g_cache_file_header, 0x3390u);
+					//s_cache_file_header cache_file_header;
+					//memmove(&cache_file_header, g_cache_file_header, 0x3390u);
 
-					auto progress = 1.f;
-					((void(__cdecl *)(int, float *))0x52EEF0)(1, &progress);
+					float progress = 1.f;
+					((void(__cdecl *)(int, int))0x52EEC0)(1, 1);
 
 					cache::cache_files_windows::open_tags();
 					cache::cache_files_windows::partitions((uint32_t *)GetStructure<uint8_t[8]>(0x22AE4D0));
 					cache::cache_files_windows::setup();
 
-					size_t tag_size = 4 * *g_tag_info.max_tag_count_ptr;
-					*(uint32_t **)g_tag_info.tag_table_ptr = global_memory_map_allocate_data(5, 0, tag_size, 0);
-					memset(*(uint32_t * *)g_tag_info.tag_table_ptr, 0, tag_size);
+					size_t tag_size = 4 * *g_cache_info.max_tag_count_ptr;
+					*(uint32_t **)g_cache_info.tag_table_ptr = global_memory_map_allocate_data(5, 0, tag_size, 0);
+					memset(*(uint32_t **)g_cache_info.tag_table_ptr, 0, tag_size);
 
 					*(uint32_t *)0x22AB004 = 0;
-					*g_resource_size = 0x4B00000;
-					*(uint32_t **)g_resource_table = global_memory_map_allocate_data(5, 0, *g_resource_size, 0);
-					g_resource_index_table = 0;
+					*g_cache_info.max_resource_count_ptr = 0x4B00000;
+					*(uint32_t **)g_cache_info.resource_table_ptr = global_memory_map_allocate_data(5, 0, *g_cache_info.max_resource_count_ptr, 0);
+					g_cache_info.resource_index_table_ptr = 0;
 
-					auto root_tag_loaded = cache::cache_files_windows::load_root_tag(0) & 1;
+					char root_tag_loaded = cache::cache_files_windows::load_root_tag(0) & 1;
 					scenario_loaded = cache::cache_files_windows::load_root_tag(g_cache_file_header->ScenarioTagIndex) & root_tag_loaded;
 
 					if (g_cache_file_header->ExternalDependencies & 2)
@@ -347,35 +353,33 @@ namespace cache
 			LABEL_25:
 
 			*g_scenario_tag_index = scenario_tag_index;
-			if (*g_scenario_tag_index == -1)
+			if (scenario_tag_index == -1)
 				return scenario_loaded;
-			g_scenario = tag_get_definition_hook('scnr', *g_scenario_tag_index);
 
-			*g_globals_tag_index = ((uint32_t(__cdecl *)(uint32_t group))0x5017E0)('matg');
-			g_globals = tag_get_definition_hook('matg', *g_globals_tag_index);
+			g_scenario_definition = (s_scenario_definition *)tag_get_definition_hook('scnr', scenario_tag_index);
 
-			auto rasterizer_definition = tag_get_definition_hook('rasg', GetStructure<tag_reference>(g_globals, 0, 0x518)->TagIndex);
+
+			globals_tag_index = ((uint32_t(__cdecl *)(uint32_t group))0x5017E0)('matg');
+			*g_globals_tag_index = globals_tag_index;
+			if (globals_tag_index == -1)
+				return globals_loaded;
+			g_globals_definition = (s_globals_definition *)tag_get_definition_hook('matg', globals_tag_index);
+
+			auto rasterizer_definition = ((tag_reference *)(g_globals_definition->data + 0x518))->GetDefinition();
 			*(uint32_t *)0x50DD9BC = *(uint32_t *)(rasterizer_definition + 0x50);
 			*(uint32_t *)0x50DD9C0 = *(uint32_t *)(rasterizer_definition + 0x54);
 
 			return true;
 		}
 
-		char load_tags_(char *scenario_path)
-		{
-			printf_s("cache::cache_files_windows::load_tags: [scenario_path, %s]\n", scenario_path);
-			auto result = ((char(*)(char *))0x502DC0)(scenario_path);
-
-			return result;
-		}
-
 		bool initialize(char *scenario_path, s_cache_file_header *cache_file_header)
 		{
+			auto runtime_resource_index = cache::cache_files_windows::get_tag_runtime_resource_index_of_source_file(scenario_path);
+
 			if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 			{
 				if (*(byte *)0x240B1E0)
 				{
-					auto runtime_resource_index = cache::cache_files_windows::get_tag_runtime_resource_index_of_source_file(scenario_path);
 					if (runtime_resource_index != -1)
 						cache::cache_files_windows::dispose_from_old_map(runtime_resource_index);
 				}
@@ -384,7 +388,6 @@ namespace cache
 			if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 				((char(__cdecl *)(char *, int a2))0x54C330)(scenario_path, 1);
 
-			auto runtime_resource_index = cache::cache_files_windows::get_tag_runtime_resource_index_of_source_file(scenario_path);
 			if (*(byte *)0x240B1E0)
 			{
 				if (runtime_resource_index == -1)
@@ -417,7 +420,7 @@ namespace cache
 			printf_s("};\n");
 
 			g_cache->cache_file.runtime_resource_index = runtime_resource_index;
-			memmove(cache_file_header, &g_cache->cache_file.tag_runtime_resources[runtime_resource_index].Header, 0x3390u);
+			memmove(cache_file_header, &g_cache->cache_file.tag_runtime_resources[runtime_resource_index].Header, sizeof(s_cache_file_header));
 			return 1;
 		}
 	}

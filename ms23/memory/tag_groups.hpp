@@ -418,7 +418,7 @@ uint8_t *globals_get_definition(bool *is_loaded)
 {
 	// make a global array of all these and create a function
 	// to enumerate through and get the correct definition
-	tag globals = { group_tags.globals, "globals\\globals", g_tag_info.globals_tag };
+	tag globals = { group_tags.globals, "globals\\globals", g_cache_info.globals_tag };
 
 	*is_loaded = false;
 	if (globals.IsLoaded())
