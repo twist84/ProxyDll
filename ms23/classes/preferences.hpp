@@ -133,7 +133,7 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 			g_DisplayPreferencesNew->Windowed = !Fullscreen.value; // != 2;
 
 		preferences.Fullscreen.set(Fullscreen);
-		*(uint8_t *)0x50DD9D1 = 1;
+		SetMemory<0x50DD9D1, uint8_t>(1);
 	}
 }
 
@@ -529,7 +529,7 @@ inline void SubmitPreferencesHooks(const char *name)
 
 void DisableSaberReflections()
 {
-	*(bool *)0x1917D62 = false;
+	SetMemory<0x1917D62>(false);
 }
 
 inline void SubmitPreferencesPatches(const char *name)

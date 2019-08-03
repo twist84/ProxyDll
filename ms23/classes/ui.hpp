@@ -192,8 +192,7 @@ int __cdecl system_default_ui_language_to_game_language_hook()
 	}
 	//}
 
-	return *(int *)0x189DEE4 = result;
-	//return *(int *)0x12E71B4 = result;
+	return SetMemory<0x189DEE4>(result);
 }
 
 const char *game_get_region_hook(e_game_language game_language, bool foreign)

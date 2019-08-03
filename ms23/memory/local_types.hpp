@@ -70,10 +70,11 @@ std::string GetExecutable()
 #pragma warning( push )
 #pragma warning( disable : 4244)
 template <size_t offset, typename T>
-void SetMemory(T value)
+T SetMemory(T value)
 {
-	if (Pointer(offset).Read<T>() != static_cast<T>(value))
-		Pointer(offset).Write<T>(value);
+	if (*(T *)offset != value)
+		*(T *)offset = value;
+	return value;
 }
 #pragma warning( pop )
 
@@ -2073,8 +2074,8 @@ struct s_game_options : s_game_options_base
 			v1 = this == 0;
 		}
 
-		*(uint8_t *)0x23917F1 = v1;
-		*(uint8_t *)0x23917F0 = true;
+		SetMemory<0x23917F1>(v1);
+		SetMemory<0x23917F0>(true);
 
 		// substitute timeGetTime() with GetTickCount64()
 		auto result = (int)GetTickCount64();
@@ -2104,8 +2105,8 @@ void LaunchScenario(
 )
 {
 	// replace tutorial scenario_type and scenario_path with new ones
-	*(const char **)0x7B5E8C = scenario_path;
-	*(int *)0x7B5E97 = scenario_type;
+	SetMemory<0x7B5E8C>(scenario_path);
+	SetMemory<0x7B5E97>(scenario_type);
 
 	// execute ssl_hq_start_tutorial_level
 	((void(__cdecl *)())0x7B5E40)();

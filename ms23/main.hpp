@@ -47,7 +47,7 @@ void PostInit()
 
 void ExitGame()
 {
-	*(bool *)0x22B473C = true; //g_game_is_exiting
+	SetMemory<0x22B473C>(true); //g_game_is_exiting
 }
 void LaunchMainmenu()
 {
