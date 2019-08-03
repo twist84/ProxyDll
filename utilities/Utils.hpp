@@ -478,8 +478,8 @@ struct HookMan
 				if (offsets.size() == 1)
 					printf_s("%s\n", name);
 				else
-					printf_s("%s, 0x%X\n", name, offset + 0x400000);
-				Hook(offset, dest_func, flags).Apply();
+					printf_s("%s, 0x%X\n", name, offset);
+				Hook(offset - 0x400000, dest_func, flags).Apply();
 			}
 		}
 	};

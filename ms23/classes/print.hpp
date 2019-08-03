@@ -355,53 +355,53 @@ inline void SubmitPrintHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x1610 }, &strcpy_hook, "strcpy");
+		HookManager.Submit({ 0x00401610 }, &strcpy_hook, "strcpy");
 
-		HookManager.Submit({ 0x1670 }, &wchar_string_copy_hook, "wchar_string_copy");
-		HookManager.Submit({ 0x1760 }, &sub_401760_hook, "sub_401760");
+		HookManager.Submit({ 0x00401670 }, &wchar_string_copy_hook, "wchar_string_copy");
+		HookManager.Submit({ 0x00401760 }, &sub_401760_hook, "sub_401760");
 
-		HookManager.Submit({ 0x1910 }, &blam_sprintf_hook, "blam_sprintf");
-		HookManager.Submit({ 0x1940 }, &sub_401940_hook, "sub_401940");
-		HookManager.Submit({ 0x19C0 }, &vsnprintf_and_end_hook, "vsnprintf_and_end");
-		HookManager.Submit({ 0x1AE0 }, &string_is_empty_hook, "string_is_empty");
-		HookManager.Submit({ 0x1B00 }, &find_string_in_string_hook, "find_string_in_string");
+		HookManager.Submit({ 0x00401910 }, &blam_sprintf_hook, "blam_sprintf");
+		HookManager.Submit({ 0x00401940 }, &sub_401940_hook, "sub_401940");
+		HookManager.Submit({ 0x004019C0 }, &vsnprintf_and_end_hook, "vsnprintf_and_end");
+		HookManager.Submit({ 0x00401AE0 }, &string_is_empty_hook, "string_is_empty");
+		HookManager.Submit({ 0x00401B00 }, &find_string_in_string_hook, "find_string_in_string");
 
-		HookManager.Submit({ 0x521A0 }, &format<4>, "format<4>");
-		HookManager.Submit({ 0x30320 }, &format<16>, "format<16>");
-		HookManager.Submit({ 0x779F0 }, &format<17>, "format<17>");
-		HookManager.Submit({ 0x1547D0 }, &format<32>, "format<32>");
-		HookManager.Submit({ 0x30360 }, &format<33>, "format<33>");
-		HookManager.Submit({ 0x77A10 }, &format<48>, "format<48>");
-		HookManager.Submit({ 0x2E8E0 }, &format<64>, "format<64>");
-		HookManager.Submit({ 0x430ED0 }, &format<128>, "format<128>");
-		HookManager.Submit({ 0x1C5520 }, &format<255>, "format<255>");
-		HookManager.Submit({ 0x30340 }, &format<256>, "format<256>");
-		HookManager.Submit({ 0x40C10 }, &format<260>, "format<260>");
-		HookManager.Submit({ 0x329D0 }, &format<1024>, "format<1024>");
-		HookManager.Submit({ 0x329F0 }, &format<1536>, "format<1536>");
-		HookManager.Submit({ 0x26D2B0 }, &format<3976>, "format<3976>");
+		HookManager.Submit({ 0x004521A0 }, &format<4>, "format<4>");
+		HookManager.Submit({ 0x00430320 }, &format<16>, "format<16>");
+		HookManager.Submit({ 0x004779F0 }, &format<17>, "format<17>");
+		HookManager.Submit({ 0x005547D0 }, &format<32>, "format<32>");
+		HookManager.Submit({ 0x00430360 }, &format<33>, "format<33>");
+		HookManager.Submit({ 0x00477A10 }, &format<48>, "format<48>");
+		HookManager.Submit({ 0x0042E8E0 }, &format<64>, "format<64>");
+		HookManager.Submit({ 0x00830ED0 }, &format<128>, "format<128>");
+		HookManager.Submit({ 0x005C5520 }, &format<255>, "format<255>");
+		HookManager.Submit({ 0x00430340 }, &format<256>, "format<256>");
+		HookManager.Submit({ 0x00440C10 }, &format<260>, "format<260>");
+		HookManager.Submit({ 0x004329D0 }, &format<1024>, "format<1024>");
+		HookManager.Submit({ 0x004329F0 }, &format<1536>, "format<1536>");
+		HookManager.Submit({ 0x0066D2B0 }, &format<3976>, "format<3976>");
 
-		HookManager.Submit({ 0x12BA30 }, &vsnwprintf_s<256>, "vsnwprintf_s<256>");
-		HookManager.Submit({ 0x2E5520 }, &vsnwprintf_s<1024>, "vsnwprintf_s<1024>");
+		HookManager.Submit({ 0x0052BA30 }, &vsnwprintf_s<256>, "vsnwprintf_s<256>");
+		HookManager.Submit({ 0x006E5520 }, &vsnwprintf_s<1024>, "vsnwprintf_s<1024>");
 
-		HookManager.Submit({ 0xEC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
-		HookManager.Submit({ 0xECA10 }, &sub_4ECA10_hook, "sub_4ECA10");
-		HookManager.Submit({ 0xECBD0 }, &get_wchar_count_hook, "get_wchar_count");
-		HookManager.Submit({ 0xECCD0 }, &wcsncpy_hook, "wcsncpy");
-		HookManager.Submit({ 0xEDC90 }, &sub_4EDC90_hook, "sub_4EDC90");
+		HookManager.Submit({ 0x004EC9F0 }, &sub_4EC9F0_hook, "sub_4EC9F0");
+		HookManager.Submit({ 0x004ECA10 }, &sub_4ECA10_hook, "sub_4ECA10");
+		HookManager.Submit({ 0x004ECBD0 }, &get_wchar_count_hook, "get_wchar_count");
+		HookManager.Submit({ 0x004ECCD0 }, &wcsncpy_hook, "wcsncpy");
+		HookManager.Submit({ 0x004EDC90 }, &sub_4EDC90_hook, "sub_4EDC90");
 
-		HookManager.Submit({ 0x1CF710 }, &sub_5CF710_hook, "sub_5CF710");
-		HookManager.Submit({ 0x12EB80 }, &wprintf_12288_hook, "wprintf_12288");
+		HookManager.Submit({ 0x005CF710 }, &sub_5CF710_hook, "sub_5CF710");
+		HookManager.Submit({ 0x0052EB80 }, &wprintf_12288_hook, "wprintf_12288");
 
-		HookManager.Submit({ 0x7F0A93 }, &sprintf_s_hook, "sprintf_s");
-		HookManager.Submit({ 0x7F28CA }, &wcsncmp_hook, "wcsncmp");
+		HookManager.Submit({ 0x00BF0A93 }, &sprintf_s_hook, "sprintf_s");
+		HookManager.Submit({ 0x00BF28CA }, &wcsncmp_hook, "wcsncmp");
 
-		//HookManager.Submit({ 0x9858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
+		//HookManager.Submit({ 0x00D858D0 }, &network_debug_print_hook, "network_debug_print"); // crashes, I think we hook this in ElDewrito
 
-		HookManager.Submit({ 0x218A10 }, &print_string_with_int_hook, "print_string_with_int");
-		HookManager.Submit({ 0x218A20 }, &print_string_with_vector3d_hook, "print_string_with_vector3d");
-		HookManager.Submit({ 0x218A30 }, &print_string_with_string_hook, "print_string_with_string");
-		HookManager.Submit({ 0x218A50 }, &print_string_with_wide_string_hook, "print_string_with_wide_string");
+		HookManager.Submit({ 0x00618A10 }, &print_string_with_int_hook, "print_string_with_int");
+		HookManager.Submit({ 0x00618A20 }, &print_string_with_vector3d_hook, "print_string_with_vector3d");
+		HookManager.Submit({ 0x00618A30 }, &print_string_with_string_hook, "print_string_with_string");
+		HookManager.Submit({ 0x00618A50 }, &print_string_with_wide_string_hook, "print_string_with_wide_string");
 	}
 }
 

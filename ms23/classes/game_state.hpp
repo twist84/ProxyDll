@@ -105,7 +105,7 @@ bool __cdecl hash_verification_hook(int a1, int a2, bool a3, int32_t *a4, int a5
 	return true;
 }
 
-bool __cdecl campaign_save_exists_hook(int)
+bool __cdecl saved_games__c_storage_device__content_item_not_found_hook(int)
 {
 	s_file_reference file;
 	file_reference_create_from_path(&file, (g_saves_path + L"mmiof.bmf").c_str(), false);
@@ -117,15 +117,14 @@ inline void SubmitGameStateHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.Submit({ GetGameStateDefinitionPointer(e_game_state::_levels)->GetInitialize(true) }, &levels_initialize_hook, "levels_initialize", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x25DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
-		HookManager.Submit({ 0x1265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
-		HookManager.Submit({ 0x1266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
-		HookManager.Submit({ 0x1270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
-		HookManager.Submit({ 0x25DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
-		HookManager.Submit({ 0x109020 }, &hash_verification_hook, "hash_verification");
-		HookManager.Submit({ 0x1254A0 }, &campaign_save_exists_hook, "campaign_save_exists");
+		HookManager.Submit({ 0x0065DB10 }, &game_state_read_file_from_storage_hook, "game_state_read_file_from_storage");
+		HookManager.Submit({ 0x005265E0 }, &read_campaign_save_file_blocking_hook, "read_campaign_save_file_blocking");
+		HookManager.Submit({ 0x005266E0 }, &game_state_read_header_from_persistent_storage_blocking_hook, "game_state_write_file_to_storage");
+		HookManager.Submit({ 0x005270F0 }, &game_state_write_file_to_storage_blocking_hook, "game_state_write_file_to_storage_blocking");
+		HookManager.Submit({ 0x0065DBE0 }, &game_state_write_file_to_storage_hook, "game_state_write_file_to_storage");
+		HookManager.Submit({ 0x00509020 }, &hash_verification_hook, "hash_verification");
+		HookManager.Submit({ 0x005254A0 }, &saved_games__c_storage_device__content_item_not_found_hook, "saved_games::c_storage_device::content_item_not_exists");
 	}
 }
 

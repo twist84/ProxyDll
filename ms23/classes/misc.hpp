@@ -180,11 +180,11 @@ unsigned long __cdecl podium_duration_call_hook(float a1)
 	return (unsigned long)((1.0 * 0.5) + (60 * ConfigManager.GetInt("Timing", "PodiumDuration")));
 }
 
-int game_set_initial_network_values_hook()
+int network_configuration_initialize_private_hook()
 {
 	auto result = ((int(*)())0x43D2B0)();
 
-	initial_network_values->SetMaxPlayerCounts(4, 8, 16, 8);
+	network_configuration->SetMaxPlayerCounts(4, 8, 16, 8);
 
 	return result;
 }
@@ -285,55 +285,55 @@ inline void SubmitMiscHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x2796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
-		HookManager.Submit({ 0x1314B0 }, &game_in_progress_hook, "game_in_progress");
-		HookManager.Submit({ 0x131A60 }, &game_is_campaign_hook, "game_is_campaign");
-		HookManager.Submit({ 0x131C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
-		HookManager.Submit({ 0x131D10 }, &game_is_theater_hook, "game_is_theater");
-		HookManager.Submit({ 0x131D50 }, &game_is_playtest_hook, "game_is_playtest");
-		HookManager.Submit({ 0x131E20 }, &game_is_survival_hook, "game_is_survival");
-		HookManager.Submit({ 0x131E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
+		HookManager.Submit({ 0x006796C0 }, &get_time_from_frame_count_hook, "get_time_from_frame_count");
+		HookManager.Submit({ 0x005314B0 }, &game_in_progress_hook, "game_in_progress");
+		HookManager.Submit({ 0x00531A60 }, &game_is_campaign_hook, "game_is_campaign");
+		HookManager.Submit({ 0x00531C00 }, &game_is_multiplayer_hook, "game_is_multiplayer");
+		HookManager.Submit({ 0x00531D10 }, &game_is_theater_hook, "game_is_theater");
+		HookManager.Submit({ 0x00531D50 }, &game_is_playtest_hook, "game_is_playtest");
+		HookManager.Submit({ 0x00531E20 }, &game_is_survival_hook, "game_is_survival");
+		HookManager.Submit({ 0x00531E90 }, &game_is_mainmenu_hook, "game_is_mainmenu");
 
-		HookManager.Submit({ 0x1670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
+		HookManager.Submit({ 0x005670E0 }, &game_is_map_loading_hook, "game_is_map_loading");
 
-		HookManager.Submit({ 0x131FF0 }, &prepare_game_level_hook, "prepare_game_level");
-		HookManager.Submit({ 0x132050 }, &game_level_prepare_hook, "game_level_prepare");
+		HookManager.Submit({ 0x00531FF0 }, &prepare_game_level_hook, "prepare_game_level");
+		HookManager.Submit({ 0x00532050 }, &game_level_prepare_hook, "game_level_prepare");
 
-		HookManager.Submit({ 0x132B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
-		HookManager.Submit({ 0x132EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
+		HookManager.Submit({ 0x00532B50 }, &primary_skull_toggle_hook, "primary_skull_toggle");
+		HookManager.Submit({ 0x00532EE0 }, &secondary_skull_toggle_hook, "secondary_skull_toggle");
 
-		HookManager.Submit({ 0x20AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
-		HookManager.Submit({ 0x20AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
+		HookManager.Submit({ 0x0060AE20 }, &primary_skull_is_active_hook, "primary_skull_is_active");
+		HookManager.Submit({ 0x0060AE50 }, &secondary_skull_is_active_hook, "secondary_skull_is_active");
 
 
-		HookManager.Submit({ 0x2E130 }, &sub_42E130_hook, "sub_42E130");
+		HookManager.Submit({ 0x0042E130 }, &sub_42E130_hook, "sub_42E130");
 
-		//HookManager.Submit({ 0x2E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
+		//HookManager.Submit({ 0x0042E2C0 }, &game_is_multithreaded_hook, "game_is_multithreaded");
 
-		HookManager.Submit({ 0x61FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
-		HookManager.Submit({ 0x61FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
+		HookManager.Submit({ 0x00A1FA30 }, &aspect_ratio_get_hook, "aspect_ratio_get");
+		HookManager.Submit({ 0x00A1FC90 }, &game_is_widescreen_hook, "game_is_widescreen");
 
-		//HookManager.Submit({ 0x622169, 0x10BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00A22169, 0x0050BF07 }, &sub_42E350_hook, "sub_42E350", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x1056D0 }, &GameClientShutdownHook, "GameClientShutdown");
-		//HookManager.Submit({ 0x200A20 }, &sub_600A20_hook, "sub_600A20");
+		//HookManager.Submit({ 0x005056D0 }, &GameClientShutdownHook, "GameClientShutdown");
+		//HookManager.Submit({ 0x00600A20 }, &sub_600A20_hook, "sub_600A20");
 
-		HookManager.Submit({ 0x130FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
+		HookManager.Submit({ 0x00530FAE }, &podium_duration_call_hook, "podium_duration", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x3C966 }, &game_set_initial_network_values_hook, "game_set_initial_network_values", HookFlags::IsCall);
+		HookManager.Submit({ 0x0043C966 }, &network_configuration_initialize_private_hook, "network_configuration_initialize_private", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x149B70 }, &peer_property_get_string_hook, "peer_property_get_string");
+		HookManager.Submit({ 0x00549B70 }, &peer_property_get_string_hook, "peer_property_get_string");
 
-		HookManager.Submit({ 0x7232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
+		HookManager.Submit({ 0x00B232DB }, &lobby_status_get_hook, "lobby_status_get", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x7232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
+		HookManager.Submit({ 0x00B232C4 }, &gamestart_status_get_hook, "gamestart_status_get", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x942D3, 0x9432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
+		HookManager.Submit({ 0x004942D3, 0x0049432F }, &c_life_cycle_state_handler_matchmaking_start__squad_allowed_to_start_matchmaking_hook, "c_life_cycle_state_handler_matchmaking_start::squad_allowed_to_start_matchmaking", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x12BC80 }, &dereference_pointer_hook, "dereference_pointer");
+		//HookManager.Submit({ 0x0052BC80 }, &dereference_pointer_hook, "dereference_pointer");
 
-		//HookManager.Submit({ 0x7F0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
-		//HookManager.Submit({ 0x7F04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
+		//HookManager.Submit({ 0x00BF0454 }, &vector_ctor_iterator_hook, "vector_constructor_iterator'");
+		//HookManager.Submit({ 0x00BF04BC }, &vector_dtor_iterator_hook, "vector_destructor_iterator'");
 	}
 }
 

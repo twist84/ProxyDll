@@ -91,10 +91,10 @@ inline void SubmitPlayerProfileHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x1A5600 }, &content_catalogue_get_hook, "content_catalogue::get");
-		HookManager.Submit({ 0x67CD50 }, &c_player_profile__get_hook, "c_player_profile::get");
-		HookManager.Submit({ 0x10E2260 }, &achievements_get_index_from_string_id_hook, "achievements_get_index_from_string_id");
-		HookManager.Submit({ 0x10E24B0 }, &controller_achievement_state_to_string_hook, "controller_achievement_state_to_string");
+		HookManager.Submit({ 0x005A5600 }, &content_catalogue_get_hook, "content_catalogue::get");
+		HookManager.Submit({ 0x00A7CD50 }, &c_player_profile__get_hook, "c_player_profile::get");
+		HookManager.Submit({ 0x014E2260 }, &achievements_get_index_from_string_id_hook, "achievements_get_index_from_string_id");
+		HookManager.Submit({ 0x014E24B0 }, &controller_achievement_state_to_string_hook, "controller_achievement_state_to_string");
 	}
 }
 

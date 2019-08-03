@@ -70,11 +70,11 @@ inline void SubmitTagsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x103370 }, &tag_get_definition_hook, "tag_get_definition");
-		HookManager.Submit({ 0x1033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
+		HookManager.Submit({ 0x00503370 }, &tag_get_definition_hook, "tag_get_definition");
+		HookManager.Submit({ 0x005033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
 		
-		HookManager.Submit({ 0x101FC0 }, &maps_path_hook, "maps_path");
-		HookManager.Submit({ 0x15AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
+		HookManager.Submit({ 0x00501FC0 }, &maps_path_hook, "maps_path");
+		HookManager.Submit({ 0x0055AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
 	}
 }
 

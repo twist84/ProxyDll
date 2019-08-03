@@ -386,41 +386,41 @@ inline void SubmitRendererHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.Submit({ 0x1064C4 }, &Loading__BeginScene_hook, "Loading::BeginScene", HookFlags::IsCall);
-		//HookManager.Submit({ 0x10654A }, &Loading__EndScene_hook, "Loading::EndScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x005064C4 }, &Loading__BeginScene_hook, "Loading::BeginScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0050654A }, &Loading__EndScene_hook, "Loading::EndScene", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x106935 }, &Unknown__BeginScene_hook, "Unknown::BeginScene", HookFlags::IsCall);
-		//HookManager.Submit({ 0x106953 }, &Unknown__EndScene_hook, "Unknown::EndScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00506935 }, &Unknown__BeginScene_hook, "Unknown::BeginScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00506953 }, &Unknown__EndScene_hook, "Unknown::EndScene", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x204372 }, &World__BeginScene_hook, "World::BeginScene", HookFlags::IsCall);
-		//HookManager.Submit({ 0x204A20 }, &World__EndScene_hook, "World::EndScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00604372 }, &World__BeginScene_hook, "World::BeginScene", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00604A20 }, &World__EndScene_hook, "World::EndScene", HookFlags::IsCall);
 
 		// correct *implementations
 		
-		HookManager.Submit({ 0x6212A0 }, &IDirect3DDevice9__BeginScene, "IDirect3DDevice9::BeginScene");
-		HookManager.Submit({ 0x6232D0 }, &IDirect3DDevice9__SetRenderState__CullMode, "IDirect3DDevice9::SetRenderState::CullMode");
-		HookManager.Submit({ 0x6233A0 }, &IDirect3DDevice9__SetRenderState__FillMode, "IDirect3DDevice9::SetRenderState::FillMode");
-		HookManager.Submit({ 0x6233C0 }, &IDirect3DDevice9__SetIndices, "IDirect3DDevice9::SetIndices");
-		HookManager.Submit({ 0x623500 }, &IDirect3DDevice9__SetPixelShader, "IDirect3DDevice9::SetPixelShader");
-		HookManager.Submit({ 0x624650 }, &IDirect3DDevice9__SetVertexDeclaration, "IDirect3DDevice9::SetVertexDeclaration");
-		HookManager.Submit({ 0x6247B0 }, &IDirect3DDevice9__SetVertexShader, "IDirect3DDevice9::SetVertexShader");
-		HookManager.Submit({ 0x648C70 }, &IDirect3DDevice9__SetDepthStencilSurface__ZStencil, "IDirect3DDevice9::DepthStencilSurfaceSetZ");
-		HookManager.Submit({ 0x649010 }, &IDirect3DDevice9__SetViewport, "IDirect3DDevice9::SetViewport");
-		HookManager.Submit({ 0x666370 }, &IDirect3DDevice9__SetPixelShaderConstantB, "IDirect3DDevice9::SetPixelShaderConstantB");
-		HookManager.Submit({ 0x6663A0 }, &IDirect3DDevice9__SetPixelShaderConstantI, "IDirect3DDevice9::SetPixelShaderConstantI");
-		HookManager.Submit({ 0x666620 }, &IDirect3DDevice9__SetVertexShaderConstantB, "IDirect3DDevice9::SetVertexShaderConstantB");
-		HookManager.Submit({ 0x675810 }, &IDirect3DDevice9__IsNull, "IDirect3DDevice9::IsNull");
-		HookManager.Submit({ 0x6758F0 }, &IDirect3DDevice9__CreateCubeTexture, "IDirect3DDevice9::CreateCubeTexture");
-		HookManager.Submit({ 0x675A00 }, &IDirect3DDevice9__CreateDepthStencilSurface__MultisampleNone, "IDirect3DDevice9::CreateDepthStencilSurface::MultisampleNone");
-		HookManager.Submit({ 0x675BD0 }, &IDirect3DDevice9__CreateVertexDeclaration, "IDirect3DDevice9::CreateVertexDeclaration");
-		HookManager.Submit({ 0x675E30 }, &IDirect3DDevice9__UpdateTexture, "IDirect3DDevice9::UpdateTexture");
+		HookManager.Submit({ 0x00A212A0 }, &IDirect3DDevice9__BeginScene, "IDirect3DDevice9::BeginScene");
+		HookManager.Submit({ 0x00A232D0 }, &IDirect3DDevice9__SetRenderState__CullMode, "IDirect3DDevice9::SetRenderState::CullMode");
+		HookManager.Submit({ 0x00A233A0 }, &IDirect3DDevice9__SetRenderState__FillMode, "IDirect3DDevice9::SetRenderState::FillMode");
+		HookManager.Submit({ 0x00A233C0 }, &IDirect3DDevice9__SetIndices, "IDirect3DDevice9::SetIndices");
+		HookManager.Submit({ 0x00A23500 }, &IDirect3DDevice9__SetPixelShader, "IDirect3DDevice9::SetPixelShader");
+		HookManager.Submit({ 0x00A24650 }, &IDirect3DDevice9__SetVertexDeclaration, "IDirect3DDevice9::SetVertexDeclaration");
+		HookManager.Submit({ 0x00A247B0 }, &IDirect3DDevice9__SetVertexShader, "IDirect3DDevice9::SetVertexShader");
+		HookManager.Submit({ 0x00A48C70 }, &IDirect3DDevice9__SetDepthStencilSurface__ZStencil, "IDirect3DDevice9::DepthStencilSurfaceSetZ");
+		HookManager.Submit({ 0x00A49010 }, &IDirect3DDevice9__SetViewport, "IDirect3DDevice9::SetViewport");
+		HookManager.Submit({ 0x00A66370 }, &IDirect3DDevice9__SetPixelShaderConstantB, "IDirect3DDevice9::SetPixelShaderConstantB");
+		HookManager.Submit({ 0x00A663A0 }, &IDirect3DDevice9__SetPixelShaderConstantI, "IDirect3DDevice9::SetPixelShaderConstantI");
+		HookManager.Submit({ 0x00A66620 }, &IDirect3DDevice9__SetVertexShaderConstantB, "IDirect3DDevice9::SetVertexShaderConstantB");
+		HookManager.Submit({ 0x00A75810 }, &IDirect3DDevice9__IsNull, "IDirect3DDevice9::IsNull");
+		HookManager.Submit({ 0x00A758F0 }, &IDirect3DDevice9__CreateCubeTexture, "IDirect3DDevice9::CreateCubeTexture");
+		HookManager.Submit({ 0x00A75A00 }, &IDirect3DDevice9__CreateDepthStencilSurface__MultisampleNone, "IDirect3DDevice9::CreateDepthStencilSurface::MultisampleNone");
+		HookManager.Submit({ 0x00A75BD0 }, &IDirect3DDevice9__CreateVertexDeclaration, "IDirect3DDevice9::CreateVertexDeclaration");
+		HookManager.Submit({ 0x00A75E30 }, &IDirect3DDevice9__UpdateTexture, "IDirect3DDevice9::UpdateTexture");
 
 		// incorrect implementations
-		//HookManager.Submit({ 0x623700 }, &sub_A23700, "sub_A23700");
-		//HookManager.Submit({ 0x675960 }, &IDirect3DDevice9__CreateIndexBuffer, "IDirect3DDevice9::CreateIndexBuffer");
-		//HookManager.Submit({ 0x6759B0 }, &IDirect3DDevice9__CreateVertexBuffer, "IDirect3DDevice9::CreateVertexBuffer");
-		//HookManager.Submit({ 0x675B20 }, &IDirect3DDevice9__CreateTexture, "IDirect3DDevice9::CreateTexture");
-		//HookManager.Submit({ 0x675C70 }, &IDirect3DDevice9__CreateVolumeTexture, "IDirect3DDevice9::CreateVolumeTexture");
+		//HookManager.Submit({ 0x00A23700 }, &sub_A23700, "sub_A23700");
+		//HookManager.Submit({ 0x00A75960 }, &IDirect3DDevice9__CreateIndexBuffer, "IDirect3DDevice9::CreateIndexBuffer");
+		//HookManager.Submit({ 0x00A759B0 }, &IDirect3DDevice9__CreateVertexBuffer, "IDirect3DDevice9::CreateVertexBuffer");
+		//HookManager.Submit({ 0x00A75B20 }, &IDirect3DDevice9__CreateTexture, "IDirect3DDevice9::CreateTexture");
+		//HookManager.Submit({ 0x00A75C70 }, &IDirect3DDevice9__CreateVolumeTexture, "IDirect3DDevice9::CreateVolumeTexture");
 	}
 }
 

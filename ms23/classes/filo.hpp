@@ -92,18 +92,18 @@ inline void SubmitFiloHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x12A5F0 }, &file_get_folder_path_hook, "file_get_folder_path");
-
-		HookManager.Submit({ 0x128500 }, &file_reference_initialize_header_hook, "file_reference_initialize_header");
-		HookManager.Submit({ 0x12A9A0 }, &file_reference_initialize_hook, "file_reference_initialize");
-
-		HookManager.Submit({ 0x128550 }, &filo_create_hook, "filo_create");
-		HookManager.Submit({ 0x12A7E0 }, &file_read_hook, "file_read");
-		HookManager.Submit({ 0x128B60 }, &file_close_hook, "file_close");
-		HookManager.Submit({ 0x1298C0 }, &file_get_eof_hook, "file_get_eof");
-		HookManager.Submit({ 0x129AF0 }, &filo_get_file_pointer_hook, "filo_get_file_pointer");
-		HookManager.Submit({ 0x12B060 }, &file_set_position_hook, "file_set_position");
-		HookManager.Submit({ 0x12B250 }, &file_write_hook, "file_write");
+		HookManager.Submit({ 0x0052A5F0 }, &file_get_folder_path_hook, "file_get_folder_path");
+		
+		HookManager.Submit({ 0x00528500 }, &file_reference_initialize_header_hook, "file_reference_initialize_header");
+		HookManager.Submit({ 0x0052A9A0 }, &file_reference_initialize_hook, "file_reference_initialize");
+		
+		HookManager.Submit({ 0x00528550 }, &filo_create_hook, "filo_create");
+		HookManager.Submit({ 0x0052A7E0 }, &file_read_hook, "file_read");
+		HookManager.Submit({ 0x00528B60 }, &file_close_hook, "file_close");
+		HookManager.Submit({ 0x005298C0 }, &file_get_eof_hook, "file_get_eof");
+		HookManager.Submit({ 0x00529AF0 }, &filo_get_file_pointer_hook, "filo_get_file_pointer");
+		HookManager.Submit({ 0x0052B060 }, &file_set_position_hook, "file_set_position");
+		HookManager.Submit({ 0x0052B250 }, &file_write_hook, "file_write");
 	}
 }
 

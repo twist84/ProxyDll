@@ -4,7 +4,7 @@
 #include <Utils.hpp>
 #include "../memory/local_types.hpp"
 
-std::vector<size_t> c_simulation_event_handler_send_event_offsets = { 0xE5723, 0xE5A15, 0xE5B1B };
+std::vector<size_t> c_simulation_event_handler_send_event_offsets = { 0x004E5723, 0x004E5A15, 0x004E5B1B };
 char c_simulation_event_handler_send_event_hook(uint32_t *this_ptr, e_simulation_event simulation_event, int a3, int a4, int a5, size_t num, void *source, int a8)
 {
 	if (scenario_type_get() != e_scenario_type::_mainmenu || simulation_event.value < e_simulation_event::k_number_of_simulation_events)
@@ -14,7 +14,7 @@ char c_simulation_event_handler_send_event_hook(uint32_t *this_ptr, e_simulation
 	return c_simulation_event_handler_send_event(this_ptr, simulation_event, a3, a4, a5, num, source, a8);
 }
 
-std::vector<size_t> simulation_event_generate_internal_offsets = { 0xB2409, 0xB387D, 0xB38E3, 0xB39D5, 0xB3A44, 0xB3B4B, 0xB3BB3, 0xB3D11, 0xB4142, 0xB4EF7, 0xB4F59, 0xB4FDA, 0xB5008, 0xB506D, 0xB5885, 0xE5803 };
+std::vector<size_t> simulation_event_generate_internal_offsets = { 0x004B2409, 0x004B387D, 0x004B38E3, 0x004B39D5, 0x004B3A44, 0x004B3B4B, 0x004B3BB3, 0x004B3D11, 0x004B4142, 0x004B4EF7, 0x004B4F59, 0x004B4FDA, 0x004B5008, 0x004B506D, 0x004B5885, 0x004E5803 };
 char __cdecl simulation_event_generate_internal_hook(e_simulation_event simulation_event, int a2, int a3, int player_handle, size_t a5, void *a6)
 {
 	if (scenario_type_get() != e_scenario_type::_mainmenu || simulation_event.value < e_simulation_event::k_number_of_simulation_events)

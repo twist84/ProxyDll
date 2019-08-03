@@ -65,9 +65,9 @@ inline void SubmitUiHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0xC2C30 }, &get_loading_text_hook, "get_loading_text");
-		HookManager.Submit({ 0xB0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
-		HookManager.Submit({ 0xB0CE0 }, &game_get_region_hook, "game_get_region");
+		HookManager.Submit({ 0x004C2C30 }, &get_loading_text_hook, "get_loading_text");
+		HookManager.Submit({ 0x004B0C00 }, &system_default_ui_language_to_game_language_hook, "system_default_ui_language_to_game_language");
+		HookManager.Submit({ 0x004B0CE0 }, &game_get_region_hook, "game_get_region");
 	}
 }
 

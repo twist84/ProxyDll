@@ -57,10 +57,10 @@ inline void SubmitPlayersHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x136020 }, &player_datum_get_active_armor_loadout_customization_hook, "player_datum_get_active_armor_loadout_customization");
+		HookManager.Submit({ 0x00536020 }, &player_datum_get_active_armor_loadout_customization_hook, "player_datum_get_active_armor_loadout_customization");
 
-		HookManager.Submit({ 0x189A30 }, &player_mapping_get_hook, "player_mapping_get");
-		HookManager.Submit({ 0x189EB0 }, &player_mapping_iterator_hook, "player_mapping_iterator");
+		HookManager.Submit({ 0x00589A30 }, &player_mapping_get_hook, "player_mapping_get");
+		HookManager.Submit({ 0x00589EB0 }, &player_mapping_iterator_hook, "player_mapping_iterator");
 	}
 }
 

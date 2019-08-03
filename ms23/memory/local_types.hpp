@@ -3085,7 +3085,7 @@ struct c_managed_session
 };
 #pragma pack(pop)
 
-struct s_initial_network_values
+struct s_network_configuration
 {
 	int unknown0;
 	int unknown4;
@@ -4588,7 +4588,7 @@ struct s_initial_network_values
 		SetMaxTheaterPlayerCount(theater);
 	}
 };
-auto initial_network_values = GetStructure<s_initial_network_values>(0x19A62C0);
+auto network_configuration = GetStructure<s_network_configuration>(0x19A62C0);
 
 int32_t achievement_string_ids[] {
 	0x60000,

@@ -1255,7 +1255,7 @@ inline void SubmitGameEngineHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.Submit({ 0x715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
+		//HookManager.Submit({ 0x004715D0 }, &simulation_definitions_table_initialize_hook, "simulation_definitions_table_initialize"); // I don't feel comfortable testing this until all the `classes` above are mapped
 	}
 }
 

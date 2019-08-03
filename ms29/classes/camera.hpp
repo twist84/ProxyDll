@@ -17,7 +17,7 @@ inline void SubmitCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x14690A }, &sub_553660_hook, "camera_definition_validate", HookFlags::IsCall);
+		HookManager.Submit({ 0x0054690A }, &sub_553660_hook, "camera_definition_validate", HookFlags::IsCall);
 	}
 }
 

@@ -154,24 +154,24 @@ inline void SubmitNetworkingHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x30C50 }, &XnkIdToStringHook, "XnkId::ToString");
-		HookManager.Submit({ 0x30ED0 }, &XnkAddrToStringHook, "XnkAddr::ToString");
+		HookManager.Submit({ 0x00430C50 }, &XnkIdToStringHook, "XnkId::ToString");
+		HookManager.Submit({ 0x00430ED0 }, &XnkAddrToStringHook, "XnkAddr::ToString");
 
-		HookManager.Submit({ 0x81E10 }, &managed_session_game_end_hook, "managed_session_game_end");
+		HookManager.Submit({ 0x00481E10 }, &managed_session_game_end_hook, "managed_session_game_end");
 
-		HookManager.Submit({ 0x82000 }, &ManagedSession_XSession_GetHandle_hook, "ManagedSession::XSession::GetHandle");
-		HookManager.Submit({ 0x820A0 }, &ManagedSession_XSession_GetAddress_hook, "ManagedSession::XSession::GetAddress");
-		HookManager.Submit({ 0x831F0 }, &ManagedSession_DeleteSession_hook, "ManagedSession::DeleteSession");
+		HookManager.Submit({ 0x00482000 }, &ManagedSession_XSession_GetHandle_hook, "ManagedSession::XSession::GetHandle");
+		HookManager.Submit({ 0x004820A0 }, &ManagedSession_XSession_GetAddress_hook, "ManagedSession::XSession::GetAddress");
+		HookManager.Submit({ 0x004831F0 }, &ManagedSession_DeleteSession_hook, "ManagedSession::DeleteSession");
 
-		HookManager.Submit({ 0x42A90 }, &network_is_connected_to_live_hook, "network_is_connected_to_live");
+		HookManager.Submit({ 0x00442A90 }, &network_is_connected_to_live_hook, "network_is_connected_to_live");
 
-		HookManager.Submit({ 0x683D45 }, &network_session_parameter_countdown_timer_request_change_hook, "network_session_parameter_countdown_timer_request_change", HookFlags::IsCall);
+		HookManager.Submit({ 0x00A83D45 }, &network_session_parameter_countdown_timer_request_change_hook, "network_session_parameter_countdown_timer_request_change", HookFlags::IsCall);
 
 		//HookManager.Submit({ 0x69D631, 0xA7E2F2, 0xA7ED2B, 0xAA6C2D, 0xAA70E3, 0xAE888E, 0xAE88A4, 0xAE88B7, 0xAE9247, 0xAE925F, 0xAE9274, 0xAEA6D3, 0xAEA6EB, 0xAEA700, 0xAEBC0D, 0xAEBC23, 0xAEBC36, 0xB018FB }, &change_network_privacy_hook, "change_network_privacy", HookFlags::IsCall);
 
-		HookManager.Submit({ 0xD34E0 }, &session_composition_get_string_hook, "session_composition_get_string");
+		HookManager.Submit({ 0x004D34E0 }, &session_composition_get_string_hook, "session_composition_get_string");
 
-		HookManager.Submit({ 0x6DE26D }, &game_browser_join_host_hook, "game_browser::join_host", HookFlags::IsCall);
+		HookManager.Submit({ 0x00ADE26D }, &game_browser_join_host_hook, "game_browser::join_host", HookFlags::IsCall);
 	}
 }
 

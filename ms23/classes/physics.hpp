@@ -15,7 +15,7 @@ inline void SubmitPhysicsHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x324701 }, &edge_drop_hook, "edge_drop_fix", HookFlags::IsCall);
+		HookManager.Submit({ 0x00724701 }, &edge_drop_hook, "edge_drop_fix", HookFlags::IsCall);
 	}
 }
 

@@ -59,10 +59,10 @@ inline void SubmitCameraHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		HookManager.Submit({ 0x214D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
+		HookManager.Submit({ 0x00614D68 }, &sub_614CB0_hook, "camera_definition_validate", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x19228B, 0x192399 }, &director_globals_set_director_mode_hook, "director_globals_set_director_mode", HookFlags::IsCall);
-		HookManager.Submit({ 0x191990 }, &director_get_player_hook, "director_get_player");
+		HookManager.Submit({ 0x0059228B, 0x00592399 }, &director_globals_set_director_mode_hook, "director_globals_set_director_mode", HookFlags::IsCall);
+		HookManager.Submit({ 0x00591990 }, &director_get_player_hook, "director_get_player");
 	}
 }
 

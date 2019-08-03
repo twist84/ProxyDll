@@ -21,8 +21,8 @@ void __fastcall sub_6E59A0_hook(char *scoreboard, void *thisptr, uint32_t *handl
 
 inline void AddGameUpdateHooks(const char *name)
 {
-	//HookManager.Submit({ 0x1332E9, 0x1338E7 }, &campaign_metagame_update_hook, "campaign_metagame_update", HookFlags::IsCall);
-	//HookManager.Submit({ 0x2E59A0 }, &sub_6E59A0_hook, "campaign_scoring_fix");
+	//HookManager.Submit({ 0x005332E9, 0x005338E7 }, &campaign_metagame_update_hook, "campaign_metagame_update", HookFlags::IsCall);
+	//HookManager.Submit({ 0x006E59A0 }, &sub_6E59A0_hook, "campaign_scoring_fix");
 }
 
 void AddGameUpdatePatches(const char *name)

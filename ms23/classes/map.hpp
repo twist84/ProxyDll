@@ -112,17 +112,16 @@ inline void SubmitMapHooks(const char *name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
-		//HookManager.Submit({ 0x10FC2C, 0x1671BE, 0x167B4F }, &main_game_change_immediate_hook, "main_game_change_immediate", HookFlags::IsCall);
-		//HookManager.Submit({ 0x14C7FF }, &maps_store_map_info_hook, "maps_store_map_info", HookFlags::IsCall);
-		//HookManager.Submit({ 0x14EB54, 0x14EB62, 0x152C15 }, &game__game_engine__start_game_hook, "game::game_engine::start_game", HookFlags::IsCall);
-		//HookManager.Submit({ 0x105ABA, 0x105AD7, 0x1063E6 }, &c_stop_watch__start_hook, "c_stop_watch::start", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0050FC2C, 0x005671BE, 0x00567B4F }, &main_game_change_immediate_hook, "main_game_change_immediate", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0054C7FF }, &maps_store_map_info_hook, "maps_store_map_info", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0054EB54, 0x0054EB62, 0x00552C15 }, &game__game_engine__start_game_hook, "game::game_engine::start_game", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00505ABA, 0x00505AD7, 0x005063E6 }, &c_stop_watch__start_hook, "c_stop_watch::start", HookFlags::IsCall);
 
-		//HookManager.Submit({ 0x101A51 }, &map_file_validation_hook, "map_file_validation", HookFlags::IsCall);
-		//HookManager.Submit({ 0x10286A }, &sub_52CCC0_hook, "sub_52CCC0", HookFlags::IsCall);
-		//HookManager.Submit({ 0x10309E }, &sub_508F80_hook, "sub_508F80", HookFlags::IsCall);
-		//HookManager.Submit({ 0x10C965 }, &compute_blf_hash_hook, "compute_blf_hash", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0050286A }, &sub_52CCC0_hook, "sub_52CCC0", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0050309E }, &sub_508F80_hook, "sub_508F80", HookFlags::IsCall);
+		//HookManager.Submit({ 0x0050C965 }, &compute_blf_hash_hook, "compute_blf_hash", HookFlags::IsCall);
 
-		HookManager.Submit({ 0x6C3900 }, &sub_AC3900_hook, "sub_AC3900");
+		HookManager.Submit({ 0x00AC3900 }, &sub_AC3900_hook, "sub_AC3900");
 	}
 }
 
