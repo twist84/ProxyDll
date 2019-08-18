@@ -20,7 +20,7 @@ namespace cache
 		s_cache_file_header *get_header();
 		int32_t *get_rsa();
 		static auto partitions = (uint32_t(__thiscall *)(uint32_t *))(0x502500);
-		char load_root_tag(uint32_t tag_index);
+		char load_tag(uint32_t tag_index);
 		bool open_tags();
 		bool setup();
 		bool read_tag(LONG tag_offset, DWORD size, LPVOID buffer);
@@ -28,9 +28,9 @@ namespace cache
 		bool load_tags(char *scenario_path);
 		static auto sub_5031A0 = (bool(__cdecl *)())(0x5031A0);
 		bool initialize(char *scenario_path, s_cache_file_header *cache_file_header);
-		static auto dispose_from_old_map = (void *(__cdecl *)(int runtime_resource_index))(0x5AB630);
-		static auto initialize_for_new_map = (bool(__cdecl *)(int runtime_resource_index, char *scenario_path))(0x5ABAD0);
-		static auto get_tag_runtime_resource_index_of_source_file = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
+		static auto dispose_from_old_map = (void *(__cdecl *)(int runtime_index))(0x5AB630);
+		static auto initialize_for_new_map = (bool(__cdecl *)(int runtime_index, char *scenario_path))(0x5ABAD0);
+		static auto get_tag_runtime_index_of_source_file = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
 	}
 }
 
@@ -40,7 +40,7 @@ inline void SubmitCacheFilesHooks(const char *name)
 	{
 		//HookManager.Submit({ 0x005016D0 }, &cache::cache_files_windows::read, "cache::cache_files_windows::read");
 		HookManager.Submit({ 0x00501940 }, &cache::cache_files_windows::get_build, "cache::cache_files_windows::get_build");
-		HookManager.Submit({ 0x00502F16 }, &cache::cache_files_windows::load_root_tag, "cache::cache_files_windows::load_root_tag", HookFlags::IsCall);
+		HookManager.Submit({ 0x00502F16 }, &cache::cache_files_windows::load_tag, "cache::cache_files_windows::load_tag", HookFlags::IsCall);
 		HookManager.Submit({ 0x005028C0 }, &cache::cache_files_windows::open_tags, "cache::cache_files_windows::open_tags");
 		HookManager.Submit({ 0x00502E9B }, &cache::cache_files_windows::setup, "cache::cache_files_windows::setup", HookFlags::IsCall);
 		//HookManager.Submit({ 0x00502C90 }, &cache::cache_files_windows::read_tag, "cache::cache_files_windows::read_tag");
@@ -87,7 +87,7 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	00502300, cache::cache_files_windows::sub_502300, used in cache::cache_files_windows::do_work_internal as right side of ^ (bitwise or)
 //	00502500, cache::cache_files_windows::partitions
 //	00502500, cache::cache_files_windows::sub_502550, used at the very beginning of cache::cache_files_windows::sub_501FD0
-//-	00502780, cache::cache_files_windows::load_root_tag
+//-	00502780, cache::cache_files_windows::load_tag
 //-	005028C0, cache::cache_files_windows::open_tags
 //-	00502970, cache::cache_files_windows::read_from_tag_list
 //-	00502B40, cache::cache_files_windows::setup
@@ -98,7 +98,7 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	00503200, cache::cache_files_windows::release
 //	00503300, cache::dispose
 //	00503340, cache::initialize
-//	00503470, cache::cache_files_windows::sub_503470, used in cache::cache_files_windows::load_root_tag
+//	00503470, cache::cache_files_windows::sub_503470, used in cache::cache_files_windows::load_tag
 //	005A97C0, cache::cache_files_windows::do_work_internal
 //	005AA060, cache::cache_files_windows::get_resource_runtime_file_handle
 //	005AA0C0, cache::cache_files_windows::get_resource_runtime_file_handle_from_scenario_path
@@ -127,8 +127,8 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	005AB820, cache::cache_files_windows::get_cache_path
 //	005ABAD0, cache::cache_files_windows::initialize_for_new_map
 //	005ABBD0, cache::cache_files_windows::validation
-//	005ABDF0, cache::cache_files_windows::get_runtime_resource_count
-//	005ABE90, cache::cache_files_windows::get_tag_runtime_resource_index_of_source_file
+//	005ABDF0, cache::cache_files_windows::get_runtime_count
+//	005ABE90, cache::cache_files_windows::get_tag_runtime_index_of_source_file
 //	005ABF00, cache::open_all_maps
 //	005AC420, cache::cache_files_windows::campare
 
@@ -204,9 +204,9 @@ int32_t *__cdecl cache::cache_files_windows::get_rsa()
 	return result;
 }
 
-char cache::cache_files_windows::load_root_tag(uint32_t tag_index)
+char cache::cache_files_windows::load_tag(uint32_t tag_index)
 {
-	printf_s("cache::cache_files_windows::load_root_tag: [tag_index, 0x%04X]\n", tag_index);
+	printf_s("cache::cache_files_windows::load_tag: [tag_index, 0x%04X]\n", tag_index);
 	auto result = ((char(*)(uint32_t tag_index))0x502780)(tag_index);
 
 	return result;
@@ -309,8 +309,8 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 			*(uint32_t * *)g_cache_info.resource_table_ptr = global_memory_map_allocate_data(5, 0, *g_cache_info.max_resource_count_ptr, 0);
 			g_cache_info.resource_index_table_ptr = 0;
 
-			char root_tag_loaded = cache::cache_files_windows::load_root_tag(0) & 1;
-			scenario_loaded = cache::cache_files_windows::load_root_tag(g_cache_file_header->ScenarioTagIndex) & root_tag_loaded;
+			char root_tag_loaded = cache::cache_files_windows::load_tag(0) & 1;
+			scenario_loaded = cache::cache_files_windows::load_tag(g_cache_file_header->ScenarioTagIndex) & root_tag_loaded;
 
 			if (g_cache_file_header->ExternalDependencies & 2)
 				file_close(global_tag_cache_filo);
@@ -420,14 +420,31 @@ LABEL_25:
 
 bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_header *cache_file_header)
 {
-	auto runtime_resource_index = cache::cache_files_windows::get_tag_runtime_resource_index_of_source_file(scenario_path);
+	auto runtime_index = cache::cache_files_windows::get_tag_runtime_index_of_source_file(scenario_path);
+	auto last_index = e_tag_runtime::k_tag_runtime_count - 1;
+	auto tag_runtimes = g_cache->cache_file.tag_runtimes;
+
+	for (int i = 0; i < e_tag_runtime::k_tag_runtime_count; i++)
+	{
+		if (i == e_tag_runtime::_mainmenu || i == e_tag_runtime::_tags)
+			continue;
+
+		// crashes
+		//tag_runtimes[last_index].Header.To(&tag_runtimes[i].Header);
+
+		// succeeds
+		tag_runtimes[runtime_index].Header.To(&tag_runtimes[i].Header);
+	}
+
+	// doing this is fine when force loading, not so much when using the menu
+	return tag_runtimes[runtime_index].Header.To(cache_file_header);
 
 	if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 	{
 		if (*(byte *)0x240B1E0)
 		{
-			if (runtime_resource_index != -1)
-				cache::cache_files_windows::dispose_from_old_map(runtime_resource_index);
+			if (runtime_index != -1)
+				cache::cache_files_windows::dispose_from_old_map(runtime_index);
 		}
 	}
 
@@ -436,15 +453,15 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 
 	if (*(byte *)0x240B1E0)
 	{
-		if (runtime_resource_index == -1)
+		if (runtime_index == -1)
 		{
-			runtime_resource_index = 7;
+			runtime_index = 7;
 
-			if (!cache::cache_files_windows::initialize_for_new_map(runtime_resource_index, scenario_path))
+			if (!cache::cache_files_windows::initialize_for_new_map(runtime_index, scenario_path))
 				return 0;
 		}
 	}
-	else if (runtime_resource_index == -1)
+	else if (runtime_index == -1)
 	{
 		return 0;
 	}
@@ -452,20 +469,20 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 	printf_s("cache::cache_files_windows::initialize\n{\n");
 	for (size_t i = 0; i < 15; i++)
 	{
-		auto CacheFileHeader = g_cache->cache_file.tag_runtime_resources[i].Header;
+		auto CacheFileHeader = tag_runtimes[i].Header;
 		if (CacheFileHeader.ScenarioTagIndex)
-			printf_s("\t[tag_runtime_resources[%d].Header(0x%04X, %s)]\n", i, CacheFileHeader.ScenarioTagIndex, CacheFileHeader.ScenarioPath);
+			printf_s("\t%s.Header(0x%04X, %s)]\n", e_tag_runtime(i).GetName(), CacheFileHeader.ScenarioTagIndex, CacheFileHeader.ScenarioPath);
 	}
 	printf_s("\n");
 	for (size_t i = 0; i < 15; i++)
 	{
-		auto CacheFileHeader = g_cache->cache_file.tag_runtime_resources[i].Header;
+		auto CacheFileHeader = tag_runtimes[i].Header;
 		if (CacheFileHeader.SourceFile[0] && !CacheFileHeader.ScenarioTagIndex)
-			printf_s("\t[tag_runtime_resources[%d].Header(%s)]\n", i, CacheFileHeader.SourceFile);
+			printf_s("\t%s.Header(%s)]\n", e_tag_runtime(i).GetName(), CacheFileHeader.SourceFile);
 	}
 	printf_s("};\n");
 
-	g_cache->cache_file.runtime_resource_index = runtime_resource_index;
-	memmove(cache_file_header, &g_cache->cache_file.tag_runtime_resources[runtime_resource_index].Header, sizeof(s_cache_file_header));
+	g_cache->cache_file.runtime_index = runtime_index;
+	tag_runtimes[runtime_index].Header.To(cache_file_header);
 	return 1;
 }

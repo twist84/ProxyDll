@@ -5520,9 +5520,71 @@ struct s_cache_file_header
 	{
 		return sizeof(*this);
 	}
+
+	bool To(s_cache_file_header *cache_file_header)
+	{
+		memset(cache_file_header, 0, sizeof(s_cache_file_header));
+		memmove(cache_file_header, this, sizeof(s_cache_file_header));
+
+		return true;
+	}
+	bool From(s_cache_file_header *cache_file_header)
+	{
+		memset(this, 0, sizeof(s_cache_file_header));
+		memmove(this, cache_file_header, sizeof(s_cache_file_header));
+
+		return true;
+	}
 };
 static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
 auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
+
+struct e_tag_runtime
+{
+	enum e : __int32
+	{
+		_mainmenu,
+
+		_resources,
+		_textures,
+		_textures_b,
+		_audio,
+		_video,
+
+		_tags = 8,
+
+		k_tag_runtime_count = 15
+	} value;
+
+	e_tag_runtime(int val)
+	{
+		value = (e)val;
+	}
+
+	const char *GetName()
+	{
+		switch (value)
+		{
+		case _mainmenu:
+			return "mainmenu";
+		case _resources:
+			return "resources";
+		case _textures:
+			return "textures";
+		case _textures_b:
+			return "textures_b";
+		case _audio:
+			return "audio";
+		case _video:
+			return "video";
+		case _tags:
+			return "tags";
+		default:
+			return "unused";
+		}
+		return "NULL";
+	}
+};
 
 struct s_cache
 {
@@ -5532,7 +5594,7 @@ struct s_cache
 
 	struct s_cache_file
 	{
-		struct s_tag_runtime_resource
+		struct s_tag_runtime
 		{
 			uint32_t *FileHandle;
 			uint32_t unknown4;
@@ -5541,14 +5603,34 @@ struct s_cache
 
 			uint32_t IoCompletionKey;
 			uint32_t *FileHandle2;
-		} tag_runtime_resources[15];
-		static_assert(sizeof(s_tag_runtime_resource) == 0x33A0, "s_tag_runtime_resource wrong size");
 
-		int32_t runtime_resource_index;
+			size_t Size()
+			{
+				return sizeof(*this);
+			}
+
+			bool To(s_tag_runtime *tag_runtime)
+			{
+				memset(tag_runtime, 0, sizeof(s_tag_runtime));
+				memmove(tag_runtime, this, sizeof(s_tag_runtime));
+
+				return true;
+			}
+			bool From(s_tag_runtime *tag_runtime)
+			{
+				memset(this, 0, sizeof(s_tag_runtime));
+				memmove(this, tag_runtime, sizeof(s_tag_runtime));
+
+				return true;
+			}
+		} tag_runtimes[15];
+		static_assert(sizeof(s_tag_runtime) == 0x33A0, "s_tag_runtime wrong size");
+
+		int32_t runtime_index;
 
 		int32_t unknown30664;
 
-		int32_t runtime_resource_count;
+		int32_t runtime_count;
 
 		int32_t unknown_type;
 
