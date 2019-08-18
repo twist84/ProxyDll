@@ -420,31 +420,30 @@ LABEL_25:
 
 bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_header *cache_file_header)
 {
-	auto runtime_index = cache::cache_files_windows::get_tag_runtime_index_of_source_file(scenario_path);
-	auto last_index = e_tag_runtime::k_tag_runtime_count - 1;
-	auto tag_runtimes = g_cache->cache_file.tag_runtimes;
+	auto tag_runtime_index = cache::cache_files_windows::get_tag_runtime_index_of_source_file(scenario_path);
+	auto tag_runtimes = g_cache->CacheFile.TagRuntimes;
 
-	for (int i = 0; i < e_tag_runtime::k_tag_runtime_count; i++)
+	for (int i = 0; i < e_tag_runtime::k_number_of_tag_runtimes; i++)
 	{
 		if (i == e_tag_runtime::_mainmenu || i == e_tag_runtime::_tags)
 			continue;
 
-		// crashes
-		//tag_runtimes[last_index].Header.To(&tag_runtimes[i].Header);
+		// crashes, probably due to tag_runtimes[count - 1] being invalid
+		//tag_runtimes[e_tag_runtime::k_tag_runtime_count - 1].Header.MoveTo(&tag_runtimes[i].Header);
 
-		// succeeds
-		tag_runtimes[runtime_index].Header.To(&tag_runtimes[i].Header);
+		// succeeds, probably should throw an error perhaps because its only the header thats moved
+		tag_runtimes[tag_runtime_index].Header.CopyTo(&tag_runtimes[i].Header);
 	}
 
 	// doing this is fine when force loading, not so much when using the menu
-	return tag_runtimes[runtime_index].Header.To(cache_file_header);
+	return tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
 
 	if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 	{
 		if (*(byte *)0x240B1E0)
 		{
-			if (runtime_index != -1)
-				cache::cache_files_windows::dispose_from_old_map(runtime_index);
+			if (tag_runtime_index != -1)
+				cache::cache_files_windows::dispose_from_old_map(tag_runtime_index);
 		}
 	}
 
@@ -453,15 +452,15 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 
 	if (*(byte *)0x240B1E0)
 	{
-		if (runtime_index == -1)
+		if (tag_runtime_index == -1)
 		{
-			runtime_index = 7;
+			tag_runtime_index = 7;
 
-			if (!cache::cache_files_windows::initialize_for_new_map(runtime_index, scenario_path))
+			if (!cache::cache_files_windows::initialize_for_new_map(tag_runtime_index, scenario_path))
 				return 0;
 		}
 	}
-	else if (runtime_index == -1)
+	else if (tag_runtime_index == -1)
 	{
 		return 0;
 	}
@@ -482,7 +481,7 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 	}
 	printf_s("};\n");
 
-	g_cache->cache_file.runtime_index = runtime_index;
-	tag_runtimes[runtime_index].Header.To(cache_file_header);
+	g_cache->CacheFile.RuntimeIndex = tag_runtime_index;
+	tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
 	return 1;
 }

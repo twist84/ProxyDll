@@ -5380,6 +5380,53 @@ struct e_achievement
 	}
 };
 
+struct e_tag_runtime
+{
+	enum e : __int32
+	{
+		_mainmenu,
+
+		_resources,
+		_textures,
+		_textures_b,
+		_audio,
+		_video,
+
+		_tags = 8,
+
+		k_number_of_tag_runtimes = 15
+	} value;
+
+	e_tag_runtime(int val)
+	{
+		value = (e)val;
+	}
+
+	const char *GetName()
+	{
+		switch (value)
+		{
+		case _mainmenu:
+			return "mainmenu";
+		case _resources:
+			return "resources";
+		case _textures:
+			return "textures";
+		case _textures_b:
+			return "textures_b";
+		case _audio:
+			return "audio";
+		case _video:
+			return "video";
+		case _tags:
+			return "tags";
+		default:
+			return "unused";
+		}
+		return "NULL";
+	}
+};
+
 enum class alignas(2) e_cache_file_type : char { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
 enum class alignas(2) e_cache_file_shared_type : char { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
 //enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
@@ -5521,17 +5568,31 @@ struct s_cache_file_header
 		return sizeof(*this);
 	}
 
-	bool To(s_cache_file_header *cache_file_header)
+	bool MoveTo(s_cache_file_header *cache_file_header)
 	{
 		memset(cache_file_header, 0, sizeof(s_cache_file_header));
 		memmove(cache_file_header, this, sizeof(s_cache_file_header));
 
 		return true;
 	}
-	bool From(s_cache_file_header *cache_file_header)
+	bool MoveFrom(s_cache_file_header *cache_file_header)
 	{
 		memset(this, 0, sizeof(s_cache_file_header));
 		memmove(this, cache_file_header, sizeof(s_cache_file_header));
+
+		return true;
+	}
+	bool CopyTo(s_cache_file_header *cache_file_header)
+	{
+		memset(cache_file_header, 0, sizeof(s_cache_file_header));
+		memcpy(cache_file_header, this, sizeof(s_cache_file_header));
+
+		return true;
+	}
+	bool CopyFrom(s_cache_file_header *cache_file_header)
+	{
+		memset(this, 0, sizeof(s_cache_file_header));
+		memcpy(this, cache_file_header, sizeof(s_cache_file_header));
 
 		return true;
 	}
@@ -5539,52 +5600,67 @@ struct s_cache_file_header
 static_assert(sizeof(s_cache_file_header) == 0x3390, "s_cache_file_header wrong size");
 auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
 
-struct e_tag_runtime
+struct s_cache_file_tag_runtime
 {
-	enum e : __int32
+	uint32_t *FileHandle;
+	uint32_t unknown4;
+
+	s_cache_file_header Header;
+
+	uint32_t IoCompletionKey;
+	uint32_t *FileHandle2;
+
+	size_t Size()
 	{
-		_mainmenu,
-
-		_resources,
-		_textures,
-		_textures_b,
-		_audio,
-		_video,
-
-		_tags = 8,
-
-		k_tag_runtime_count = 15
-	} value;
-
-	e_tag_runtime(int val)
-	{
-		value = (e)val;
+		return sizeof(*this);
 	}
 
-	const char *GetName()
+	bool MoveTo(s_cache_file_tag_runtime *tag_runtime)
 	{
-		switch (value)
-		{
-		case _mainmenu:
-			return "mainmenu";
-		case _resources:
-			return "resources";
-		case _textures:
-			return "textures";
-		case _textures_b:
-			return "textures_b";
-		case _audio:
-			return "audio";
-		case _video:
-			return "video";
-		case _tags:
-			return "tags";
-		default:
-			return "unused";
-		}
-		return "NULL";
+		memset(tag_runtime, 0, sizeof(s_cache_file_tag_runtime));
+		memmove(tag_runtime, this, sizeof(s_cache_file_tag_runtime));
+
+		return true;
+	}
+	bool MoveFrom(s_cache_file_tag_runtime *tag_runtime)
+	{
+		memset(this, 0, sizeof(s_cache_file_tag_runtime));
+		memmove(this, tag_runtime, sizeof(s_cache_file_tag_runtime));
+
+		return true;
+	}
+	bool CopyTo(s_cache_file_tag_runtime *tag_runtime)
+	{
+		memset(tag_runtime, 0, sizeof(s_cache_file_tag_runtime));
+		memcpy(tag_runtime, this, sizeof(s_cache_file_tag_runtime));
+
+		return true;
+	}
+	bool CopyFrom(s_cache_file_tag_runtime *tag_runtime)
+	{
+		memset(this, 0, sizeof(s_cache_file_tag_runtime));
+		memcpy(this, tag_runtime, sizeof(s_cache_file_tag_runtime));
+
+		return true;
 	}
 };
+static_assert(sizeof(s_cache_file_tag_runtime) == 0x33A0, "s_cache_file_tag_runtime wrong size");
+
+struct s_cache_file
+{
+	s_cache_file_tag_runtime TagRuntimes[15];
+
+	int32_t RuntimeIndex;
+
+	int32_t unknown30664;
+
+	int32_t RuntimeCount;
+
+	int32_t UnknownType;
+
+	uint8_t unknown30670[8][0x108];
+};
+static_assert(sizeof(s_cache_file) == 0x30EB0, "s_cache_file wrong size");
 
 struct s_cache
 {
@@ -5592,51 +5668,7 @@ struct s_cache
 
 	uint8_t unknown1[7];
 
-	struct s_cache_file
-	{
-		struct s_tag_runtime
-		{
-			uint32_t *FileHandle;
-			uint32_t unknown4;
-
-			s_cache_file_header Header;
-
-			uint32_t IoCompletionKey;
-			uint32_t *FileHandle2;
-
-			size_t Size()
-			{
-				return sizeof(*this);
-			}
-
-			bool To(s_tag_runtime *tag_runtime)
-			{
-				memset(tag_runtime, 0, sizeof(s_tag_runtime));
-				memmove(tag_runtime, this, sizeof(s_tag_runtime));
-
-				return true;
-			}
-			bool From(s_tag_runtime *tag_runtime)
-			{
-				memset(this, 0, sizeof(s_tag_runtime));
-				memmove(this, tag_runtime, sizeof(s_tag_runtime));
-
-				return true;
-			}
-		} tag_runtimes[15];
-		static_assert(sizeof(s_tag_runtime) == 0x33A0, "s_tag_runtime wrong size");
-
-		int32_t runtime_index;
-
-		int32_t unknown30664;
-
-		int32_t runtime_count;
-
-		int32_t unknown_type;
-
-		uint8_t unknown30670[8][0x108];
-	} cache_file;
-	static_assert(sizeof(s_cache_file) == 0x30EB0, "s_cache_file wrong size");
+	s_cache_file CacheFile;
 
 	uint8_t part2[0x36E8];
 	uint8_t part3[0x3B8];
