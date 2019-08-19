@@ -10,6 +10,7 @@
 namespace cache
 {
 	bool load(int campaign_id, int map_id, char *scenario_path);
+	bool open_all_runtimes(bool *opened);
 
 	namespace cache_files_windows
 	{
@@ -29,7 +30,7 @@ namespace cache
 		static auto sub_5031A0 = (bool(__cdecl *)())(0x5031A0);
 		bool initialize(char *scenario_path, s_cache_file_header *cache_file_header);
 		static auto dispose_from_old_map = (void *(__cdecl *)(int runtime_index))(0x5AB630);
-		static auto initialize_for_new_map = (bool(__cdecl *)(int runtime_index, char *scenario_path))(0x5ABAD0);
+		static auto initialize_for_new_map = (bool(__cdecl *)(int runtime_index, const char *scenario_path))(0x5ABAD0);
 		static auto get_tag_runtime_index_of_source_file = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
 	}
 }
@@ -51,6 +52,8 @@ inline void SubmitCacheFilesHooks(const char *name)
 	
 		HookManager.Submit({ 0x00501F90 }, &cache::cache_files_windows::get_header, "cache::cache_files_windows::get_header");
 		HookManager.Submit({ 0x00501FA0 }, &cache::cache_files_windows::get_rsa, "cache::cache_files_windows::get_rsa");
+
+		HookManager.Submit({ 0x005ABF00 }, &cache::open_all_runtimes, "cache::open_all_runtimes");
 	}
 }
 
@@ -129,7 +132,7 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	005ABBD0, cache::cache_files_windows::validation
 //	005ABDF0, cache::cache_files_windows::get_runtime_count
 //	005ABE90, cache::cache_files_windows::get_tag_runtime_index_of_source_file
-//	005ABF00, cache::open_all_maps
+//	005ABF00, cache::open_all_runtimes
 //	005AC420, cache::cache_files_windows::campare
 
 bool cache::load(int campaign_id, int map_id, char *scenario_path) // dirty_disk_error(TODO: reimplement this function) if returned value is false
@@ -151,8 +154,8 @@ bool cache::load(int campaign_id, int map_id, char *scenario_path) // dirty_disk
 			printf_s("cache::load: cache_file_dispose called\n");
 
 			*(uint32_t *)0x189CCF8 = -1;
-			**(uint32_t * *)0x22AAEB4 = 0;
-			**(uint32_t * *)0x22AAEB8 = 0;
+			**(uint32_t **)0x22AAEB4 = 0;
+			**(uint32_t **)0x22AAEB8 = 0;
 			*(uint32_t *)0x189CD0C = -1;
 			*(uint32_t *)0x22AAEBC = 0;
 
@@ -162,6 +165,34 @@ bool cache::load(int campaign_id, int map_id, char *scenario_path) // dirty_disk
 
 	printf_s("cache::load: map_load_tags failed\n");
 	return false;
+}
+
+bool cache::open_all_runtimes(bool *opened)
+{
+	g_cache->CacheFile.InvalidateAllHandles();
+
+	const char *runtimes[]
+	{
+		"levels\\ui\\mainmenu\\mainmenu", // unsure as to why the game needs this as a dedication slot
+
+		"maps\\resources.dat",
+		"maps\\textures.dat",
+		"maps\\textures_b.dat",
+		"maps\\audio.dat",
+		"maps\\video.dat"
+	};
+
+	for (int i = 0; i < _countof(runtimes); i++)
+	{
+		if (strstr(runtimes[i] , "mainmenu") != 0)
+			continue;
+
+		if (((bool(__cdecl *)(int))0x501E80)(i - 1))
+			cache::cache_files_windows::initialize_for_new_map(i, runtimes[i]);
+	}
+
+	*opened = true;
+	return *opened;
 }
 
 bool cache::cache_files_windows::read(int a2, LONG tag_offset, DWORD size, LPVOID buffer)

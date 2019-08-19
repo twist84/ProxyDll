@@ -1848,7 +1848,7 @@ namespace Blam
 		Strings = new char *[Header.StringCount];
 
 		auto *stringOffsets = new int32_t[Header.StringCount];
-		stream.read((char *)stringOffsets, sizeof(int32_t) * Header.StringCount);
+		stream.read((char *)stringOffsets, (Header.StringCount * sizeof(int32_t)));
 
 		auto dataOffset = stream.tellg().seekpos();
 		stream.read(Data, Header.StringDataSize);
@@ -5602,17 +5602,23 @@ auto g_cache_file_header = GetStructure<s_cache_file_header>(0x22AB018);
 
 struct s_cache_file_tag_runtime
 {
-	uint32_t *FileHandle;
+	LPVOID FileHandle;
 	uint32_t unknown4;
 
 	s_cache_file_header Header;
 
 	uint32_t IoCompletionKey;
-	uint32_t *FileHandle2;
+	LPVOID FileHandle2;
 
 	size_t Size()
 	{
 		return sizeof(*this);
+	}
+
+	void InvalidateHandles()
+	{
+		FileHandle = nullptr;
+		FileHandle2 = nullptr;
 	}
 
 	bool MoveTo(s_cache_file_tag_runtime *tag_runtime)
@@ -5648,7 +5654,7 @@ static_assert(sizeof(s_cache_file_tag_runtime) == 0x33A0, "s_cache_file_tag_runt
 
 struct s_cache_file
 {
-	s_cache_file_tag_runtime TagRuntimes[15];
+	s_cache_file_tag_runtime TagRuntimes[e_tag_runtime::k_number_of_tag_runtimes];
 
 	int32_t RuntimeIndex;
 
@@ -5659,6 +5665,12 @@ struct s_cache_file
 	int32_t UnknownType;
 
 	uint8_t unknown30670[8][0x108];
+
+	void InvalidateAllHandles()
+	{
+		for (int i = 0; i < (int)e_tag_runtime::k_number_of_tag_runtimes; i++)
+			TagRuntimes[i].InvalidateHandles();
+	}
 };
 static_assert(sizeof(s_cache_file) == 0x30EB0, "s_cache_file wrong size");
 
