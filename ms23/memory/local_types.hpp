@@ -5688,82 +5688,8 @@ struct s_cache
 static_assert(sizeof(s_cache) == 0x34958, "s_cache wrong size");
 auto g_cache = GetStructure<s_cache>(0x240B1E0);
 
-auto g_default_maps_path = "maps\\";
-std::string g_maps_path = g_default_maps_path;
-
-struct s_cache_path
-{
-	struct s_cache_file_path
-	{
-		std::string Name;
-		size_t Offset;
-		std::string Path;
-
-		s_cache_file_path(size_t offset, std::string filename)
-		{
-			Name = filename;
-			Path = g_maps_path + Name;
-			Offset = offset;
-		}
-		s_cache_file_path *Update(std::string mapname)
-		{
-			Path = g_maps_path + mapname + "\\" + Name;
-
-			return this;
-		}
-		std::string Read()
-		{
-			return Pointer::Base(Offset).Read<char*>();
-		}
-		void Write(bool shouldWrite)
-		{
-			if (shouldWrite)
-				Pointer::Base(Offset).Write(Path.c_str());
-		}
-		s_cache_file_path *Print()
-		{
-			printf_s("CacheFilePath(%s)\n", Path.c_str());
-
-			return this;
-		}
-	};
-
-	s_cache_file_path string_ids = s_cache_file_path(0x149CFEC, "string_ids.dat");
-	s_cache_file_path tags = s_cache_file_path(0x149CFF0, "tags.dat");
-	s_cache_file_path tag_list = s_cache_file_path(0x149CFF4, "tag_list.csv");
-	s_cache_file_path resources = s_cache_file_path(0x149CFF8, "resources.dat");
-	s_cache_file_path textures = s_cache_file_path(0x149CFFC, "textures.dat");
-	s_cache_file_path textures_b = s_cache_file_path(0x149D000, "textures_b.dat");
-	s_cache_file_path audio = s_cache_file_path(0x149D004, "audio.dat");
-	s_cache_file_path video = s_cache_file_path(0x149D008, "video.dat");
-
-	s_cache_path *Update(bool new_cache_style = false)
-	{
-		string_ids.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		tags.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		tag_list.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		resources.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		textures.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		textures_b.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		audio.Update(g_cache_file_header->Name)->Write(new_cache_style);
-		video.Update(g_cache_file_header->Name)->Write(new_cache_style);
-
-		return this;
-	}
-	s_cache_path *Print()
-	{
-		string_ids.Print();
-		tag_list.Print();
-		resources.Print();
-		textures.Print();
-		textures_b.Print();
-		audio.Print();
-		video.Print();
-		tags.Print();
-
-		return this;
-	}
-} cache_path;
+auto g_default_map_path = "maps\\";
+std::string g_map_path = g_default_map_path;
 
 template<typename T>
 struct point2d

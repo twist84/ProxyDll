@@ -259,7 +259,8 @@ namespace Utils
 			std::wcin.clear();
 			std::cin.clear();
 
-			fprintf(fStdOut, str.c_str());
+			if (fStdOut)
+				fprintf(fStdOut, str.c_str());
 		}
 
 		void LogOutput(const std::string& line)

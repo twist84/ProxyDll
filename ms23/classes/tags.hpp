@@ -51,11 +51,6 @@ uint32_t __cdecl tag_get_group_tag_hook(uint32_t index)
 	return result;
 }
 
-const char *maps_path_hook()
-{
-	return g_maps_path.c_str();
-}
-
 uint8_t *__cdecl tag_block_get_defintion_hook(tag_block *block, int index, int size)
 {
 	auto result = &block->address[size * index];
@@ -73,7 +68,6 @@ inline void SubmitTagsHooks(const char *name)
 		HookManager.Submit({ 0x00503370 }, &tag_get_definition_hook, "tag_get_definition");
 		HookManager.Submit({ 0x005033A0 }, &tag_get_group_tag_hook, "tag_get_group_tag");
 		
-		HookManager.Submit({ 0x00501FC0 }, &maps_path_hook, "maps_path");
 		HookManager.Submit({ 0x0055AA00 }, &tag_block_get_defintion_hook, "tag_block_get_defintion");
 	}
 }

@@ -15,13 +15,13 @@ void PreInit()
 
 	g_saves_path = ConfigManager.GetWString("Saves", "Path");
 	UseStandardRendering(ConfigManager.GetBool("Rendering", "UseStandardRendering"));
-	g_maps_path = ConfigManager.GetString("Maps", "Path")[0] != '\0' ? ConfigManager.GetString("Maps", "Path") : g_default_maps_path;
+	g_map_path = ConfigManager.GetString("Maps", "Path")[0] != '\0' ? ConfigManager.GetString("Maps", "Path") : g_default_map_path;
 	g_use_default_system_ui_language = ConfigManager.GetBool("Language", "UseSystemDefault");
 	g_new_system_ui_language = ConfigManager.GetLanguage("Language", "Selected");
 	hotkey_sleep_delta = ConfigManager.GetFloat("Timing", "HotkeySleepDelta");
 	update_debug_loading_type();
 
-	Blam::StringIDCache::Instance.Load(g_maps_path);
+	Blam::StringIDCache::Instance.Load(g_map_path);
 
 	SubmitHooks();
 	SubmitPatches();

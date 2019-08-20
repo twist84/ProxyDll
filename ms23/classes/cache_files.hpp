@@ -5,33 +5,36 @@
 #include "../memory/tag_groups.hpp"
 #include "../memory/local_types.hpp"
 #include "filo.hpp"
+#include "print.hpp"
 #include "tags.hpp"
 
 namespace cache
 {
 	bool load(int campaign_id, int map_id, char *scenario_path);
-	bool open_all_runtimes(bool *opened);
 
 	namespace cache_files_windows
 	{
 		bool read(int a2, LONG tag_offset, DWORD size, LPVOID buffer);
 		char *get_build();
-		static auto validate = (bool(__cdecl *)(s_cache_file_header * cache_file_header))(0x501950);
+		static auto verify_header = (bool(__cdecl *)(s_cache_file_header * cache_file_header))(0x501950);
 		static auto calculate_load_percentage = (double(__cdecl *)(int, char *scenario_path))(0x501BF0);
 		s_cache_file_header *get_header();
 		int32_t *get_rsa();
+		const char *map_path();
 		static auto partitions = (uint32_t(__thiscall *)(uint32_t *))(0x502500);
 		char load_tag(uint32_t tag_index);
-		bool open_tags();
+		bool open_tags(char *scenario_path);
 		bool setup();
-		bool read_tag(LONG tag_offset, DWORD size, LPVOID buffer);
-		static auto dispose = (uint32_t(__cdecl *)())(0x502CE0);
+		bool read_blocking(LONG tag_offset, DWORD size, LPVOID buffer);
+		static auto reset_tags = (uint32_t(__cdecl *)())(0x502CE0);
 		bool load_tags(char *scenario_path);
-		static auto sub_5031A0 = (bool(__cdecl *)())(0x5031A0);
-		bool initialize(char *scenario_path, s_cache_file_header *cache_file_header);
+		static auto fixup = (bool(__cdecl *)())(0x5031A0);
+		static auto close = (bool(__cdecl *)())(0x5A9730);
+		bool open_runtimes(char *scenario_path, s_cache_file_header *cache_file_header);
 		static auto dispose_from_old_map = (void *(__cdecl *)(int runtime_index))(0x5AB630);
-		static auto initialize_for_new_map = (bool(__cdecl *)(int runtime_index, const char *scenario_path))(0x5ABAD0);
+		static auto open_runtime = (bool(__cdecl *)(int runtime_index, char *scenario_path))(0x5ABAD0);
 		static auto get_tag_runtime_index_of_source_file = (int(__cdecl *)(char *scenario_path))(0x5ABE90);
+		bool open_all_runtimes(bool *opened);
 	}
 }
 
@@ -40,20 +43,21 @@ inline void SubmitCacheFilesHooks(const char *name)
 	if (ConfigManager.GetBool("Hooks", name))
 	{
 		//HookManager.Submit({ 0x005016D0 }, &cache::cache_files_windows::read, "cache::cache_files_windows::read");
-		HookManager.Submit({ 0x00501940 }, &cache::cache_files_windows::get_build, "cache::cache_files_windows::get_build");
-		HookManager.Submit({ 0x00502F16 }, &cache::cache_files_windows::load_tag, "cache::cache_files_windows::load_tag", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00501940 }, &cache::cache_files_windows::get_build, "cache::cache_files_windows::get_build");
+		//HookManager.Submit({ 0x00502F16 }, &cache::cache_files_windows::load_tag, "cache::cache_files_windows::load_tag", HookFlags::IsCall);
 		HookManager.Submit({ 0x005028C0 }, &cache::cache_files_windows::open_tags, "cache::cache_files_windows::open_tags");
-		HookManager.Submit({ 0x00502E9B }, &cache::cache_files_windows::setup, "cache::cache_files_windows::setup", HookFlags::IsCall);
-		//HookManager.Submit({ 0x00502C90 }, &cache::cache_files_windows::read_tag, "cache::cache_files_windows::read_tag");
-		HookManager.Submit({ 0x00502E1E }, &cache::cache_files_windows::initialize, "cache::cache_files_windows::initialize", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00502E9B }, &cache::cache_files_windows::setup, "cache::cache_files_windows::setup", HookFlags::IsCall);
+		//HookManager.Submit({ 0x00502C90 }, &cache::cache_files_windows::read_blocking, "cache::cache_files_windows::read_blocking");
+		//HookManager.Submit({ 0x00502E1E }, &cache::cache_files_windows::open_runtimes, "cache::cache_files_windows::open_runtimes", HookFlags::IsCall);
 		
-		HookManager.Submit({ 0x004EA5E0 }, &cache::load, "cache::load");
+		//HookManager.Submit({ 0x004EA5E0 }, &cache::load, "cache::load");
 		HookManager.Submit({ 0x004EA5EE }, &cache::cache_files_windows::load_tags, "cache::cache_files_windows::load_tags", HookFlags::IsCall);
 	
-		HookManager.Submit({ 0x00501F90 }, &cache::cache_files_windows::get_header, "cache::cache_files_windows::get_header");
-		HookManager.Submit({ 0x00501FA0 }, &cache::cache_files_windows::get_rsa, "cache::cache_files_windows::get_rsa");
+		//HookManager.Submit({ 0x00501F90 }, &cache::cache_files_windows::get_header, "cache::cache_files_windows::get_header");
+		//HookManager.Submit({ 0x00501FA0 }, &cache::cache_files_windows::get_rsa, "cache::cache_files_windows::get_rsa");
+		//HookManager.Submit({ 0x00501FC0 }, &cache::cache_files_windows::map_path, "cache::cache_files_windows::map_path");
 
-		HookManager.Submit({ 0x005ABF00 }, &cache::open_all_runtimes, "cache::open_all_runtimes");
+		HookManager.Submit({ 0x005ABF00 }, &cache::cache_files_windows::open_all_runtimes, "cache::cache_files_windows::open_all_runtimes");
 	}
 }
 
@@ -81,10 +85,11 @@ inline void SubmitCacheFilesPatches(const char *name)
 //-	004EA5E0, cache::load
 //-	005016D0, cache::cache_files_windows::read
 //-	00501940, cache::cache_files_windows::get_build, called on draw_watermark
-//	00501950, cache::cache_files_windows::validate
+//	00501950, cache::cache_files_windows::verify_header
 //	00501BF0, cache::cache_files_windows::calculate_load_percentage
 //-	00501F90, cache::cache_files_windows::get_header
 //-	00501FA0, cache::cache_files_windows::get_rsa
+//-	00501FA0, cache::cache_files_windows::map_path
 //	00501FD0, cache::cache_files_windows::sub_501FD0, used in c_cache_file_tag_resource_runtime_manager::initialize_for_new_map::c_cache_file_page_restorer
 //	00502210, cache::cache_files_windows::hash_validate
 //	00502300, cache::cache_files_windows::sub_502300, used in cache::cache_files_windows::do_work_internal as right side of ^ (bitwise or)
@@ -94,15 +99,17 @@ inline void SubmitCacheFilesPatches(const char *name)
 //-	005028C0, cache::cache_files_windows::open_tags
 //-	00502970, cache::cache_files_windows::read_from_tag_list
 //-	00502B40, cache::cache_files_windows::setup
-//-	00502C90, cache::cache_files_windows::read_tag
-//	00502CE0, cache::cache_files_windows::dispose
+//-	00502C90, cache::cache_files_windows::read_blocking
+//	00502CE0, cache::cache_files_windows::reset_tags
 //-	00502DC0, cache::cache_files_windows::load_tags
-//	005031A0, cache::cache_files_windows::sub_5031A0, used in cache::cache_files_windows::load after hash verification is successful
+//	005031A0, cache::cache_files_windows::fixup
 //	00503200, cache::cache_files_windows::release
 //	00503300, cache::dispose
 //	00503340, cache::initialize
 //	00503470, cache::cache_files_windows::sub_503470, used in cache::cache_files_windows::load_tag
+//	0054C360, cache::cache_files_windows::map_full_path
 //	005A97C0, cache::cache_files_windows::do_work_internal
+//	005A9730, cache::cache_files_windows::close
 //	005AA060, cache::cache_files_windows::get_resource_runtime_file_handle
 //	005AA0C0, cache::cache_files_windows::get_resource_runtime_file_handle_from_scenario_path
 //	005AA1D0, cache::cache_files_windows::get_io_completion_key_from_scenario_path
@@ -113,7 +120,7 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	005AA420, cache::cache_files_windows::get_resource_runtime_file_handle2_from_scenario_path
 //	005AA560, cache::cache_files_windows::get_interop_debug_section_size_from_scenario_path
 //	005AA660, cache::cache_files_windows::has_valid_cache_file_index
-//-	005AA7C0, cache::cache_files_windows::initialize
+//-	005AA7C0, cache::cache_files_windows::open_runtimes
 //	005AA8E0, cache::cache_files_windows::get_guid
 //	005AA910, cache::cache_files_windows::get_guid_from_scenario_path
 //	005AAB20, cache::cache_files_windows::do_work
@@ -128,12 +135,58 @@ inline void SubmitCacheFilesPatches(const char *name)
 //	005AB630, cache::cache_files_windows::dispose_from_old_map
 //	005AB6F0, cache::cache_files_windows::dependencies_loaded
 //	005AB820, cache::cache_files_windows::get_cache_path
-//	005ABAD0, cache::cache_files_windows::initialize_for_new_map
+//	005ABAD0, cache::cache_files_windows::open_runtime
 //	005ABBD0, cache::cache_files_windows::validation
 //	005ABDF0, cache::cache_files_windows::get_runtime_count
 //	005ABE90, cache::cache_files_windows::get_tag_runtime_index_of_source_file
-//	005ABF00, cache::open_all_runtimes
+//	005ABF00, cache::cache_files_windows::open_all_runtimes
 //	005AC420, cache::cache_files_windows::campare
+
+char *decomposePath(const char *path)
+{
+#if defined _WIN32
+	const char *lastSeparator = strrchr(path, '\\');
+#else
+	const char *lastSeparator = strrchr(path, '/');
+#endif
+
+	const char *lastDot = strrchr(path, '.');
+	const char *endOfPath = path + strlen(path);
+	const char *startOfName = lastSeparator ? lastSeparator + 1 : path;
+	const char *startOfExt = lastDot > startOfName ? lastDot : endOfPath;
+
+	char name[MAX_PATH] = {};
+	if (name)
+		_snprintf(name, MAX_PATH, "%.*s", startOfExt - startOfName, startOfName);
+	return name;
+}
+
+const int k_number_of_runtimes = 6;
+void update_runtime(int index, const char *scenario_path = "")
+{
+	const char *runtimes[k_number_of_runtimes]
+	{
+		"levels\\ui\\mainmenu\\mainmenu",
+
+		"resources",
+		"textures",
+		"textures_b",
+		"audio",
+		"video"
+	};
+
+	char full_path[MAX_PATH] = {};
+	if (scenario_path[0])
+		format<256>(full_path, "%s%s\\%s.dat", g_map_path.c_str(), decomposePath(scenario_path), runtimes[index]);
+	else
+		format<256>(full_path, "%s%s.dat", g_map_path.c_str(), runtimes[index]);
+
+	g_cache->CacheFile.TagRuntimes[index].InvalidateHandles();
+
+	if (((bool(__cdecl *)(int))0x501E80)(index - 1))
+		cache::cache_files_windows::open_runtime(index, full_path);
+}
+
 
 bool cache::load(int campaign_id, int map_id, char *scenario_path) // dirty_disk_error(TODO: reimplement this function) if returned value is false
 {
@@ -165,34 +218,6 @@ bool cache::load(int campaign_id, int map_id, char *scenario_path) // dirty_disk
 
 	printf_s("cache::load: map_load_tags failed\n");
 	return false;
-}
-
-bool cache::open_all_runtimes(bool *opened)
-{
-	g_cache->CacheFile.InvalidateAllHandles();
-
-	const char *runtimes[]
-	{
-		"levels\\ui\\mainmenu\\mainmenu", // unsure as to why the game needs this as a dedication slot
-
-		"maps\\resources.dat",
-		"maps\\textures.dat",
-		"maps\\textures_b.dat",
-		"maps\\audio.dat",
-		"maps\\video.dat"
-	};
-
-	for (int i = 0; i < _countof(runtimes); i++)
-	{
-		if (strstr(runtimes[i] , "mainmenu") != 0)
-			continue;
-
-		if (((bool(__cdecl *)(int))0x501E80)(i - 1))
-			cache::cache_files_windows::initialize_for_new_map(i, runtimes[i]);
-	}
-
-	*opened = true;
-	return *opened;
 }
 
 bool cache::cache_files_windows::read(int a2, LONG tag_offset, DWORD size, LPVOID buffer)
@@ -235,6 +260,11 @@ int32_t *__cdecl cache::cache_files_windows::get_rsa()
 	return result;
 }
 
+const char *cache::cache_files_windows::map_path()
+{
+	return g_map_path.c_str();
+}
+
 char cache::cache_files_windows::load_tag(uint32_t tag_index)
 {
 	printf_s("cache::cache_files_windows::load_tag: [tag_index, 0x%04X]\n", tag_index);
@@ -243,19 +273,23 @@ char cache::cache_files_windows::load_tag(uint32_t tag_index)
 	return result;
 }
 
-bool cache::cache_files_windows::open_tags()
+bool cache::cache_files_windows::open_tags(char *scenario_path)
 {
-	cache_path.Update(ConfigManager.GetBool("Maps", "UseNewCacheStyle"));
+	char full_path[MAX_PATH] = {};
+	if (scenario_path[0] && ConfigManager.GetBool("Maps", "UseNewCacheStyle"))
+		format<256>(full_path, "%s%s\\tags.dat", g_map_path.c_str(), decomposePath(scenario_path));
+	else
+		format<256>(full_path, "%stags.dat", g_map_path.c_str());
 
 	char result = 0;
 	if (g_cache_file_header->ExternalDependencies & 2)
 	{
-		filo_create_hook(global_tag_cache_filo, cache_path.tags.Path.c_str(), 0);
+		filo_create_hook(global_tag_cache_filo, full_path, 0);
 		int file_error;
 		result = file_open(global_tag_cache_filo, 1, &file_error);
 	}
 
-	cache_path.tags.Print();
+	printf_s("%s\n", full_path);
 	return result;
 }
 
@@ -267,9 +301,9 @@ bool cache::cache_files_windows::setup()
 	return result;
 }
 
-bool cache::cache_files_windows::read_tag(LONG tag_offset, DWORD size, LPVOID buffer)
+bool cache::cache_files_windows::read_blocking(LONG tag_offset, DWORD size, LPVOID buffer)
 {
-	printf_s("cache::cache_files_windows::read_tag: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
+	printf_s("cache::cache_files_windows::read_blocking: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
 	if (!(g_cache_file_header->ExternalDependencies & 2))
 		return cache::cache_files_windows::read(2, tag_offset, size, buffer);
 
@@ -299,6 +333,12 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 {
 	printf_s("cache::cache_files_windows::load_tags: [scenario_path, %s]\n", scenario_path);
 
+	if (ConfigManager.GetBool("Maps", "UseNewCacheStyle"))
+	{
+		for (int i = 0; i < k_number_of_runtimes; i++)
+			update_runtime(i, scenario_path);
+	}
+
 	if (!g_shouldPrint)
 		return ((char(*)(char *))0x502DC0)(scenario_path);
 
@@ -314,9 +354,9 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 	int32_t globals_tag_index = -1;
 	char globals_loaded = 0;
 
-	if (cache::cache_files_windows::initialize(scenario_path, g_cache_file_header))
+	if (cache::cache_files_windows::open_runtimes(scenario_path, g_cache_file_header))
 	{
-		if (cache::cache_files_windows::validate(g_cache_file_header))
+		if (cache::cache_files_windows::verify_header(g_cache_file_header))
 		{
 			if (*(bool *)0x189CFD0 && g_cache_file_header->TrackedBuild)
 				((char(__cdecl *)(char *))0x42E390)(g_cache_file_header->Build);
@@ -327,7 +367,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 			float progress = 1.f;
 			((void(__cdecl *)(int, int))0x52EEC0)(1, 1);
 
-			cache::cache_files_windows::open_tags();
+			cache::cache_files_windows::open_tags(scenario_path);
 			cache::cache_files_windows::partitions((uint32_t *)GetStructure<uint8_t[8]>(0x22AE4D0));
 			cache::cache_files_windows::setup();
 
@@ -354,7 +394,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 
 				if (scenario_loaded)
 				{
-					cache::cache_files_windows::sub_5031A0();
+					cache::cache_files_windows::fixup();
 					scenario_tag_index = g_cache_file_header->ScenarioTagIndex;
 					*g_resources_loaded = true;
 					goto LABEL_25;
@@ -406,7 +446,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 				//	if (scenario_loaded)
 				//	{
 				//		v12->unknown3390[0] = 1;
-				//		cache::cache_files_windows::sub_5031A0();
+				//		cache::cache_files_windows::fixup();
 				//		scenario_tag_index = g_cache_file_header->ScenarioTagIndex;
 				//		*g_resources_loaded = true;
 				//		goto LABEL_25;
@@ -424,8 +464,8 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 		((void(__cdecl *)())0x50CBB0)();
 	}
 
-	cache::cache_files_windows::dispose();
-	((char(__cdecl *)())0x5A9730)();
+	cache::cache_files_windows::reset_tags();
+	cache::cache_files_windows::close();
 
 LABEL_25:
 
@@ -449,25 +489,25 @@ LABEL_25:
 	return true;
 }
 
-bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_header *cache_file_header)
+bool cache::cache_files_windows::open_runtimes(char *scenario_path, s_cache_file_header *cache_file_header)
 {
 	auto tag_runtime_index = cache::cache_files_windows::get_tag_runtime_index_of_source_file(scenario_path);
 	auto tag_runtimes = g_cache->CacheFile.TagRuntimes;
 
-	for (int i = 0; i < e_tag_runtime::k_number_of_tag_runtimes; i++)
-	{
-		if (i == e_tag_runtime::_mainmenu || i == e_tag_runtime::_tags)
-			continue;
+	//for (int i = 0; i < e_tag_runtime::k_number_of_tag_runtimes; i++)
+	//{
+	//	if (i == e_tag_runtime::_mainmenu || i == e_tag_runtime::_tags)
+	//		continue;
 
-		// crashes, probably due to tag_runtimes[count - 1] being invalid
-		//tag_runtimes[e_tag_runtime::k_tag_runtime_count - 1].Header.MoveTo(&tag_runtimes[i].Header);
+	//	// crashes, probably due to tag_runtimes[count - 1] being invalid
+	//	//tag_runtimes[e_tag_runtime::k_tag_runtime_count - 1].Header.MoveTo(&tag_runtimes[i].Header);
 
-		// succeeds, probably should throw an error perhaps because its only the header thats moved
-		tag_runtimes[tag_runtime_index].Header.CopyTo(&tag_runtimes[i].Header);
-	}
+	//	// succeeds, probably should throw an error perhaps because its only the header thats moved
+	//	tag_runtimes[tag_runtime_index].Header.CopyTo(&tag_runtimes[i].Header);
+	//}
 
-	// doing this is fine when force loading, not so much when using the menu
-	return tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
+	//// doing this is fine when force loading, not so much when using the menu
+	//return tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
 
 	if (((bool(__cdecl *)(char *))0x54C360)(scenario_path))
 	{
@@ -487,7 +527,7 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 		{
 			tag_runtime_index = 7;
 
-			if (!cache::cache_files_windows::initialize_for_new_map(tag_runtime_index, scenario_path))
+			if (!cache::cache_files_windows::open_runtime(tag_runtime_index, scenario_path))
 				return 0;
 		}
 	}
@@ -515,4 +555,13 @@ bool cache::cache_files_windows::initialize(char *scenario_path, s_cache_file_he
 	g_cache->CacheFile.RuntimeIndex = tag_runtime_index;
 	tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
 	return 1;
+}
+
+bool cache::cache_files_windows::open_all_runtimes(bool *opened)
+{
+	for (int i = 0; i < k_number_of_runtimes; i++)
+		update_runtime(i);
+
+	*opened = true;
+	return *opened;
 }
