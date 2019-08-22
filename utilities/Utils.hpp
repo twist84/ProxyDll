@@ -747,3 +747,37 @@ struct s_vftable
 		printf_s("};\n\n");
 	}
 };
+
+struct CliMan
+{
+	size_t Address;
+	std::vector<std::pair<std::string, std::string>> Args;
+
+	CliMan *Init(size_t addr)
+	{
+		Address = addr;
+		return this;
+	}
+
+	CliMan *Add(std::string key, std::string val)
+	{
+		Args.push_back(std::make_pair(key, val));
+		return this;
+	}
+
+	std::string At(std::string key)
+	{
+		for (auto parts : Utils::String::SplitString(Utils::String::SplitString(*(LPSTR *)Address, '?')[1], '&'))
+		{
+			std::string key = Utils::String::SplitString(parts, '=')[0];
+			std::string val = Utils::String::SplitString(parts, '=')[1];
+			Add(key, val);
+		}
+
+		for (auto pair : Args)
+			if (pair.first == key)
+				return pair.second;
+
+		return "";
+	}
+} CliManager;

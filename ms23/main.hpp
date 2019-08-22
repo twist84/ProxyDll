@@ -28,9 +28,7 @@ void PreInit()
 }
 void Init()
 {
-
-
-
+	CliManager.Init(0x0199C0A4);
 }
 void PostInit()
 {
