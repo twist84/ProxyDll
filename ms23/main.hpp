@@ -28,7 +28,7 @@ void PreInit()
 }
 void Init()
 {
-	CliManager.Init(0x0199C0A4);
+	ProtocolManager.Init(0x0199C0A4);
 }
 void PostInit()
 {
@@ -83,8 +83,12 @@ void HotkeyThread()
 
 		AssignHotkey(VK_F6, &LaunchMainmenu);
 		AssignHotkey(VK_F7, &ForceLoad);
-
+		
 		Sleep((int)(hotkey_sleep_delta * 1000));
+
+		//ProtocolManager.Print();
+
+		//printf_s("Resolution(%d, %d);\n", ProtocolManager.GetParam("width").Value.Int(), ProtocolManager.GetParam("height").Value.Int());
 	}
 }
 

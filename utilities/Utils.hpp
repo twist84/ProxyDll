@@ -748,36 +748,140 @@ struct s_vftable
 	}
 };
 
-struct CliMan
+
+/*
+	This is for launching on Windows via URL protocol, elburrito://start?key1=value1&key2=value2
+	Launching with parameters this way could mean being able to launch the game discord without having an absolute game directory
+	Not saying that discord support is on the horizon, only that they screw over portable type game installers I.E. auto-extracted archives
+*/
+struct ProtoMan
 {
+	struct ParMan
+	{
+		struct uni_t // universal type
+		{
+			std::string T; // keep default as std::string
+
+			decltype(auto) Str()
+			{
+				return T.c_str();
+			}
+			decltype(auto) Int()
+			{
+				return std::stoi(Str());
+			}
+			decltype(auto) Flt()
+			{
+				return std::stof(Str());
+			}
+			decltype(auto) Dbl()
+			{
+				return std::stod(Str());
+			}
+		};
+
+		std::string Key;
+		uni_t Value;
+
+		ParMan *SetKey(std::string key)
+		{
+			Key = key;
+			return this;
+		}
+
+		ParMan *SetValue(std::string value)
+		{
+			Value.T = value;
+			return this;
+		}
+
+		ParMan(std::string key, std::string value)
+		{
+			SetKey(key)->SetValue(value);
+		}
+
+		void Print()
+		{
+			printf_s("[%s, %s]\n", Key.c_str(), Value.Str());
+		}
+
+		bool IsThis(std::string key)
+		{
+			return key == Key ? true : false;
+		}
+	};
+
 	size_t Address;
-	std::vector<std::pair<std::string, std::string>> Args;
+	std::vector<ParMan> Params;
 
-	CliMan *Init(size_t addr)
+	ProtoMan *Add(std::string key, std::string value)
 	{
-		Address = addr;
+		auto param = ParMan(key, value);
+
+		Params.push_back(param);
+
+		param.Print();
+
 		return this;
 	}
 
-	CliMan *Add(std::string key, std::string val)
+	ProtoMan *Update()
 	{
-		Args.push_back(std::make_pair(key, val));
-		return this;
-	}
+		auto shell = *(LPSTR *)Address;
+		if (shell == nullptr)
+			return this;
 
-	std::string At(std::string key)
-	{
-		for (auto parts : Utils::String::SplitString(Utils::String::SplitString(*(LPSTR *)Address, '?')[1], '&'))
+		// there should only ever be one `?`
+		auto params = Utils::String::SplitString(shell, '?');
+
+		printf_s("%s\n", params[0].c_str());
+
+		// iterate over each consecutive parameter
+		for (auto parts : Utils::String::SplitString(params[1], '&'))
 		{
 			std::string key = Utils::String::SplitString(parts, '=')[0];
 			std::string val = Utils::String::SplitString(parts, '=')[1];
-			Add(key, val);
+
+			bool canAdd = true;
+			for (auto param : Params)
+			{
+				if (param.IsThis(key))
+					canAdd = false;
+			}
+
+			if (canAdd)
+				Add(key, val);
 		}
 
-		for (auto pair : Args)
-			if (pair.first == key)
-				return pair.second;
-
-		return "";
+		return this;
 	}
-} CliManager;
+
+	ProtoMan *Init(size_t addr)
+	{
+		Address = addr;
+
+		while (Params.empty())
+			Update();
+
+		return this;
+	}
+
+	ParMan GetParam(const char *key)
+	{
+		for (auto param : Params)
+		{
+			if (param.Key == key)
+				return param;
+		}
+
+		return ParMan("", "");
+	}
+
+	void Print()
+	{
+		printf_s("Launch Params =\n{\n");
+		for (auto param : Params)
+			printf_s("\t%s: %s\n", param.Key.c_str(), param.Value.Str());
+		printf_s("}\n");
+	}
+} ProtocolManager;
