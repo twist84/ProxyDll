@@ -5382,20 +5382,20 @@ struct e_achievement
 
 struct e_tag_runtime
 {
-	enum e : __int32
-	{
-		_ui,
+enum e : __int32
+{
+	_ui,
 
-		_resources,
-		_textures,
-		_textures_b,
-		_audio,
-		_video,
+	_resources,
+	_textures,
+	_textures_b,
+	_audio,
+	_video,
 
-		_tags = 8,
+	_tags = 8,
 
-		k_number_of_tag_runtimes = 15
-	} value;
+	k_number_of_tag_runtimes = 15
+} value;
 
 	e_tag_runtime(int val)
 	{
@@ -5436,7 +5436,7 @@ enum class alignas(4) e_external_dependency : char {
 	audio = 1 << e_tag_runtime::_audio, 
 	video = 1 << e_tag_runtime::_video
 
-//	added in later releases
+//	added in later builds
 //  lightmaps = 1 << 6
 //	render_models = 1 << 7
 };
