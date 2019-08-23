@@ -5384,7 +5384,7 @@ struct e_tag_runtime
 {
 	enum e : __int32
 	{
-		_mainmenu,
+		_ui,
 
 		_resources,
 		_textures,
@@ -5404,33 +5404,42 @@ struct e_tag_runtime
 
 	const char *GetName()
 	{
+		const char *result = "<unknown>";
 		switch (value)
 		{
-		case _mainmenu:
-			return "mainmenu";
+		case _ui:
+			result = "ui";
 		case _resources:
-			return "resources";
+			result = "resources";
 		case _textures:
-			return "textures";
+			result = "textures";
 		case _textures_b:
-			return "textures_b";
+			result = "textures_b";
 		case _audio:
-			return "audio";
+			result = "audio";
 		case _video:
-			return "video";
+			result = "video";
 		case _tags:
-			return "tags";
-		default:
-			return "unused";
+			result = "tags";
 		}
-		return "NULL";
+		return result;
 	}
 };
 
 enum class alignas(2) e_cache_file_type : char { none = -1, campaign, multiplayer, mainmenu, shared, shared_campaign, unknown5, unknown6, k_number_of_cache_file_types };
 enum class alignas(2) e_cache_file_shared_type : char { none = -1, mainmenu, shared, campaign, unknown3, unknown4, unknown5, k_number_of_cache_file_shared_types };
-//enum class alignas(4) e_external_dependency : char { none = 0, unk1 = 1 << 0, unk2 = 1 << 1, unk3 = 1 << 2, unk4 = 1 << 3, unk5 = 1 << 4, unk6 = 1 << 5, unk7 = 1 << 6 };
-enum class alignas(4) e_external_dependency : char { none = 0, mainmenu = 1 << 0, shared = 1 << 1, campaign = 1 << 2, unknown3 = 1 << 3, unknown4 = 1 << 4, unknown5 = 1 << 5, unknown6 = 1 << 6 };
+enum class alignas(4) e_external_dependency : char { 
+	ui = 1 << e_tag_runtime::_ui, 
+	resources = 1 << e_tag_runtime::_resources, 
+	textures = 1 << e_tag_runtime::_textures, 
+	textures_b = 1 << e_tag_runtime::_textures_b, 
+	audio = 1 << e_tag_runtime::_audio, 
+	video = 1 << e_tag_runtime::_video
+
+//	added in later releases
+//  lightmaps = 1 << 6
+//	render_models = 1 << 7
+};
 enum class alignas(4) e_cache_file_partition_type : char { resources, sound_resources, global_tags, shared_tags, base, map_tags, k_number_of_cache_file_partition_types };
 enum class alignas(4) e_cache_file_section_type : char { debug, resource, tag, localization, k_number_of_cache_file_section_types };
 struct s_cache_file_header
@@ -5470,7 +5479,7 @@ struct s_cache_file_header
 	int32_t StringIDsIndicesOffset; // 0
 	int32_t StringIDsBufferOffset; // 0
 
-	char __declspec(align(4)) ExternalDependencies; // 62, 00111110, shared|campaign|unknown3|unknown4|unknown5
+	char __declspec(align(4)) ExternalDependencies; // 62, 00111110, resources|textures|textures_b|audio|video
 
 	// 84 1F 26 07 1C 63 D0 01
 	FILETIME DateTime;

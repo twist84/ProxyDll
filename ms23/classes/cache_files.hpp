@@ -101,24 +101,10 @@ inline void SubmitCacheFilesHooks(const char *name)
 	}
 }
 
-void cache_read_patch()
-{
-	if (ConfigManager.GetBool("Maps", "UseNewCacheStyle"))
-	{
-		// patches (g_cache_file_header.ExternalDependencies & 2) to true
-		Patch(0x1027C7, { 0xEB }).Apply();
-		Patch(0x102C9A, { 0xEB }).Apply();
-		//Patch::NopFill(0x102B54, 6);
-		//Patch::NopFill(0x102907, 2);
-		//Patch::NopFill(0x102F27, 2);
-	}
-}
-
 inline void SubmitCacheFilesPatches(const char *name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{
-		PatchManager.Submit(&cache_read_patch, "cache_read_patch");
 	}
 }
 
@@ -205,8 +191,7 @@ void update_runtime(int index, const char *scenario_path = "")
 {
 	const char *runtimes[k_number_of_runtimes]
 	{
-		"levels\\ui\\mainmenu\\mainmenu",
-
+		"ui",
 		"resources",
 		"textures",
 		"textures_b",
@@ -321,7 +306,7 @@ bool cache::cache_files_windows::open_tags(char *scenario_path)
 		format<256>(full_path, "%stags.dat", g_map_path.c_str());
 
 	char result = 0;
-	if (g_cache_file_header->ExternalDependencies & 2)
+	if (g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources))
 	{
 		filo_create_hook(global_tag_cache_filo, full_path, 0);
 		int file_error;
@@ -343,7 +328,7 @@ bool cache::cache_files_windows::setup()
 bool cache::cache_files_windows::read_blocking(LONG tag_offset, DWORD size, LPVOID buffer)
 {
 	printf_s("cache::cache_files_windows::read_blocking: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
-	if (!(g_cache_file_header->ExternalDependencies & 2))
+	if (!(g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources)))
 		return cache::cache_files_windows::read(2, tag_offset, size, buffer);
 
 	int file_error;
@@ -422,7 +407,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 			char root_tag_loaded = cache::cache_files_windows::load_tag(0) & 1;
 			scenario_loaded = cache::cache_files_windows::load_tag(g_cache_file_header->ScenarioTagIndex) & root_tag_loaded;
 
-			if (g_cache_file_header->ExternalDependencies & 2)
+			if (g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources))
 				file_close(global_tag_cache_filo);
 
 			((void(__cdecl *)())0x52EEF0)();
@@ -535,7 +520,7 @@ bool cache::cache_files_windows::open_runtimes(char *scenario_path, s_cache_file
 
 	//for (int i = 0; i < e_tag_runtime::k_number_of_tag_runtimes; i++)
 	//{
-	//	if (i == e_tag_runtime::_mainmenu || i == e_tag_runtime::_tags)
+	//	if (i == e_tag_runtime::_ui || i == e_tag_runtime::_tags)
 	//		continue;
 
 	//	// crashes, probably due to tag_runtimes[count - 1] being invalid
