@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="classes\classes.hpp">
+      <Filter>classes</Filter>
+    </ClInclude>
+    <ClInclude Include="main.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="classes">
+      <UniqueIdentifier>{a3d34a90-7912-4ed1-bdeb-be1507c0bbdf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+  </ItemGroup>
+</Project>
