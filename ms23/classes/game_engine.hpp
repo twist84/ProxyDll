@@ -768,83 +768,84 @@ struct c_load_terminal_screen_message : c_load_screen_message
 
 struct c_view
 {
-	// __purecall
-	// __purecall
-	// __purecall
-	// __purecall
+	// c_view::vftable00
+	// c_view::update
+	// c_view::vftable02
+	// c_view::vftable03
 };
 struct c_world_view : c_view
 {
-	// __purecall
-	// __purecall
-	// __purecall
-	// __purecall
+	// c_world_view::vftable00
+	// c_world_view::update
+	// c_world_view::vftable02
+	// c_world_view::vftable03
+};
+struct c_lights_view : c_world_view, c_view
+{
+	// 0x60FEB0, c_lights_view::vftable00
+	// 0xA67170, c_lights_view::update
+	// 0x60EF60, c_lights_view::vftable02
+	// 0xA671B0, c_lights_view::vftable03
+};
+struct c_lightmap_shadows_view : c_world_view, c_view
+{
+	// 0x60FEA0, c_lightmap_shadows_view::vftable00
+	// 0x610090, c_lightmap_shadows_view::update
+	// 0x60EF50, c_lightmap_shadows_view::vftable02
+	// 0xA6B340, c_lightmap_shadows_view::vftable03
+};
+struct c_occlusion_view : c_lightmap_shadows_view, c_world_view, c_view
+{
+	// 0x6100A0, c_occlusion_view::update
+	// 0xA6D7F0, c_occlusion_view::vftable04
+	// 0xA6D740, c_occlusion_view::vftable05
+};
+struct c_player_view : c_world_view, c_view
+{
+	// 0xA39960, c_player_view::vftable00
+	// 0xA3A850, c_player_view::update
+	// 0xA38D10, c_player_view::vftable02
+	// 0xA3AAA0, c_player_view::vftable03
+};
+struct c_hud_camera_view : c_player_view, c_world_view, c_view
+{
+	// 0xA2EB50, c_hud_camera_view::update	
+};
+struct c_texture_camera_view : c_player_view, c_world_view, c_view
+{
+	// 0xA70950, c_texture_camera_view::vftable00
+	// 0xA71350, c_texture_camera_view::update
+	// 0xA71420, c_texture_camera_view::vftable03
+	// 0xA70700, c_texture_camera_view::vftable04
 };
 struct c_ui_view : c_view
 {
 	// 0xA290A0, c_ui_view::vftable00
-	// 0x604E40, c_ui_view::vftable01
+	// 0x604E40, c_ui_view::update
 	// 0x604190, c_ui_view::vftable02
 	// 0x604E60, c_ui_view::vftable03
 };
+
 struct c_fullscreen_view : c_view
 {
 	// 0xA29050, c_fullscreen_view::vftable00
-	// 0xA29250, c_fullscreen_view::vftable01
+	// 0xA29250, c_fullscreen_view::update
 	// 0x604180, c_fullscreen_view::vftable02
 	// 0x604E50, c_fullscreen_view::vftable03
-};
-struct c_lights_view : c_world_view
-{
-	// 0x60FEB0, c_lights_view::vftable00
-	// 0xA67170, c_lights_view::vftable01
-	// 0x60EF60, c_lights_view::vftable02
-	// 0xA671B0, c_lights_view::vftable03
-};
-struct c_lightmap_shadows_view : c_world_view
-{
-	// 0x60FEA0, c_lightmap_shadows_view::vftable00
-	// 0x610090, c_lightmap_shadows_view::vftable01
-	// 0x60EF50, c_lightmap_shadows_view::vftable02
-	// 0xA6B340, c_lightmap_shadows_view::vftable03
-};
-struct c_occlusion_view : c_lightmap_shadows_view
-{
-	// 0x6100A0, c_occlusion_view::vftable01
-	// 0xA6D7F0, c_occlusion_view::vftable04
-	// 0xA6D740, c_occlusion_view::vftable05
 };
 struct c_reflection_view : c_view
 {
 	// 0x60FEC0, c_reflection_view::vftable00
-	// 0x6100B0, c_reflection_view::vftable01
+	// 0x6100B0, c_reflection_view::update
 	// 0x60EF70, c_reflection_view::vftable02
 	// 0x610130, c_reflection_view::vftable03
 };
 struct c_first_person_view : c_view
 {
 	// 0x60FE90, c_first_person_view::vftable00
-	// 0xA29240, c_first_person_view::vftable01
+	// 0xA29240, c_first_person_view::update
 	// 0x60EF40, c_first_person_view::vftable02
 	// 0x610120, c_first_person_view::vftable03
-};
-struct c_player_view : c_world_view
-{
-	// 0xA39960, c_player_view::vftable00
-	// 0xA3A850, c_player_view::vftable01
-	// 0xA38D10, c_player_view::vftable02
-	// 0xA3AAA0, c_player_view::vftable03
-};
-struct c_hud_camera_view : c_player_view
-{
-	// 0xA2EB50, c_hud_camera_view::vftable01	
-};
-struct c_texture_camera_view : c_player_view
-{
-	// 0xA70950, c_texture_camera_view::vftable00
-	// 0xA71350, c_texture_camera_view::vftable01
-	// 0xA71420, c_texture_camera_view::vftable03
-	// 0xA70700, c_texture_camera_view::vftable04
 };
 
 struct s_simulation_globals_type_collection

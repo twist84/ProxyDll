@@ -8,15 +8,15 @@ float hotkey_sleep_delta = 1.f;
 
 void PreInit()
 {
-	ConfigManager.Init(".\\bin\\juiced2_hin.ini");
+	ConfigManager.Init(".\\bin\\dizzel.ini");
 
 	//SubmitHooks();
 	//SubmitPatches();
 }
 void Init()
 {
-	Pointer::Base(0x369624).WriteFast(static_cast<float>(1 / 60));
-	Pointer::Base(0x38BAEC).WriteFast(3.5f);
+	//Pointer::Base(0x369624).WriteFast(static_cast<float>(1 / 60));
+	//Pointer::Base(0x38BAEC).WriteFast(3.5f);
 }
 void PostInit()
 {

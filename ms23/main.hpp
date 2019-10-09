@@ -28,7 +28,7 @@ void PreInit()
 }
 void Init()
 {
-	ProtocolManager.Init(0x0199C0A4);
+	//ProtocolManager.Init(0x0199C0A4);
 }
 void PostInit()
 {
