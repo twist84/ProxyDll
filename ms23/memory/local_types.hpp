@@ -70,10 +70,10 @@ std::string GetExecutable()
 #pragma warning( push )
 #pragma warning( disable : 4244)
 template <size_t offset, typename T>
-T SetMemory(T value)
+T SetMemory(T value, size_t off = 0)
 {
-	if (*(T *)offset != value)
-		*(T *)offset = value;
+	if (*(T *)(offset + off) != value)
+		*(T *)(offset + off) = value;
 	return value;
 }
 #pragma warning( pop )
