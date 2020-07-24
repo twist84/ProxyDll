@@ -75,7 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>bin\$(Configuration)\</IntDir>
     <ExecutablePath>$(SolutionDir)directx\lib.X86;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)directx\include;$(IncludePath)</IncludePath>
@@ -86,7 +86,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <EnableManagedIncrementalBuild>false</EnableManagedIncrementalBuild>
-    <OutDir>bin\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>bin\$(Configuration)\</IntDir>
     <ExecutablePath>$(SolutionDir)directx\lib.X86;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)directx\include;$(IncludePath)</IncludePath>
@@ -197,6 +197,11 @@ echo f|xcopy /Y  $(ProjectDir)info\D3DX9_34.dll $(SolutionDir)D3DX9_34_org.dll</
     <ClInclude Include="binkw32.hpp" />
     <ClInclude Include="d3dx9_34.hpp" />
     <ClInclude Include="d3dx9_43.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\utilities\utilities.vcxproj">
+      <Project>{0fd6c5e3-4d1e-457b-8ae9-1e34f6aeadd7}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Pointer.cpp" />
+    <ClCompile Include="Patch.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Pointer.hpp" />
+    <ClInclude Include="Utils.hpp" />
+    <ClInclude Include="Console.hpp" />
+    <ClInclude Include="Patch.hpp" />
+  </ItemGroup>
+</Project>

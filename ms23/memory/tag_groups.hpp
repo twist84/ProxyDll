@@ -15,7 +15,7 @@ struct tag_block
 template<size_t size, size_t offset, typename T>
 T *TagBlock(T *data, size_t index)
 {
-	return (T *)(&GetStructure<tag_block>(data + offset)->address[index * size]);
+	return (T *)(&pointer_get<tag_block>(data + offset)->address[index * size]);
 }
 
 struct tag_reference

@@ -33,7 +33,7 @@ namespace cache
 		static auto fixup = (bool(__cdecl *)())(0x5031A0);
 		static auto release = (void *(__cdecl *)())(0x503200);
 		static auto dispose = (int(__cdecl *)())(0x503300);
-		static auto initialize = (struct data_array *(__thiscall *)(struct c_cache_file_tag_runtime_resource *, int))(0x503340);
+		static auto initialize = (struct data_array *(__thiscall *)(class c_cache_file_tag_runtime_resource *, int))(0x503340);
 		static auto sub_503470 = (void(__thiscall *)(void *, void *, int))(0x503470);
 		static auto map_full_path = (bool(__cdecl *)(char *))(0x54C360);
 		static auto do_work_internal = (bool(__cdecl *)())(0x5A97C0);
@@ -180,9 +180,9 @@ char *decomposePath(const char *path)
 	const char *startOfName = lastSeparator ? lastSeparator + 1 : path;
 	const char *startOfExt = lastDot > startOfName ? lastDot : endOfPath;
 
-	char name[MAX_PATH] = {};
-	if (name)
-		_snprintf(name, MAX_PATH, "%.*s", startOfExt - startOfName, startOfName);
+	static char name[MAX_PATH + 1] = {};
+	memset(name, 0, MAX_PATH);
+	_snprintf(name, MAX_PATH, "%.*s", startOfExt - startOfName, startOfName);
 	return name;
 }
 
@@ -205,7 +205,7 @@ void update_runtime(int index, const char *scenario_path = "")
 	else
 		format<256>(full_path, "%s%s.dat", g_map_path.c_str(), runtimes[index]);
 
-	g_cache->CacheFile.TagRuntimes[index].InvalidateHandles();
+	g_cache.CacheFile.TagRuntimes[index].InvalidateHandles();
 
 	if (((bool(__cdecl *)(int))0x501E80)(index - 1))
 		cache::cache_files_windows::open_runtime(index, full_path);
@@ -250,31 +250,31 @@ bool cache::cache_files_windows::read(int unused, LONG tag_offset, DWORD size, L
 
 	//return ((char(*)(uint8_t *, int, LONG, DWORD, LPVOID))(0x5016D0))(a1, a2, tag_offset, size, buffer);
 	int file_error;
-	if (!file_open(global_tag_cache_filo, 1, &file_error))
+	if (!file_open(&global_tag_cache_filo, 1, &file_error))
 		return 0;
-	if (!file_set_position_hook(global_tag_cache_filo, tag_offset, 0))
+	if (!file_set_position_hook(&global_tag_cache_filo, tag_offset, 0))
 		return 0;
-	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
+	return file_read_hook(&global_tag_cache_filo, size, 0, buffer);
 }
 
 char *cache::cache_files_windows::get_build()
 {
-	auto result = g_cache_file_header->Build;
+	auto result = g_cache_file_header.Build;
 	//printf_s("cache::cache_files_windows::get_build: [cache_file_header->Build, %s]\n", result);
 
 	return result;
 }
 s_cache_file_header *cache::cache_files_windows::get_header()
 {
-	auto result = g_cache_file_header;
-	//printf_s("cache::cache_files_windows::get_header: [cache_file_header->ScenarioPath, %s]\n", result->ScenarioPath);
+	auto result = &g_cache_file_header;
+	//printf_s("cache::cache_files_windows::get_header: [cache_file_header->scenario_path, %s]\n", result->scenario_path);
 
 	return result;
 }
 
 int32_t *__cdecl cache::cache_files_windows::get_rsa()
 {
-	auto result = g_cache_file_header->RSA;
+	auto result = g_cache_file_header.RSA;
 
 	printf_s("cache::cache_files_windows::get_rsa: [cache_file_header->RSA, (%d", result[0]);
 	for (size_t i = 1; i < 64; i++)
@@ -306,11 +306,11 @@ bool cache::cache_files_windows::open_tags(char *scenario_path)
 		format<256>(full_path, "%stags.dat", g_map_path.c_str());
 
 	char result = 0;
-	if (g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources))
+	if (g_cache_file_header.ExternalDependencies & (1 << e_tag_runtime::_resources))
 	{
-		filo_create_hook(global_tag_cache_filo, full_path, 0);
+		filo_create_hook(&global_tag_cache_filo, full_path, 0);
 		int file_error;
-		result = file_open(global_tag_cache_filo, 1, &file_error);
+		result = file_open(&global_tag_cache_filo, 1, &file_error);
 	}
 
 	printf_s("%s\n", full_path);
@@ -319,7 +319,7 @@ bool cache::cache_files_windows::open_tags(char *scenario_path)
 
 bool cache::cache_files_windows::setup()
 {
-	printf_s("cache::cache_files_windows::setup: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header->ScenarioPath);
+	printf_s("cache::cache_files_windows::setup: [cache_file_header->ScenarioPath, %s]\n", g_cache_file_header.scenario_path);
 	auto result = ((char(*)())0x502B40)();
 
 	return result;
@@ -328,23 +328,23 @@ bool cache::cache_files_windows::setup()
 bool cache::cache_files_windows::read_blocking(LONG tag_offset, DWORD size, LPVOID buffer)
 {
 	printf_s("cache::cache_files_windows::read_blocking: [tag_offset, 0x%04X, size, 0x%04X]\n", tag_offset, size);
-	if (!(g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources)))
+	if (!(g_cache_file_header.ExternalDependencies & (1 << e_tag_runtime::_resources)))
 		return cache::cache_files_windows::read(2, tag_offset, size, buffer);
 
 	int file_error;
-	if (!file_open(global_tag_cache_filo, 1, &file_error))
+	if (!file_open(&global_tag_cache_filo, 1, &file_error))
 		return 0;
-	if (!file_set_position_hook(global_tag_cache_filo, tag_offset, 0))
+	if (!file_set_position_hook(&global_tag_cache_filo, tag_offset, 0))
 		return 0;
-	return file_read_hook(global_tag_cache_filo, size, 0, buffer);
+	return file_read_hook(&global_tag_cache_filo, size, 0, buffer);
 }
 
 struct s_scenario_definition : s_base_definition<0x824> {};
-auto g_scenario_definition = GetStructure<s_scenario_definition>(0x22AAEB4);
+auto& g_scenario_definition = reference_get<s_scenario_definition>(0x22AAEB4);
 auto g_scenario_tag_index = (uint32_t *)0x189CCF8;
 
 struct s_globals_definition : s_base_definition<0x608> {};
-auto g_globals_definition = GetStructure<s_globals_definition>(0x22AAEB8);
+auto& g_globals_definition = reference_get<s_globals_definition>(0x22AAEB8);
 auto g_globals_tag_index = (uint32_t *)0x189CCFC;
 
 auto g_resources_loaded = (bool *)0x22AAFF0;
@@ -378,12 +378,12 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 	int32_t globals_tag_index = -1;
 	char globals_loaded = 0;
 
-	if (cache::cache_files_windows::open_runtimes(scenario_path, g_cache_file_header))
+	if (cache::cache_files_windows::open_runtimes(scenario_path, &g_cache_file_header))
 	{
-		if (cache::cache_files_windows::verify_header(g_cache_file_header))
+		if (cache::cache_files_windows::verify_header(&g_cache_file_header))
 		{
-			if (*(bool *)0x189CFD0 && g_cache_file_header->TrackedBuild)
-				((char(__cdecl *)(char *))0x42E390)(g_cache_file_header->Build);
+			if (*(bool *)0x189CFD0 && g_cache_file_header.TrackedBuild)
+				((char(__cdecl *)(char *))0x42E390)(g_cache_file_header.Build);
 
 			//s_cache_file_header cache_file_header;
 			//memmove(&cache_file_header, g_cache_file_header, 0x3390u);
@@ -392,7 +392,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 			((void(__cdecl *)(int, int))0x52EEC0)(1, 1);
 
 			cache::cache_files_windows::open_tags(scenario_path);
-			cache::cache_files_windows::partitions((uint32_t *)GetStructure<uint8_t[8]>(0x22AE4D0));
+			cache::cache_files_windows::partitions((uint32_t *)pointer_get<uint8_t[8]>(0x22AE4D0));
 			cache::cache_files_windows::setup();
 
 			size_t tag_size = 4 * *g_cache_info.max_tag_count_ptr;
@@ -405,10 +405,10 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 			g_cache_info.resource_index_table_ptr = 0;
 
 			char root_tag_loaded = cache::cache_files_windows::load_tag(0) & 1;
-			scenario_loaded = cache::cache_files_windows::load_tag(g_cache_file_header->ScenarioTagIndex) & root_tag_loaded;
+			scenario_loaded = cache::cache_files_windows::load_tag(g_cache_file_header.ScenarioTagIndex) & root_tag_loaded;
 
-			if (g_cache_file_header->ExternalDependencies & (1 << e_tag_runtime::_resources))
-				file_close(global_tag_cache_filo);
+			if (g_cache_file_header.ExternalDependencies & (1 << e_tag_runtime::_resources))
+				file_close(&global_tag_cache_filo);
 
 			((void(__cdecl *)())0x52EEF0)();
 
@@ -419,7 +419,7 @@ bool cache::cache_files_windows::load_tags(char *scenario_path)
 				if (scenario_loaded)
 				{
 					cache::cache_files_windows::fixup();
-					scenario_tag_index = g_cache_file_header->ScenarioTagIndex;
+					scenario_tag_index = g_cache_file_header.ScenarioTagIndex;
 					*g_resources_loaded = true;
 					goto LABEL_25;
 				}
@@ -497,16 +497,16 @@ LABEL_25:
 	if (scenario_tag_index == -1)
 		return scenario_loaded;
 
-	g_scenario_definition = (s_scenario_definition *)tag_get_definition_hook('scnr', scenario_tag_index);
+	g_scenario_definition = *(s_scenario_definition *)tag_get_definition_hook('scnr', scenario_tag_index);
 
 
 	globals_tag_index = ((uint32_t(__cdecl *)(uint32_t group))0x5017E0)('matg');
 	*g_globals_tag_index = globals_tag_index;
 	if (globals_tag_index == -1)
 		return globals_loaded;
-	g_globals_definition = (s_globals_definition *)tag_get_definition_hook('matg', globals_tag_index);
+	g_globals_definition = *(s_globals_definition *)tag_get_definition_hook('matg', globals_tag_index);
 
-	auto rasterizer_definition = ((tag_reference *)(g_globals_definition->data + 0x518))->GetDefinition();
+	auto rasterizer_definition = ((tag_reference *)(g_globals_definition.data + 0x518))->GetDefinition();
 	*(uint32_t *)0x50DD9BC = *(uint32_t *)(rasterizer_definition + 0x50);
 	*(uint32_t *)0x50DD9C0 = *(uint32_t *)(rasterizer_definition + 0x54);
 
@@ -516,7 +516,7 @@ LABEL_25:
 bool cache::cache_files_windows::open_runtimes(char *scenario_path, s_cache_file_header *cache_file_header)
 {
 	auto tag_runtime_index = cache::cache_files_windows::get_tag_runtime_index_of_source_file(scenario_path);
-	auto tag_runtimes = g_cache->CacheFile.TagRuntimes;
+	auto tag_runtimes = g_cache.CacheFile.TagRuntimes;
 
 	//for (int i = 0; i < e_tag_runtime::k_number_of_tag_runtimes; i++)
 	//{
@@ -565,7 +565,7 @@ bool cache::cache_files_windows::open_runtimes(char *scenario_path, s_cache_file
 	{
 		auto CacheFileHeader = tag_runtimes[i].Header;
 		if (CacheFileHeader.ScenarioTagIndex)
-			printf_s("\t%s.Header(0x%04X, %s)]\n", e_tag_runtime(i).GetName(), CacheFileHeader.ScenarioTagIndex, CacheFileHeader.ScenarioPath);
+			printf_s("\t%s.Header(0x%04X, %s)]\n", e_tag_runtime(i).GetName(), CacheFileHeader.ScenarioTagIndex, CacheFileHeader.scenario_path);
 	}
 	printf_s("\n");
 	for (size_t i = 0; i < 15; i++)
@@ -576,7 +576,7 @@ bool cache::cache_files_windows::open_runtimes(char *scenario_path, s_cache_file
 	}
 	printf_s("};\n");
 
-	g_cache->CacheFile.RuntimeIndex = tag_runtime_index;
+	g_cache.CacheFile.RuntimeIndex = tag_runtime_index;
 	tag_runtimes[tag_runtime_index].Header.MoveTo(cache_file_header);
 	return 1;
 }

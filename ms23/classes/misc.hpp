@@ -21,7 +21,7 @@ bool game_is_campaign_hook()
 bool game_in_progress_hook()
 {
 	auto game_globals = game_globals_get();
-	if (!game_globals || !game_globals->unknown24BDC || game_globals->unknown0)
+	if (!game_globals || !game_globals->unknown24BDC || game_globals->__unknown0)
 		return false;
 	if (game_globals->unknown1)
 		return true;
@@ -36,7 +36,7 @@ bool game_is_multiplayer_hook()
 bool game_is_survival_hook()
 {
 	auto game_globals = game_globals_get();
-	if (game_globals && (game_globals->unknown0 || game_globals->unknown1))
+	if (game_globals && (game_globals->__unknown0 || game_globals->unknown1))
 	{
 		auto game_options = &game_globals->GameOptions;
 		if (game_options && (game_options->ScenarioType.value == e_scenario_type::_campaign && game_options->SurvivalModeEnabled))
@@ -48,7 +48,7 @@ bool game_is_survival_hook()
 bool game_is_theater_hook()
 {
 	auto game_globals = game_globals_get();
-	return game_globals && (game_globals->unknown0 || game_globals->unknown1) && game_globals->GameOptions.GamePlayback.value;
+	return game_globals && (game_globals->__unknown0 || game_globals->unknown1) && game_globals->GameOptions.GamePlayback.value;
 }
 
 bool game_is_playtest_hook()
@@ -82,13 +82,13 @@ char prepare_game_level_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign && game_globals->unknown24B58 != a1))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->__unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign && game_globals->unknown24B58 != a1))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = false;
 		}
 	}
-	return game_globals->unknown0;
+	return game_globals->__unknown0;
 }
 
 char game_level_prepare_hook(uint32_t a1)
@@ -96,13 +96,13 @@ char game_level_prepare_hook(uint32_t a1)
 	auto game_globals = game_globals_get();
 	if (!sub_42E130_hook())
 	{
-		if (game_globals && (game_globals->unknown24BDC && !game_globals->unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign))
+		if (game_globals && (game_globals->unknown24BDC && !game_globals->__unknown0 && game_globals->unknown1 && game_globals->GameOptions.ScenarioType.value == e_scenario_type::_campaign))
 		{
 			game_globals->unknown24B58 = a1;
 			game_globals->unknown24BDF = true;
 		}
 	}
-	return game_globals->unknown0;
+	return game_globals->__unknown0;
 }
 
 std::vector<e_primary_skull> primary_skulls = {
@@ -155,12 +155,12 @@ bool __cdecl secondary_skull_is_active_hook(__int16 skull)
 
 bool game_is_widescreen_hook()
 {
-	return GetStructure<s_screen_resolution>(0x19106C0)->IsWidescreen();
+	return reference_get<s_screen_resolution>(0x19106C0).IsWidescreen();
 }
 
 double aspect_ratio_get_hook()
 {
-	return GetStructure<s_screen_resolution>(0x19106C0)->GetAspectRation();
+	return reference_get<s_screen_resolution>(0x19106C0).GetAspectRation();
 }
 
 bool sub_42E350_hook()
@@ -184,7 +184,7 @@ int network_configuration_initialize_private_hook()
 {
 	auto result = ((int(*)())0x43D2B0)();
 
-	network_configuration->SetMaxPlayerCounts(4, 8, 16, 8);
+	network_configuration.SetMaxPlayerCounts(4, 8, 16, 8);
 
 	return result;
 }

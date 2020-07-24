@@ -5,7 +5,7 @@
 
 struct s_player_datum
 {
-	uint8_t unknown0[0x2F08];
+	uint8_t __unknown0[0x2F08];
 
 	s_player_datum(uint8_t *a1)
 	{

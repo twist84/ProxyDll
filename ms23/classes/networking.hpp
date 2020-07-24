@@ -6,80 +6,80 @@
 #include "../memory/local_types.hpp"
 
 
-char *XnkIdToStringHook(XnkAddr *a1)
+char* XnkIdToStringHook(XnkAddr* a1)
 {
 	return a1->String();
 }
 
-char *XnkAddrToStringHook(XnkAddr *a1)
+char* XnkAddrToStringHook(XnkAddr* a1)
 {
 	return a1->String();
 }
 
 unsigned int __cdecl managed_session_game_end_hook(int session)
 {
-	auto managed_session = GetStructure<c_managed_session>(0x2247450, session);
-	unsigned int result = managed_session->ShortFlagsE >> 10;
+	auto& managed_session = reference_get<c_managed_session>(0x2247450, session);
+	unsigned int result = managed_session.ShortFlagsE >> 10;
 	if (result & 1)
 	{
 		printf_s("MP/NET/STUB_LOG_PATH,STUB_LOG_FILTER: managed_session_game_end: [0x%08X] calling game end before the game start processed, canceling both\n", session);
-		managed_session->ShortFlagsE &= (unsigned)-0x401;
+		managed_session.ShortFlagsE &= (unsigned)-0x401;
 		printf_s("MP/NET/STUB_LOG_PATH,STUB_LOG_FILTER: managed_session_successful_game_start_complete: session 0x%8X, game start completed successfully\n", session);
-		managed_session->LongFlags8 |= (unsigned)0x2000;
-		result = printf_s( "MP/NET/STUB_LOG_PATH,STUB_LOG_FILTER: managed_session_successful_game_end_complete: session 0x%8X, game end completed successfully\n", session);
-		managed_session->LongFlags8 |= (unsigned)0x8000;
+		managed_session.LongFlags8 |= (unsigned)0x2000;
+		result = printf_s("MP/NET/STUB_LOG_PATH,STUB_LOG_FILTER: managed_session_successful_game_end_complete: session 0x%8X, game end completed successfully\n", session);
+		managed_session.LongFlags8 |= (unsigned)0x8000;
 	}
 	else
 	{
-		managed_session->ShortFlagsE = managed_session->ShortFlagsE | 0x200;
-		managed_session->LongFlags8 &= (unsigned)-0x18001;
+		managed_session.ShortFlagsE = managed_session.ShortFlagsE | 0x200;
+		managed_session.LongFlags8 &= (unsigned)-0x18001;
 	}
-	managed_session->LongFlags8 &= (unsigned)-5;
-	managed_session->UnknownTimeValue = 0;
+	managed_session.LongFlags8 &= (unsigned)-5;
+	managed_session.UnknownTimeValue = 0;
 	return result;
 }
 
 // ManagedSession == 0 = Offline, ManagedSession == 1 = Local, ManagedSession == 2 = ???
 
-char ManagedSession_XSession_GetHandle_hook(int ManagedSessionIndex, uint32_t *a2)
+char ManagedSession_XSession_GetHandle_hook(int ManagedSessionIndex, uint32_t* a2)
 {
 	if (ManagedSessionIndex == -1)
 		return false;
-	uint32_t *Handle = GetStructure<c_managed_session>(0x2247450, ManagedSessionIndex)->LiveSession.Handle;
-	if (!Handle || Handle == (uint32_t *)-1)
+	uint32_t* Handle = reference_get<c_managed_session>(0x2247450, ManagedSessionIndex).LiveSession.Handle;
+	if (!Handle || Handle == (uint32_t*)-1)
 		return false;
 	*a2 = *Handle;
 	//printf_s("ManagedSession[%d].LiveSession.Handle: 0x%d\n", ManagedSessionIndex, Handle);
 	return true;
 }
 
-const char *ManagedSession_XSession_GetAddress_hook(int ManagedSessionIndex)
+const char* ManagedSession_XSession_GetAddress_hook(int ManagedSessionIndex)
 {
 	if (ManagedSessionIndex != -1)
 		return "00:00:00:00:00:00:00:00";
 
 	//printf_s("ManagedSession[%d].LiveSession.XnkAddr: %s\n", ManagedSessionIndex, XnkAddr);
-	return XnkAddrToStringHook(GetStructure<c_managed_session>(0x2247450, ManagedSessionIndex)->LiveSession.XnkAddr);
+	return XnkAddrToStringHook(reference_get<c_managed_session>(0x2247450, ManagedSessionIndex).LiveSession.XnkAddr);
 }
 
 void __cdecl ManagedSession_DeleteSession_hook(int ManagedSessionIndex)
 {
-	static auto sub_5A8F50 = (char(__cdecl *)(uint32_t *))(0x5A8F50);
-	auto *managed_session = GetStructure<c_managed_session>(0x2247450, ManagedSessionIndex);
-	managed_session->LiveSession.Handle = 0;
-	managed_session->LongFlags8 &= -0x31;
-	if ((managed_session->ShortFlagsE >> 1) & 1)
+	static auto sub_5A8F50 = (char(__cdecl*)(uint32_t*))(0x5A8F50);
+	auto& managed_session = reference_get<c_managed_session>(0x2247450, ManagedSessionIndex);
+	managed_session.LiveSession.Handle = 0;
+	managed_session.LongFlags8 &= -0x31;
+	if ((managed_session.ShortFlagsE >> 1) & 1)
 	{
-		managed_session->ShortFlagsE = managed_session->ShortFlagsE & -3;
-		if (HIWORD(managed_session->OverlappedTask.type) == e_session_overlapped_task_type::_modify)
-			sub_5A8F50((uint32_t *)&managed_session->OverlappedTask);
-		managed_session->LongFlags8 &= -2;
+		managed_session.ShortFlagsE = managed_session.ShortFlagsE & -3;
+		if (HIWORD(managed_session.OverlappedTask.type) == e_session_overlapped_task_type::_modify)
+			sub_5A8F50((uint32_t*)&managed_session.OverlappedTask);
+		managed_session.LongFlags8 &= -2;
 	}
 	else
 	{
-		memset(managed_session->XnkAddr, 0, 0x30);
-		memset(&managed_session->LiveSession, 0, 0x150);
-		memset(&managed_session->LocalSession, 0, 0x150);
+		memset(managed_session.XnkAddr, 0, 0x30);
+		memset(&managed_session.LiveSession, 0, 0x150);
+		memset(&managed_session.LocalSession, 0, 0x150);
 	}
 }
 
@@ -93,12 +93,12 @@ bool transport_available()
 	return Transport()[0] && Transport()[1];
 }
 
-bool __fastcall network_session_parameter_countdown_timer_request_change_hook(void *thisPtr, void *unused, int state, int value)
+bool __fastcall network_session_parameter_countdown_timer_request_change_hook(void* thisPtr, void* unused, int state, int value)
 {
 	if (state == 2) // start
 		value = 0;
 
-	static auto network_session_parameter_countdown_timer_request_change = (bool(__thiscall*)(void *thisPtr, int state, int newValue))(0x453740);
+	static auto network_session_parameter_countdown_timer_request_change = (bool(__thiscall*)(void* thisPtr, int state, int newValue))(0x453740);
 	return network_session_parameter_countdown_timer_request_change(thisPtr, state, value);
 }
 
@@ -108,39 +108,39 @@ char __cdecl change_network_privacy_hook(e_privacy_mode a1)
 	return ((char(__cdecl*)(e_privacy_mode))0xA7F950)(a1);
 }
 
-const char *__cdecl session_composition_get_string_hook(e_session_composition session_composition)
+const char* __cdecl session_composition_get_string_hook(e_session_composition session_composition)
 {
 	printf_s("session composition: %s", session_composition.GetName());
 	return session_composition.GetName();
 }
 
 // this is the function the game ui uses to connect the hosts | a3, a4, a5 are all the hosts XnkAddr
-char __cdecl game_browser_join_host_hook(char a1, int a2, XnkAddr *a3, XnkAddr *a4, XnkAddr *a5)
+char __cdecl game_browser_join_host_hook(char a1, int a2, XnkAddr* a3, XnkAddr* a4, XnkAddr* a5)
 {
 	return s_join_data(a1, a2, a3, a4, a5)./*Print()->*/Join();
 }
 
 // this could probably use some error checking
-char __cdecl network_join_to_remote_squad(char not_leader, char a2, char should_squad_join, int sign_in_state, XnkAddr *a5, XnkAddr *a6, XnkAddr *a7)
+char __cdecl network_join_to_remote_squad(char not_leader, char a2, char should_squad_join, int session_class, s_transport_secure_identifier* session_id, long(*key)[4], s_transport_secure_address* host_address)
 {
-	s_remote_join_data remote_join_data;
+	s_network_session_remote_session_join_data* remote_session_join_data = nullptr;
 
 	// c_managed_sessions::squad_in_session
 	// get_session_array
-	if (!((void *(__thiscall *)(void *, XnkAddr *))0x45F0E0)(((void *(__cdecl *)())0x49E1A0)(), a5))
+	if (!((void* (__thiscall*)(void*, s_transport_secure_identifier*))0x45F0E0)(((void* (__cdecl*)())0x49E1A0)(), session_id))
 	{
 		// network_squad_session_player_is_leader
-		if (should_squad_join && ((bool(__cdecl *)())0x455320)())
+		if (should_squad_join && ((bool(__cdecl*)())0x455320)())
 		{
-			if (g_squad_session)
+			if (&g_network_squad_session)
 			{
-				memset(&remote_join_data, 0, 0x58u);
-				remote_join_data.SetJoinData(a2, sign_in_state, a5, a6, a7);
+				memset(remote_session_join_data, 0, sizeof(s_network_session_remote_session_join_data));
+				remote_session_join_data = new s_network_session_remote_session_join_data(a2, session_class, session_id, host_address);
 
 				// c_network_session_parameter_requested_remote_join_data::request_change
-				((char(__thiscall *)(void *, s_remote_join_data *))0x4595B0)(g_squad_session->GetParameters()->GetRequestedJoinData(), &remote_join_data);
+				((char(__thiscall*)(void*, s_network_session_remote_session_join_data*))0x4595B0)(g_network_squad_session.session_parameters_get()->requested_remote_join_data_get(), remote_session_join_data);
 
-				g_remote_join_data->SetJoinData(a2, sign_in_state, a5, a6, a7);
+				g_remote_session_join_data = *remote_session_join_data;
 
 				return true;
 			}
@@ -150,7 +150,7 @@ char __cdecl network_join_to_remote_squad(char not_leader, char a2, char should_
 	return false;
 }
 
-inline void SubmitNetworkingHooks(const char *name)
+inline void SubmitNetworkingHooks(const char* name)
 {
 	if (ConfigManager.GetBool("Hooks", name))
 	{
@@ -175,7 +175,7 @@ inline void SubmitNetworkingHooks(const char *name)
 	}
 }
 
-inline void SubmitNetworkingPatches(const char *name)
+inline void SubmitNetworkingPatches(const char* name)
 {
 	if (ConfigManager.GetBool("Patches", name))
 	{

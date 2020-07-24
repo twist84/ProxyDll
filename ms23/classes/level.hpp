@@ -77,11 +77,11 @@ void PrintLevelInfo(s_levels *level, const char *type)
 	//printf_s("level info: %s\n%ls\n%ls\n%s\n%s\n", type, level->map_name, level->map_description, level->map_path, level->map_image_path);
 }
 
-auto g_levels = GetStructure<s_levels_unknown>(0x189E2D4);
+auto& g_levels = reference_get<s_levels_unknown>(0x189E2D4);
 static const auto levels_try_and_get_by_map_id = (char(*)(int *, int, s_levels *))0x54C910; // todo: hook this also
 char campaign_levels_try_and_get_by_map_id_hook(int map_id, s_levels *level)
 {
-	auto result = levels_try_and_get_by_map_id(g_levels->CampaignLevels, map_id, level);
+	auto result = levels_try_and_get_by_map_id(g_levels.campaign_levels_data, map_id, level);
 
 	PrintLevelInfo(level, "campaign");
 	return result;
@@ -89,7 +89,7 @@ char campaign_levels_try_and_get_by_map_id_hook(int map_id, s_levels *level)
 
 char multiplayer_levels_try_and_get_by_map_id_hook(int map_id, s_levels *level)
 {
-	auto result = levels_try_and_get_by_map_id(g_levels->MultiplayerLevels, map_id, level);
+	auto result = levels_try_and_get_by_map_id(g_levels.multiplayer_levels_data, map_id, level);
 
 	PrintLevelInfo(level, "multiplayer");
 	return result;

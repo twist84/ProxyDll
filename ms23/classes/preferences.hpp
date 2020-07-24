@@ -125,12 +125,12 @@ void __cdecl display_preferences_update_back_buffer_hook(int adapter, int BackBu
 	preferences.ScreenResolution.height = BackBufferHeight;
 	if (adapter == g_adapter)
 	{
-		memcpy(g_DisplayPreferencesNew, g_DisplayPreferences, sizeof(D3DPRESENT_PARAMETERS));
-		g_DisplayPreferencesNew->BackBufferWidth = BackBufferWidth;
-		g_DisplayPreferencesNew->BackBufferHeight = BackBufferHeight;
+		memcpy(&g_DisplayPreferencesNew, &g_DisplayPreferences, sizeof(D3DPRESENT_PARAMETERS));
+		g_DisplayPreferencesNew.BackBufferWidth = BackBufferWidth;
+		g_DisplayPreferencesNew.BackBufferHeight = BackBufferHeight;
 
 		if (!StandardRendering.val)
-			g_DisplayPreferencesNew->Windowed = !Fullscreen.value; // != 2;
+			g_DisplayPreferencesNew.Windowed = !Fullscreen.value; // != 2;
 
 		preferences.Fullscreen.set(Fullscreen);
 		SetMemory<0x50DD9D1, uint8_t>(1);

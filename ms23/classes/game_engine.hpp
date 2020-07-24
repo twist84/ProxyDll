@@ -1,8 +1,9 @@
 #pragma once
 #include <Utils.hpp>
 
-struct c_game_engine
+class c_game_engine
 {
+public:
 	int (*_get_index)();
 	void *_vftable1;
 	void *_vftable2;
@@ -83,7 +84,7 @@ struct c_game_engine
 	void *_vftable77;
 	void *_event_game_start;
 };
-struct c_ctf_engine : c_game_engine
+class c_ctf_engine : public c_game_engine
 {
 	void *_vftable79;
 	void *_vftable80;
@@ -97,31 +98,31 @@ struct c_ctf_engine : c_game_engine
 	void *_vftable88;
 	void *_vftable89;
 };
-struct c_slayer_engine : c_game_engine
+class c_slayer_engine : public c_game_engine
 {
 };
-struct c_oddball_engine : c_game_engine
+class c_oddball_engine : public c_game_engine
 {
 };
-struct c_king_engine : c_game_engine
+class c_king_engine : public c_game_engine
 {
 };
-struct c_sandbox_engine : c_game_engine
+class c_sandbox_engine : public c_game_engine
 {
 };
-struct c_vip_engine : c_game_engine
+class c_vip_engine : public c_game_engine
 {
 };
-struct c_juggernaut_engine : c_game_engine
+class c_juggernaut_engine : public c_game_engine
 {
 };
-struct c_territories_engine : c_game_engine
+class c_territories_engine : public c_game_engine
 {
 };
-struct c_assault_engine : c_ctf_engine
+class c_assault_engine : public c_game_engine
 {
 };
-struct c_infection_engine : c_game_engine
+class c_infection_engine : public c_game_engine
 {
 };
 
@@ -153,7 +154,7 @@ void SetupEngines()
 // TODO: Write these out and actually make them functional
 
 // https://gist.github.com/theTwist84/9ff80d8a53c6e9cae361f6bb37126969
-struct c_gui_selected_item
+class c_gui_selected_item
 {
 	// 0x680C50, c_gui_selected_item::vftable00
 	// 0x680BD0, c_gui_selected_item::vftable01
@@ -166,40 +167,40 @@ struct c_gui_selected_item
 	// 0x680AC0, c_gui_selected_item::vftable08
 	// 0x680BC0, c_gui_selected_item::vftable09
 };
-struct c_gui_saved_screenshot_selected_item : c_gui_selected_item
+class c_gui_saved_screenshot_selected_item : c_gui_selected_item
 {
 	// 0x680B80, c_gui_saved_screenshot_selected_item::vftable10
 };
-struct c_gui_map_selected_item : c_gui_selected_item
+class c_gui_map_selected_item : c_gui_selected_item
 {
 	// 0xAD97B0, c_gui_map_selected_item::vftable10
 };
-struct c_gui_difficulty_selected_item : c_gui_selected_item
+class c_gui_difficulty_selected_item : c_gui_selected_item
 {
 	// same as c_gui_selected_item
 };
-struct c_gui_game_variant_selected_item : c_gui_selected_item
+class c_gui_game_variant_selected_item : c_gui_selected_item
 {
 	// 0xADB4B0, c_gui_game_variant_selected_item::vftable10
 };
-struct c_gui_saved_film_selected_item : c_gui_selected_item
+class c_gui_saved_film_selected_item : c_gui_selected_item
 {
 	// 0xADCAE0, c_gui_saved_film_selected_item::vftable10
 };
-struct c_gui_level_selected_item : c_gui_selected_item
+class c_gui_level_selected_item : c_gui_selected_item
 {
 	// same as c_gui_selected_item
 };
-struct c_gui_network_mode_selected_item : c_gui_selected_item
+class c_gui_network_mode_selected_item : c_gui_selected_item
 {
 	// same as c_gui_selected_item
 };
-struct c_gui_hopper_selected_item : c_gui_selected_item
+class c_gui_hopper_selected_item : c_gui_selected_item
 {
 	// same as c_gui_selected_item
 };
 
-struct c_gui_widget
+class c_gui_widget
 {
 	// 0xAB8720, c_gui_widget::vftable00
 	// 0xAB63A0, c_gui_widget::vftable01
@@ -238,7 +239,7 @@ struct c_gui_widget
 	// 0xAB9A40, c_gui_widget::vftable35
 	// 0xAB9700, c_gui_widget::vftable36
 };
-struct c_gui_screen_widget : c_gui_widget
+class c_gui_screen_widget : c_gui_widget
 {
 	// 0xAB06A0, c_gui_screen_widget::vftable01
 	// 0xAB14D0, c_gui_screen_widget::vftable02
@@ -267,19 +268,19 @@ struct c_gui_screen_widget : c_gui_widget
 	// 0xAB1760, c_gui_screen_widget::vftable53
 	// 0xAB2930, c_gui_screen_widget::vftable54
 };
-struct c_gui_screen_codeless_widget : c_gui_screen_widget
+class c_gui_screen_codeless_widget : c_gui_screen_widget
 {
 	// 0xAB0670, c_gui_screen_codeless_widget::vftable01
 	// 0xAB1560, c_gui_screen_codeless_widget::vftable40
 };
-struct c_gui_screen_terminal : c_gui_screen_widget
+class c_gui_screen_terminal : c_gui_screen_widget
 {
 	// 0xAA8D60, c_gui_screen_terminal::vftable01
 	// 0xB12080, c_gui_screen_terminal::vftable18
 	// 0xB12960, c_gui_screen_terminal::vftable24
 	// 0xB122B0, c_gui_screen_terminal::vftable35
 };
-struct c_gui_screen_scoreboard : c_gui_screen_widget
+class c_gui_screen_scoreboard : c_gui_screen_widget
 {
 	// 0xAB2BD0, c_gui_screen_scoreboard::vftable01
 	// 0xAB3810, c_gui_screen_scoreboard::vftable03
@@ -289,7 +290,7 @@ struct c_gui_screen_scoreboard : c_gui_screen_widget
 	// 0xAB3590, c_gui_screen_scoreboard::vftable40
 	// 0xAB3470, c_gui_screen_scoreboard::vftable49
 };
-struct c_gui_screen_boot_betrayer : c_gui_screen_widget
+class c_gui_screen_boot_betrayer : c_gui_screen_widget
 {
 	// 0xAB54D0, c_gui_screen_boot_betrayer::vftable01
 	// 0xAB57A0, c_gui_screen_boot_betrayer::vftable02
@@ -297,13 +298,13 @@ struct c_gui_screen_boot_betrayer : c_gui_screen_widget
 	// 0xAB56A0, c_gui_screen_boot_betrayer::vftable35
 	// 0xAB5760, c_gui_screen_boot_betrayer::vftable50
 };
-struct c_gui_screen_in_progress : c_gui_screen_widget
+class c_gui_screen_in_progress : c_gui_screen_widget
 {
 	// 0xAFBC80, c_gui_screen_in_progress::vftable01
 	// 0xAFBCB0, c_gui_screen_in_progress::vftable24
 	// 0xAC00B0, c_gui_screen_in_progress::vftable37
 };
-struct c_gui_screen_carnage_report : c_gui_screen_widget
+class c_gui_screen_carnage_report : c_gui_screen_widget
 {
 	// 0xABFC40, c_gui_screen_carnage_report::vftable01
 	// 0xAC09E0, c_gui_screen_carnage_report::vftable02
@@ -318,13 +319,13 @@ struct c_gui_screen_carnage_report : c_gui_screen_widget
 	// 0xAC0680, c_gui_screen_carnage_report::vftable49
 	// 0xAC0660, c_gui_screen_carnage_report::vftable50
 };
-struct c_gui_screen_alpha_motd : c_gui_screen_widget
+class c_gui_screen_alpha_motd : c_gui_screen_widget
 {
 	// 0xAE6F60, c_gui_screen_alpha_motd::vftable01
 	// 0xAE7040, c_gui_screen_alpha_motd::vftable03
 	// 0xAE7010, c_gui_screen_alpha_motd::vftable35
 };
-struct c_gui_screen_maximum_party_size : c_gui_screen_widget
+class c_gui_screen_maximum_party_size : c_gui_screen_widget
 {
 	// 0xB0A810, c_gui_screen_maximum_party_size::vftable01
 	// 0xB0A930, c_gui_screen_maximum_party_size::vftable02
@@ -332,7 +333,7 @@ struct c_gui_screen_maximum_party_size : c_gui_screen_widget
 	// 0xB0AA70, c_gui_screen_maximum_party_size::vftable24
 	// 0xB0A840, c_gui_screen_maximum_party_size::vftable35
 };
-struct c_gui_screen_game_options : c_gui_screen_widget
+class c_gui_screen_game_options : c_gui_screen_widget
 {
 	// 0xB0B370, c_gui_screen_game_options::vftable01
 	// 0xB0CA70, c_gui_screen_game_options::vftable02
@@ -343,27 +344,27 @@ struct c_gui_screen_game_options : c_gui_screen_widget
 	// 0xB0C470, c_gui_screen_game_options::vftable49
 	// 0xB0C200, c_gui_screen_game_options::vftable50
 };
-struct c_gui_screen_alpha_legal : c_gui_screen_widget
+class c_gui_screen_alpha_legal : c_gui_screen_widget
 {
 	// 0xB0E050, c_gui_screen_alpha_legal::vftable01
 	// 0xB0E0E0, c_gui_screen_alpha_legal::vftable03
 	// 0xB0E120, c_gui_screen_alpha_legal::vftable24
 	// 0xB0E080, c_gui_screen_alpha_legal::vftable35
 };
-struct c_gui_screen_alpha_locked_down : c_gui_screen_widget
+class c_gui_screen_alpha_locked_down : c_gui_screen_widget
 {
 	// 0xB0E230, c_gui_screen_alpha_locked_down::vftable01
 	// 0xB0E290, c_gui_screen_alpha_locked_down::vftable03
 	// 0xB0E260, c_gui_screen_alpha_locked_down::vftable35
 };
-struct c_gui_screen_forge_legal : c_gui_screen_widget
+class c_gui_screen_forge_legal : c_gui_screen_widget
 {
 	// 0xB0E2E0, c_gui_screen_forge_legal::vftable01
 	// 0xB0E390, c_gui_screen_forge_legal::vftable03
 	// 0xB0E310, c_gui_screen_forge_legal::vftable35
 };
 
-struct c_gui_screen_campaign_select_difficulty : c_gui_screen_widget
+class c_gui_screen_campaign_select_difficulty : c_gui_screen_widget
 {
 	// 0xAFC320, c_gui_screen_campaign_select_difficulty::vftable01
 	// 0xAFC770, c_gui_screen_campaign_select_difficulty::vftable02
@@ -372,7 +373,7 @@ struct c_gui_screen_campaign_select_difficulty : c_gui_screen_widget
 	// 0xAFC620, c_gui_screen_campaign_select_difficulty::vftable49
 	// 0xAFC5A0, c_gui_screen_campaign_select_difficulty::vftable50
 };
-struct c_gui_screen_campaign_select_level : c_gui_screen_widget
+class c_gui_screen_campaign_select_level : c_gui_screen_widget
 {
 	// 0xAFCBA0, c_gui_screen_campaign_select_level::vftable01
 	// 0xAFD180, c_gui_screen_campaign_select_level::vftable02
@@ -384,19 +385,19 @@ struct c_gui_screen_campaign_select_level : c_gui_screen_widget
 	// 0xAFCF90, c_gui_screen_campaign_select_level::vftable49
 	// 0xAFCF20, c_gui_screen_campaign_select_level::vftable50
 };
-struct c_gui_screen_campaign_settings : c_gui_screen_widget
+class c_gui_screen_campaign_settings : c_gui_screen_widget
 {
 	// 0xB20FA0, c_gui_screen_campaign_settings::vftable01
 	// 0xB20FD0, c_gui_screen_campaign_settings::vftable50
 };
-struct c_gui_screen_campaign_select_scoring : c_gui_screen_campaign_settings
+class c_gui_screen_campaign_select_scoring : c_gui_screen_campaign_settings
 {
 	// 0xAFE2B0, c_gui_screen_campaign_select_scoring::vftable01
 	// 0xAFE400, c_gui_screen_campaign_select_scoring::vftable02
 	// 0xAFE330, c_gui_screen_campaign_select_scoring::vftable49
 	// 0xAFE2E0, c_gui_screen_campaign_select_scoring::vftable50
 };
-struct c_gui_screen_campaign_select_skulls : c_gui_screen_campaign_settings
+class c_gui_screen_campaign_select_skulls : c_gui_screen_campaign_settings
 {
 	// 0xAFE5C0, c_gui_screen_campaign_select_skulls::vftable01
 	// 0xAFEF60, c_gui_screen_campaign_select_skulls::vftable02
@@ -407,12 +408,12 @@ struct c_gui_screen_campaign_select_skulls : c_gui_screen_campaign_settings
 	// 0xAFEE11, c_gui_screen_campaign_select_skulls::vftable50
 };
 
-struct c_gui_screen_pregame_switch_lobby : c_gui_screen_widget
+class c_gui_screen_pregame_switch_lobby : c_gui_screen_widget
 {
 	// 0xB02E20, c_gui_screen_pregame_switch_lobby::vftable01
 	// 0xB02F60, c_gui_screen_pregame_switch_lobby::vftable03
 };
-struct c_gui_screen_pregame_selection : c_gui_screen_widget
+class c_gui_screen_pregame_selection : c_gui_screen_widget
 {
 	// 0xB03220, c_gui_screen_pregame_selection::vftable01
 	// 0xB044B0, c_gui_screen_pregame_selection::vftable02
@@ -426,7 +427,7 @@ struct c_gui_screen_pregame_selection : c_gui_screen_widget
 	// 0xB03EE0, c_gui_screen_pregame_selection::vftable49
 	// 0xB03D90, c_gui_screen_pregame_selection::vftable50
 };
-struct c_gui_screen_pregame_lobby : c_gui_screen_widget
+class c_gui_screen_pregame_lobby : c_gui_screen_widget
 {
 	// 0xB21230, c_gui_screen_pregame_lobby::vftable01
 	// 0xB22140, c_gui_screen_pregame_lobby::vftable02
@@ -447,7 +448,7 @@ struct c_gui_screen_pregame_lobby : c_gui_screen_widget
 	// 0xB22DC0, c_gui_screen_pregame_lobby::vftable62
 };
 
-struct c_gui_screen_pregame_lobby_campaign : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_campaign : c_gui_screen_pregame_lobby
 {
 	// 0xAFF900, c_gui_screen_pregame_lobby_campaign::vftable01
 	// 0xAFFDA0, c_gui_screen_pregame_lobby_campaign::vftable02
@@ -460,7 +461,7 @@ struct c_gui_screen_pregame_lobby_campaign : c_gui_screen_pregame_lobby
 	// 0xAFFA00, c_gui_screen_pregame_lobby_campaign::title_string_id
 	// 0xAFF9D0, c_gui_screen_pregame_lobby_campaign::ui_game_mode
 };
-struct c_gui_screen_pregame_lobby_survival : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_survival : c_gui_screen_pregame_lobby
 {
 	// 0xB00930, c_gui_screen_pregame_lobby_survival::vftable01
 	// 0xB00CB0, c_gui_screen_pregame_lobby_survival::vftable02
@@ -473,7 +474,7 @@ struct c_gui_screen_pregame_lobby_survival : c_gui_screen_pregame_lobby
 	// 0xB009C0, c_gui_screen_pregame_lobby_survival::title_string_id
 	// 0xB009A0, c_gui_screen_pregame_lobby_survival::ui_game_mode
 };
-struct c_gui_screen_pregame_lobby_multiplayer : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_multiplayer : c_gui_screen_pregame_lobby
 {
 	// 0xB011A0, c_gui_screen_pregame_lobby_multiplayer::vftable01
 	// 0xB013B0, c_gui_screen_pregame_lobby_multiplayer::vftable02
@@ -484,7 +485,7 @@ struct c_gui_screen_pregame_lobby_multiplayer : c_gui_screen_pregame_lobby
 	// 0xB01230, c_gui_screen_pregame_lobby_multiplayer::title_string_id
 	// 0xB01210, c_gui_screen_pregame_lobby_multiplayer::ui_game_mode
 };
-struct c_gui_screen_pregame_lobby_matchmaking : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_matchmaking : c_gui_screen_pregame_lobby
 {
 	// 0xB01760, c_gui_screen_pregame_lobby_matchmaking::vftable01
 	// 0xB01B10, c_gui_screen_pregame_lobby_matchmaking::vftable02
@@ -499,7 +500,7 @@ struct c_gui_screen_pregame_lobby_matchmaking : c_gui_screen_pregame_lobby
 	// 0xB018C0, c_gui_screen_pregame_lobby_matchmaking::title_string_id
 	// 0xB01870, c_gui_screen_pregame_lobby_matchmaking::ui_game_mode
 };
-struct c_gui_screen_pregame_lobby_mapeditor : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_mapeditor : c_gui_screen_pregame_lobby
 {
 	// 0xB021D0, c_gui_screen_pregame_lobby_mapeditor::vftable01
 	// 0xB023C0, c_gui_screen_pregame_lobby_mapeditor::vftable02
@@ -511,7 +512,7 @@ struct c_gui_screen_pregame_lobby_mapeditor : c_gui_screen_pregame_lobby
 	// 0xB02260, c_gui_screen_pregame_lobby_mapeditor::title_string_id
 	// 0xB02240, c_gui_screen_pregame_lobby_mapeditor::ui_game_mode
 };
-struct c_gui_screen_pregame_lobby_theater : c_gui_screen_pregame_lobby
+class c_gui_screen_pregame_lobby_theater : c_gui_screen_pregame_lobby
 {
 	// 0xB025F0, c_gui_screen_pregame_lobby_theater::vftable01
 	// 0xB02790, c_gui_screen_pregame_lobby_theater::vftable02
@@ -525,7 +526,7 @@ struct c_gui_screen_pregame_lobby_theater : c_gui_screen_pregame_lobby
 	// 0xB02660, c_gui_screen_pregame_lobby_theater::ui_game_mode
 };
 
-struct c_gui_screen_postgame_lobby : c_gui_screen_widget
+class c_gui_screen_postgame_lobby : c_gui_screen_widget
 {
 	// 0xB06960, c_gui_screen_postgame_lobby::vftable01
 	// 0xB06F00, c_gui_screen_postgame_lobby::vftable02
@@ -540,7 +541,7 @@ struct c_gui_screen_postgame_lobby : c_gui_screen_widget
 	// 0xB06D60, c_gui_screen_postgame_lobby::vftable50
 };
 
-struct c_gui_screen_matchmaking_advanced_options : c_gui_screen_widget
+class c_gui_screen_matchmaking_advanced_options : c_gui_screen_widget
 {
 	// 0xB05F00, c_gui_screen_matchmaking_advanced_options::vftable01
 	// 0xB060E0, c_gui_screen_matchmaking_advanced_options::vftable02
@@ -550,7 +551,7 @@ struct c_gui_screen_matchmaking_advanced_options : c_gui_screen_widget
 	// 0xB06510, c_gui_screen_matchmaking_advanced_options::vftable24
 	// 0xB06030, c_gui_screen_matchmaking_advanced_options::vftable49
 };
-struct c_gui_screen_matchmaking_searching : c_gui_screen_widget
+class c_gui_screen_matchmaking_searching : c_gui_screen_widget
 {
 	// 0xB0E550, c_gui_screen_matchmaking_searching::vftable01
 	// 0xB0EAE0, c_gui_screen_matchmaking_searching::vftable02
@@ -565,7 +566,7 @@ struct c_gui_screen_matchmaking_searching : c_gui_screen_widget
 	// 0xB0E9A0, c_gui_screen_matchmaking_searching::vftable49
 	// 0xB0E950, c_gui_screen_matchmaking_searching::vftable50
 };
-struct c_gui_screen_matchmaking_match_found : c_gui_screen_widget
+class c_gui_screen_matchmaking_match_found : c_gui_screen_widget
 {
 	// 0xB10510, c_gui_screen_matchmaking_match_found::vftable01
 	// 0xB107E0, c_gui_screen_matchmaking_match_found::vftable02
@@ -581,7 +582,7 @@ struct c_gui_screen_matchmaking_match_found : c_gui_screen_widget
 	// 0xB10690, c_gui_screen_matchmaking_match_found::vftable49
 };
 
-struct c_gui_data
+class c_gui_data
 {
 	// 0xAD46A0, c_gui_data::vftable00
 	// 0xAD52F0, c_gui_data::player_select_actions
@@ -606,7 +607,7 @@ struct c_gui_data
 	// 0xAD48D0, c_gui_data::vftable25
 	// 0xAD4960, c_gui_data::vftable26
 };
-struct c_gui_data_array : c_gui_data
+class c_gui_data_array : c_gui_data
 {
 	// 0xAD46D0, c_gui_data_array::vftable00
 	// 0xAD5300, c_gui_data_array::vftable01
@@ -620,7 +621,7 @@ struct c_gui_data_array : c_gui_data
 	// 0xAD48B0, c_gui_data_array::vftable20
 	// 0xAD5490, c_gui_data_array::vftable21
 };
-struct c_gui_data_array_test : c_gui_data
+class c_gui_data_array_test : c_gui_data
 {
 	// 0xAD4740, c_gui_data_array_test::vftable00
 	// 0xAD5330, c_gui_data_array_test::vftable01
@@ -629,7 +630,7 @@ struct c_gui_data_array_test : c_gui_data
 	// 0xAD5230, c_gui_data_array_test::vftable12
 	// 0xAD5190, c_gui_data_array_test::vftable13
 };
-struct c_gui_data_proxy : c_gui_data
+class c_gui_data_proxy : c_gui_data
 {
 	// 0xAE19E0, c_gui_data_proxy::vftable00
 	// 0xAE1D90, c_gui_data_proxy::vftable05
@@ -648,7 +649,7 @@ struct c_gui_data_proxy : c_gui_data
 	// 0xAD5370, c_gui_data_proxy::vftable27
 };
 
-struct c_gui_ordered_data : c_gui_data
+class c_gui_ordered_data : c_gui_data
 {
 	// 0xAD47B0, c_gui_ordered_data::vftable00
 	// 0xAD4BE0, c_gui_ordered_data::vftable05
@@ -660,7 +661,7 @@ struct c_gui_ordered_data : c_gui_data
 	// 0xAD48E0, c_gui_ordered_data::vftable25
 	// 0xAD4970, c_gui_ordered_data::vftable26
 };
-struct c_player_screenshots_datasource : c_gui_ordered_data
+class c_player_screenshots_datasource : c_gui_ordered_data
 {
 	// 0xAF36C0, c_player_screenshots_datasource::vftable00
 	// 0xAF40A0, c_player_screenshots_datasource::player_select_actions
@@ -671,14 +672,14 @@ struct c_player_screenshots_datasource : c_gui_ordered_data
 	// 0xAF39F0, c_player_screenshots_datasource::vftable17
 	// 0xAF39A0, c_player_screenshots_datasource::vftable27
 };
-struct c_player_select_actions_datasource : c_gui_ordered_data
+class c_player_select_actions_datasource : c_gui_ordered_data
 {
 	// 0xB07B50, c_player_select_actions_datasource::vftable00
 	// 0xB07D50, c_player_select_actions_datasource::vftable09
 	// 0xB07E50, c_player_select_actions_datasource::vftable13
 	// 0xB07DB0, c_player_select_actions_datasource::vftable27
 };
-struct c_player_select_medals_datasource : c_gui_ordered_data
+class c_player_select_medals_datasource : c_gui_ordered_data
 {
 	// 0xB07B80, c_player_select_medals_datasource::vftable00
 	// 0xB07D70, c_player_select_medals_datasource::vftable09
@@ -687,7 +688,7 @@ struct c_player_select_medals_datasource : c_gui_ordered_data
 	// 0xB07DC0, c_player_select_medals_datasource::vftable27
 };
 
-struct c_gui_hopper_category_datasource : c_gui_ordered_data
+class c_gui_hopper_category_datasource : c_gui_ordered_data
 {
 	// 0xB24110, c_gui_hopper_category_datasource::vftable09
 	// 0xB241D0, c_gui_hopper_category_datasource::vftable11
@@ -695,7 +696,7 @@ struct c_gui_hopper_category_datasource : c_gui_ordered_data
 	// 0xB24290, c_gui_hopper_category_datasource::vftable13
 	// 0xB24180, c_gui_hopper_category_datasource::vftable27
 };
-struct c_gui_hopper_subitem_selectable_item_datasource : c_gui_ordered_data
+class c_gui_hopper_subitem_selectable_item_datasource : c_gui_ordered_data
 {
 	// 0xB240E0, c_gui_hopper_subitem_selectable_item_datasource::vftable00
 	// 0xB24150, c_gui_hopper_subitem_selectable_item_datasource::vftable09
@@ -706,7 +707,7 @@ struct c_gui_hopper_subitem_selectable_item_datasource : c_gui_ordered_data
 	// 0xB24190, c_gui_hopper_subitem_selectable_item_datasource::vftable27
 	// 0xB244E0, c_gui_hopper_subitem_selectable_item_datasource::vftable28::player_actions
 };
-struct c_gui_network_mode_category_datasource : c_gui_ordered_data
+class c_gui_network_mode_category_datasource : c_gui_ordered_data
 {
 	// 0xB23810, c_gui_network_mode_category_datasource::vftable00
 	// 0xB23A80, c_gui_network_mode_category_datasource::vftable09
@@ -716,7 +717,7 @@ struct c_gui_network_mode_category_datasource : c_gui_ordered_data
 	// 0xB23B20, c_gui_network_mode_category_datasource::vftable17
 	// 0xB23B00, c_gui_network_mode_category_datasource::vftable27
 };
-struct c_gui_network_mode_subitem_selectable_item_datasource : c_gui_ordered_data
+class c_gui_network_mode_subitem_selectable_item_datasource : c_gui_ordered_data
 {
 	// 0xB23840, c_gui_network_mode_subitem_selectable_item_datasource::vftable00
 	// 0xB23AC0, c_gui_network_mode_subitem_selectable_item_datasource::vftable09
@@ -728,7 +729,7 @@ struct c_gui_network_mode_subitem_selectable_item_datasource : c_gui_ordered_dat
 	// 0xB23DE0, c_gui_network_mode_subitem_selectable_item_datasource::vftable28::player_actions
 };
 
-struct c_gui_roster_data : c_gui_ordered_data
+class c_gui_roster_data : c_gui_ordered_data
 {
 	// 0xB248C0, c_gui_roster_data::vftable00
 	// 0xB24BC0, c_gui_roster_data::vftable09
@@ -739,86 +740,86 @@ struct c_gui_roster_data : c_gui_ordered_data
 	// 0xB24F90, c_gui_roster_data::vftable28
 	// 0xB24F40, c_gui_roster_data::vftable29
 };
-struct c_gui_active_roster_data : c_gui_roster_data
+class c_gui_active_roster_data : c_gui_roster_data
 {
 	// 0xB24890, c_gui_active_roster_data::vftable00
 	// 0xB25430, c_gui_active_roster_data::vftable03
 };
-struct c_gui_static_roster_data : c_gui_roster_data
+class c_gui_static_roster_data : c_gui_roster_data
 {
 	// 0xB248F0, c_gui_static_roster_data::vftable00
 };
 
-struct c_message
+class c_message
 {
 	// 0xA92C20, c_message::vftable00
 	// 0xA930F0, c_message::vftable01
 	// 0xA932B0, c_message::vftable02
 };
-struct c_load_screen_message : c_message
+class c_load_screen_message : c_message
 {
 	// 0xA92B90, c_load_screen_message::vftable00
 	// 0xA92DA0, c_load_screen_message::vftable03
 };
-struct c_load_terminal_screen_message : c_load_screen_message
+class c_load_terminal_screen_message : c_load_screen_message
 {
 	// 0xBB6360, c_load_terminal_screen_message::vftable00
 	// 0xBB6390, c_load_terminal_screen_message::vftable03
 };
 
-struct c_view
+class c_view
 {
 	// c_view::vftable00
 	// c_view::update
 	// c_view::vftable02
 	// c_view::vftable03
 };
-struct c_world_view : c_view
+class c_world_view : c_view
 {
 	// c_world_view::vftable00
 	// c_world_view::update
 	// c_world_view::vftable02
 	// c_world_view::vftable03
 };
-struct c_lights_view : c_world_view, c_view
+class c_lights_view : c_world_view
 {
 	// 0x60FEB0, c_lights_view::vftable00
 	// 0xA67170, c_lights_view::update
 	// 0x60EF60, c_lights_view::vftable02
 	// 0xA671B0, c_lights_view::vftable03
 };
-struct c_lightmap_shadows_view : c_world_view, c_view
+class c_lightmap_shadows_view : c_world_view
 {
 	// 0x60FEA0, c_lightmap_shadows_view::vftable00
 	// 0x610090, c_lightmap_shadows_view::update
 	// 0x60EF50, c_lightmap_shadows_view::vftable02
 	// 0xA6B340, c_lightmap_shadows_view::vftable03
 };
-struct c_occlusion_view : c_lightmap_shadows_view, c_world_view, c_view
+class c_occlusion_view : c_lightmap_shadows_view
 {
 	// 0x6100A0, c_occlusion_view::update
 	// 0xA6D7F0, c_occlusion_view::vftable04
 	// 0xA6D740, c_occlusion_view::vftable05
 };
-struct c_player_view : c_world_view, c_view
+class c_player_view : c_world_view
 {
 	// 0xA39960, c_player_view::vftable00
 	// 0xA3A850, c_player_view::update
 	// 0xA38D10, c_player_view::vftable02
 	// 0xA3AAA0, c_player_view::vftable03
 };
-struct c_hud_camera_view : c_player_view, c_world_view, c_view
+class c_hud_camera_view : c_player_view
 {
 	// 0xA2EB50, c_hud_camera_view::update	
 };
-struct c_texture_camera_view : c_player_view, c_world_view, c_view
+class c_texture_camera_view : c_player_view
 {
 	// 0xA70950, c_texture_camera_view::vftable00
 	// 0xA71350, c_texture_camera_view::update
 	// 0xA71420, c_texture_camera_view::vftable03
 	// 0xA70700, c_texture_camera_view::vftable04
 };
-struct c_ui_view : c_view
+class c_ui_view : c_view
 {
 	// 0xA290A0, c_ui_view::vftable00
 	// 0x604E40, c_ui_view::update
@@ -826,21 +827,21 @@ struct c_ui_view : c_view
 	// 0x604E60, c_ui_view::vftable03
 };
 
-struct c_fullscreen_view : c_view
+class c_fullscreen_view : c_view
 {
 	// 0xA29050, c_fullscreen_view::vftable00
 	// 0xA29250, c_fullscreen_view::update
 	// 0x604180, c_fullscreen_view::vftable02
 	// 0x604E50, c_fullscreen_view::vftable03
 };
-struct c_reflection_view : c_view
+class c_reflection_view : c_view
 {
 	// 0x60FEC0, c_reflection_view::vftable00
 	// 0x6100B0, c_reflection_view::update
 	// 0x60EF70, c_reflection_view::vftable02
 	// 0x610130, c_reflection_view::vftable03
 };
-struct c_first_person_view : c_view
+class c_first_person_view : c_view
 {
 	// 0x60FE90, c_first_person_view::vftable00
 	// 0xA29240, c_first_person_view::update
@@ -869,7 +870,7 @@ struct s_simulation_globals_type_collection
 	}
 };
 
-struct c_simulation_entity_definition
+class c_simulation_entity_definition
 {
 	// __purecall
 	// __purecall
@@ -901,7 +902,7 @@ struct c_simulation_entity_definition
 	// __purecall
 	// __purecall
 };
-struct c_simulation_game_engine_globals_definition : c_simulation_entity_definition
+class c_simulation_game_engine_globals_definition : c_simulation_entity_definition
 {
 	// 0x4B6080, c_simulation_game_engine_globals_definition::vftable03
 	// 0x4B6110, c_simulation_game_engine_globals_definition::vftable06
@@ -924,7 +925,7 @@ struct c_simulation_game_engine_globals_definition : c_simulation_entity_definit
 	// 0x4B60A0, c_simulation_game_engine_globals_definition::vftable27
 	// 0x4B71B0, c_simulation_game_engine_globals_definition::vftable28
 };
-struct c_simulation_slayer_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_slayer_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C2CA0, c_simulation_slayer_engine_globals_definition::vftable00::get_index
 	// 0x4C2CB0, c_simulation_slayer_engine_globals_definition::vftable01::get_name
@@ -937,7 +938,7 @@ struct c_simulation_slayer_engine_globals_definition : c_simulation_game_engine_
 	// 0x4C2C80, c_simulation_slayer_engine_globals_definition::vftable17
 	// 0x4C2DA0, c_simulation_slayer_engine_globals_definition::vftable29::update
 };
-struct c_simulation_ctf_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_ctf_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C2E60, c_simulation_ctf_engine_globals_definition::vftable00::get_index
 	// 0x4C2E70, c_simulation_ctf_engine_globals_definition::vftable01::get_name
@@ -950,7 +951,7 @@ struct c_simulation_ctf_engine_globals_definition : c_simulation_game_engine_glo
 	// 0x4C2E40, c_simulation_ctf_engine_globals_definition::vftable17
 	// 0x4C3540, c_simulation_ctf_engine_globals_definition::vftable29::update
 };
-struct c_simulation_assault_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_assault_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C3600, c_simulation_assault_engine_globals_definition::vftable00::get_index
 	// 0x4C3610, c_simulation_assault_engine_globals_definition::vftable01::get_name
@@ -963,7 +964,7 @@ struct c_simulation_assault_engine_globals_definition : c_simulation_game_engine
 	// 0x4C35E0, c_simulation_assault_engine_globals_definition::vftable17
 	// 0x4C3D20, c_simulation_assault_engine_globals_definition::vftable29::update
 };
-struct c_simulation_oddball_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_oddball_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C3EC0, c_simulation_oddball_engine_globals_definition::vftable00::get_index
 	// 0x4C3ED0, c_simulation_oddball_engine_globals_definition::vftable01::get_name
@@ -976,7 +977,7 @@ struct c_simulation_oddball_engine_globals_definition : c_simulation_game_engine
 	// 0x4C3E40, c_simulation_oddball_engine_globals_definition::vftable17
 	// 0x4C4590, c_simulation_oddball_engine_globals_definition::vftable29::update
 };
-struct c_simulation_king_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_king_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C4650, c_simulation_king_engine_globals_definition::vftable00::get_index
 	// 0x4C4660, c_simulation_king_engine_globals_definition::vftable01::get_name
@@ -989,7 +990,7 @@ struct c_simulation_king_engine_globals_definition : c_simulation_game_engine_gl
 	// 0x4C4630, c_simulation_king_engine_globals_definition::vftable17
 	// 0x4C48D0, c_simulation_king_engine_globals_definition::vftable29::update
 };
-struct c_simulation_territories_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_territories_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C4A10, c_simulation_territories_engine_globals_definition::vftable00::get_index
 	// 0x4C4A20, c_simulation_territories_engine_globals_definition::vftable01::get_name
@@ -1002,7 +1003,7 @@ struct c_simulation_territories_engine_globals_definition : c_simulation_game_en
 	// 0x4C49F0, c_simulation_territories_engine_globals_definition::vftable17
 	// 0x4C5010, c_simulation_territories_engine_globals_definition::vftable29::update
 };
-struct c_simulation_juggernaut_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_juggernaut_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C50D0, c_simulation_juggernaut_engine_globals_definition::vftable00::get_index
 	// 0x4C50E0, c_simulation_juggernaut_engine_globals_definition::vftable01::get_name
@@ -1015,7 +1016,7 @@ struct c_simulation_juggernaut_engine_globals_definition : c_simulation_game_eng
 	// 0x4C50B0, c_simulation_juggernaut_engine_globals_definition::vftable17
 	// 0x4C53E0, c_simulation_juggernaut_engine_globals_definition::vftable29::update
 };
-struct c_simulation_sandbox_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_sandbox_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4B7350, c_simulation_sandbox_engine_globals_definition::vftable00::get_index
 	// 0x4B7360, c_simulation_sandbox_engine_globals_definition::vftable01::get_name
@@ -1029,7 +1030,7 @@ struct c_simulation_sandbox_engine_globals_definition : c_simulation_game_engine
 	// 0x4B7330, c_simulation_sandbox_engine_globals_definition::vftable17
 	// 0x4B7870, c_simulation_sandbox_engine_globals_definition::vftable29::update
 };
-struct c_simulation_infection_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_infection_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C5490, c_simulation_infection_engine_globals_definition::vftable00::get_index
 	// 0x4C54A0, c_simulation_infection_engine_globals_definition::vftable01::get_name
@@ -1042,7 +1043,7 @@ struct c_simulation_infection_engine_globals_definition : c_simulation_game_engi
 	// 0x4C5470, c_simulation_infection_engine_globals_definition::vftable17
 	// 0x4C5850, c_simulation_infection_engine_globals_definition::vftable29::update
 };
-struct c_simulation_vip_engine_globals_definition : c_simulation_game_engine_globals_definition
+class c_simulation_vip_engine_globals_definition : c_simulation_game_engine_globals_definition
 {
 	// 0x4C5960, c_simulation_vip_engine_globals_definition::vftable00::get_index
 	// 0x4C5970, c_simulation_vip_engine_globals_definition::vftable01::get_name
@@ -1055,44 +1056,44 @@ struct c_simulation_vip_engine_globals_definition : c_simulation_game_engine_glo
 	// 0x4C5940, c_simulation_vip_engine_globals_definition::vftable17
 	// 0x4C5E50, c_simulation_vip_engine_globals_definition::vftable29::update
 };
-struct c_simulation_game_engine_player_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_game_engine_player_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_game_statborg_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_game_statborg_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_breakable_surface_group_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_breakable_surface_group_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_map_variant_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_map_variant_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_unit_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_unit_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_item_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_item_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_generic_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_generic_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_generic_garbage_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_generic_garbage_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_vehicle_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_vehicle_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_projectile_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_projectile_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_weapon_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_weapon_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
-struct c_simulation_device_entity_definition : c_simulation_game_engine_globals_definition
+class c_simulation_device_entity_definition : c_simulation_game_engine_globals_definition
 {
 };
 
-struct c_simulation_event_definition // TODO: add all the inherited `classes` for this `class`
+class c_simulation_event_definition // TODO: add all the inherited `classes` for this `class`
 {
 	// __purecall
 	// __purecall
@@ -1111,70 +1112,70 @@ struct c_simulation_event_definition // TODO: add all the inherited `classes` fo
 };
 
 
-auto g_simulation_globals_type_collection = GetStructure<s_simulation_globals_type_collection>(0x19A9FBC);
+auto g_simulation_globals_type_collection = pointer_get<s_simulation_globals_type_collection>(0x19A9FBC);
 
-auto simulation_slayer_engine_globals_definition = GetStructure<c_simulation_slayer_engine_globals_definition>(0x161FFF4);
-auto simulation_ctf_engine_globals_definition = GetStructure<c_simulation_ctf_engine_globals_definition>(0x1641B94);
-auto simulation_assault_engine_globals_definition = GetStructure<c_simulation_assault_engine_globals_definition>(0x1641D2C);
-auto simulation_oddball_engine_globals_definition = GetStructure<c_simulation_oddball_engine_globals_definition>(0x1641E84);
-auto simulation_king_engine_globals_definition = GetStructure<c_simulation_king_engine_globals_definition>(0x1641FD4);
-auto simulation_territories_engine_globals_definition = GetStructure<c_simulation_territories_engine_globals_definition>(0x164210C);
-auto simulation_juggernaut_engine_globals_definition = GetStructure<c_simulation_juggernaut_engine_globals_definition>(0x16422BC);
-auto simulation_sandbox_engine_globals_definition = GetStructure<c_simulation_sandbox_engine_globals_definition>(0x1620074);
-auto simulation_infection_engine_globals_definition = GetStructure<c_simulation_infection_engine_globals_definition>(0x164244C);
-auto simulation_vip_engine_globals_definition = GetStructure<c_simulation_vip_engine_globals_definition>(0x1642654);
-auto simulation_game_engine_player_entity_definition = GetStructure<c_simulation_game_engine_player_entity_definition>(0x1640624);
-auto simulation_game_statborg_entity_definition = GetStructure<c_simulation_game_statborg_entity_definition>(0x164278C);
-auto simulation_breakable_surface_group_entity_definition = GetStructure<c_simulation_breakable_surface_group_entity_definition>(0x1642AE4);
-auto simulation_map_variant_entity_definition = GetStructure<c_simulation_map_variant_entity_definition>(0x1643A54);
-auto simulation_unit_entity_definition = GetStructure<c_simulation_unit_entity_definition>(0x1640F34);
-auto simulation_item_entity_definition = GetStructure<c_simulation_item_entity_definition>(0x1642D9C);
-auto simulation_generic_entity_definition = GetStructure<c_simulation_generic_entity_definition>(0x1642F24);
-auto simulation_generic_garbage_entity_definition = GetStructure<c_simulation_generic_garbage_entity_definition>(0x1642F24);
-auto simulation_vehicle_entity_definition = GetStructure<c_simulation_vehicle_entity_definition>(0x164311C);
-auto simulation_projectile_entity_definition = GetStructure<c_simulation_projectile_entity_definition>(0x1640204);
-auto simulation_weapon_entity_definition = GetStructure<c_simulation_weapon_entity_definition>(0x1643384);
-auto simulation_device_entity_definition = GetStructure<c_simulation_device_entity_definition>(0x164385C);
+auto simulation_slayer_engine_globals_definition = pointer_get<c_simulation_slayer_engine_globals_definition>(0x161FFF4);
+auto simulation_ctf_engine_globals_definition = pointer_get<c_simulation_ctf_engine_globals_definition>(0x1641B94);
+auto simulation_assault_engine_globals_definition = pointer_get<c_simulation_assault_engine_globals_definition>(0x1641D2C);
+auto simulation_oddball_engine_globals_definition = pointer_get<c_simulation_oddball_engine_globals_definition>(0x1641E84);
+auto simulation_king_engine_globals_definition = pointer_get<c_simulation_king_engine_globals_definition>(0x1641FD4);
+auto simulation_territories_engine_globals_definition = pointer_get<c_simulation_territories_engine_globals_definition>(0x164210C);
+auto simulation_juggernaut_engine_globals_definition = pointer_get<c_simulation_juggernaut_engine_globals_definition>(0x16422BC);
+auto simulation_sandbox_engine_globals_definition = pointer_get<c_simulation_sandbox_engine_globals_definition>(0x1620074);
+auto simulation_infection_engine_globals_definition = pointer_get<c_simulation_infection_engine_globals_definition>(0x164244C);
+auto simulation_vip_engine_globals_definition = pointer_get<c_simulation_vip_engine_globals_definition>(0x1642654);
+auto simulation_game_engine_player_entity_definition = pointer_get<c_simulation_game_engine_player_entity_definition>(0x1640624);
+auto simulation_game_statborg_entity_definition = pointer_get<c_simulation_game_statborg_entity_definition>(0x164278C);
+auto simulation_breakable_surface_group_entity_definition = pointer_get<c_simulation_breakable_surface_group_entity_definition>(0x1642AE4);
+auto simulation_map_variant_entity_definition = pointer_get<c_simulation_map_variant_entity_definition>(0x1643A54);
+auto simulation_unit_entity_definition = pointer_get<c_simulation_unit_entity_definition>(0x1640F34);
+auto simulation_item_entity_definition = pointer_get<c_simulation_item_entity_definition>(0x1642D9C);
+auto simulation_generic_entity_definition = pointer_get<c_simulation_generic_entity_definition>(0x1642F24);
+auto simulation_generic_garbage_entity_definition = pointer_get<c_simulation_generic_garbage_entity_definition>(0x1642F24);
+auto simulation_vehicle_entity_definition = pointer_get<c_simulation_vehicle_entity_definition>(0x164311C);
+auto simulation_projectile_entity_definition = pointer_get<c_simulation_projectile_entity_definition>(0x1640204);
+auto simulation_weapon_entity_definition = pointer_get<c_simulation_weapon_entity_definition>(0x1643384);
+auto simulation_device_entity_definition = pointer_get<c_simulation_device_entity_definition>(0x164385C);
 
-auto simulation_damage_aftermath_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_damage_aftermath_event_definition*/>(0x16429A0);
-auto simulation_damage_section_response_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_damage_section_response_event_definition*/>(0x16429F0);
-auto simulation_breakable_surface_damage_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_breakable_surface_damage_event_definition*/>(0x1642A44);
-auto simulation_projectile_attached_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_attached_event_definition*/>(0x164029C);
-auto simulation_projectile_detonate_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_detonate_event_definition*/>(0x16402EC);
-auto simulation_projectile_impact_effect_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_impact_effect_event_definition*/>(0x164033C);
-auto simulation_projectile_object_impact_effect_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_object_impact_effect_event_definition*/>(0x1640394);
-auto simulation_effect_on_pos_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_effect_on_pos_event_definition*/>(0x163F824);
-auto simulation_game_engine_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_game_engine_event_definition*/>(0x163FE20);
-auto simulation_unit_board_vehicle_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_board_vehicle_event_definition*/>(0x16410BC);
-auto simulation_unit_pickup_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_pickup_event_definition*/>(0x1641334);
-auto simulation_weapon_effect_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_effect_event_definition*/>(0x1643590);
-auto simulation_weapon_empty_click_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_empty_click_event_definition*/>(0x16435DC);
-auto simulation_hit_marker_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_hit_marker_event_definition*/>(0x1642A9C);
-auto simulation_unit_exit_vehicle_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_exit_vehicle_event_definition*/>(0x164101C);
-auto simulation_unit_assassinate_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_assassinate_event_definition*/>(0x164106C);
-auto simulation_player_taunt_request_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_player_taunt_request_event_definition*/>(0x164074C);
-auto simulation_weapon_fire_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_fire_event_definition*/>(0x164341C);
-auto simulation_weapon_reload_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_reload_event_definition*/>(0x1643464);
-auto simulation_unit_throw_initiate_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_throw_initiate_event_definition*/>(0x164110C);
-auto simulation_unit_melee_initiate_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_melee_initiate_event_definition*/>(0x16411AC);
-auto simulation_weapon_pickup_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_pickup_event_definition*/>(0x16434B0);
-auto simulation_weapon_put_away_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_put_away_event_definition*/>(0x16434FC);
-auto simulation_weapon_drop_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_weapon_drop_event_definition*/>(0x1643548);
-auto simulation_vehicle_flip_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_vehicle_flip_event_definition*/>(0x164129C);
-auto simulation_vehicle_trick_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_vehicle_trick_event_definition*/>(0x16412E8);
-auto simulation_device_touch_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_device_touch_event_definition*/>(0x16438F4);
-auto simulation_unit_throw_release_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_throw_release_event_definition*/>(0x164115C);
-auto simulation_unit_melee_damage_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_melee_damage_event_definition*/>(0x16411FC);
-auto simulation_unit_melee_clang_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_melee_clang_event_definition*/>(0x164124C);
-auto simulation_unit_enter_vehicle_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_enter_vehicle_event_definition*/>(0x1640FCC);
-auto simulation_game_engine_request_boot_player_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_game_engine_request_boot_player_event_definition*/>(0x163FE68);
-auto simulation_unit_equipment_use_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_equipment_use_event_definition*/>(0x1640EE4);
-auto simulation_unit_equipment_pickup_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_unit_equipment_pickup_event_definition*/>(0x164137C);
-auto simulation_player_respawn_request_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_player_respawn_request_event_definition*/>(0x16406A0);
-auto simulation_player_force_base_respawn_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_player_force_base_respawn_event_definition*/>(0x16406F4);
-auto simulation_player_editor_request_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_player_editor_request_event_definition*/>(0x16407A0);
-auto simulation_projectile_supercombine_request_event_definition = GetStructure<c_simulation_event_definition/*c_simulation_projectile_supercombine_request_event_definition*/>(0x16403F0);
-auto simulation_object_refresh_event_definitionftable = GetStructure<c_simulation_event_definition/*c_simulation_object_refresh_event_definition*/>(0x163F7D8);
+auto simulation_damage_aftermath_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_damage_aftermath_event_definition*/>(0x16429A0);
+auto simulation_damage_section_response_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_damage_section_response_event_definition*/>(0x16429F0);
+auto simulation_breakable_surface_damage_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_breakable_surface_damage_event_definition*/>(0x1642A44);
+auto simulation_projectile_attached_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_projectile_attached_event_definition*/>(0x164029C);
+auto simulation_projectile_detonate_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_projectile_detonate_event_definition*/>(0x16402EC);
+auto simulation_projectile_impact_effect_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_projectile_impact_effect_event_definition*/>(0x164033C);
+auto simulation_projectile_object_impact_effect_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_projectile_object_impact_effect_event_definition*/>(0x1640394);
+auto simulation_effect_on_pos_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_effect_on_pos_event_definition*/>(0x163F824);
+auto simulation_game_engine_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_game_engine_event_definition*/>(0x163FE20);
+auto simulation_unit_board_vehicle_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_board_vehicle_event_definition*/>(0x16410BC);
+auto simulation_unit_pickup_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_pickup_event_definition*/>(0x1641334);
+auto simulation_weapon_effect_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_effect_event_definition*/>(0x1643590);
+auto simulation_weapon_empty_click_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_empty_click_event_definition*/>(0x16435DC);
+auto simulation_hit_marker_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_hit_marker_event_definition*/>(0x1642A9C);
+auto simulation_unit_exit_vehicle_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_exit_vehicle_event_definition*/>(0x164101C);
+auto simulation_unit_assassinate_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_assassinate_event_definition*/>(0x164106C);
+auto simulation_player_taunt_request_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_player_taunt_request_event_definition*/>(0x164074C);
+auto simulation_weapon_fire_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_fire_event_definition*/>(0x164341C);
+auto simulation_weapon_reload_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_reload_event_definition*/>(0x1643464);
+auto simulation_unit_throw_initiate_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_throw_initiate_event_definition*/>(0x164110C);
+auto simulation_unit_melee_initiate_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_melee_initiate_event_definition*/>(0x16411AC);
+auto simulation_weapon_pickup_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_pickup_event_definition*/>(0x16434B0);
+auto simulation_weapon_put_away_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_put_away_event_definition*/>(0x16434FC);
+auto simulation_weapon_drop_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_weapon_drop_event_definition*/>(0x1643548);
+auto simulation_vehicle_flip_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_vehicle_flip_event_definition*/>(0x164129C);
+auto simulation_vehicle_trick_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_vehicle_trick_event_definition*/>(0x16412E8);
+auto simulation_device_touch_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_device_touch_event_definition*/>(0x16438F4);
+auto simulation_unit_throw_release_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_throw_release_event_definition*/>(0x164115C);
+auto simulation_unit_melee_damage_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_melee_damage_event_definition*/>(0x16411FC);
+auto simulation_unit_melee_clang_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_melee_clang_event_definition*/>(0x164124C);
+auto simulation_unit_enter_vehicle_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_enter_vehicle_event_definition*/>(0x1640FCC);
+auto simulation_game_engine_request_boot_player_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_game_engine_request_boot_player_event_definition*/>(0x163FE68);
+auto simulation_unit_equipment_use_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_equipment_use_event_definition*/>(0x1640EE4);
+auto simulation_unit_equipment_pickup_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_unit_equipment_pickup_event_definition*/>(0x164137C);
+auto simulation_player_respawn_request_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_player_respawn_request_event_definition*/>(0x16406A0);
+auto simulation_player_force_base_respawn_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_player_force_base_respawn_event_definition*/>(0x16406F4);
+auto simulation_player_editor_request_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_player_editor_request_event_definition*/>(0x16407A0);
+auto simulation_projectile_supercombine_request_event_definition = pointer_get<c_simulation_event_definition/*c_simulation_projectile_supercombine_request_event_definition*/>(0x16403F0);
+auto simulation_object_refresh_event_definitionftable = pointer_get<c_simulation_event_definition/*c_simulation_object_refresh_event_definition*/>(0x163F7D8);
 
 int *simulation_definitions_table_initialize_hook(s_simulation_globals_type_collection *a1, int *simulation_global_and_entity_count, int *simulation_event_count)
 {

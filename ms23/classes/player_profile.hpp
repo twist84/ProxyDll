@@ -8,13 +8,13 @@
 s_content_catalogue *content_catalogue_get_hook(int a1)
 {
 	//printf_s("Getting content_catalogue[%d] data\n", a1);
-	return GetStructure<s_content_catalogue>(0x240A348, a1);
+	return pointer_get<s_content_catalogue>(0x240A348, a1);
 }
 
-s_player_profile *c_player_profile__get_hook(int a1)
+c_controller_interface *c_controller_interface__get_hook(int a1)
 {
 	//printf_s("Getting player[%d] profile data\n", a1);
-	return GetStructure<s_player_profile>(0x524EC48, a1);
+	return pointer_get<c_controller_interface>(0x524EC48, a1);
 }
 
 /*
@@ -92,7 +92,7 @@ inline void SubmitPlayerProfileHooks(const char *name)
 	if (ConfigManager.GetBool("Hooks", name))
 	{
 		HookManager.Submit({ 0x005A5600 }, &content_catalogue_get_hook, "content_catalogue::get");
-		HookManager.Submit({ 0x00A7CD50 }, &c_player_profile__get_hook, "c_player_profile::get");
+		HookManager.Submit({ 0x00A7CD50 }, &c_controller_interface__get_hook, "c_player_profile::get");
 		HookManager.Submit({ 0x014E2260 }, &achievements_get_index_from_string_id_hook, "achievements_get_index_from_string_id");
 		HookManager.Submit({ 0x014E24B0 }, &controller_achievement_state_to_string_hook, "controller_achievement_state_to_string");
 	}
